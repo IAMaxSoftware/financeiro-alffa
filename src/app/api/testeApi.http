@@ -1,0 +1,174 @@
+@baseURL = localhost
+@authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcxNzI2ODkxNCwiZXhwIjoxNzE3MzU1MzE0fQ.UG82KQWhc6RgKjPVgeDW8tE0oe2Fq1j1Kuj3sccqT0c
+
+POST http://{{baseURL}}:3000/api/despesas
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "nome": "Aluguel 2",
+  "valorEstimado": 100,
+  "usuarioCriou": 1,
+  "dataPrevisao": 10,
+  "empresaId": 1
+}
+
+###
+
+PUT http://{{baseURL}}:3000/api/despesas/7
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "nome": "Aluguel facul",
+  "valorEstimado": 120,
+  "usuarioCriou": 1,
+  "dataPrevisao": 10,
+  "empresaId": 1
+}
+
+###
+GET http://{{baseURL}}:3000/api/despesas
+Authorization: {{authToken}}
+Content-Type: application/json
+
+###
+
+
+GET http://{{baseURL}}:3000/api/despesas/7
+Authorization: {{authToken}}
+Content-Type: application/json
+
+###
+
+GET http://{{baseURL}}:3000/api/despesas?nome=i&empresaId=1
+Authorization: {{authToken}}
+Content-Type: application/json
+
+###
+
+DELETE http://{{baseURL}}:3000/api/despesas/3
+Authorization: {{authToken}}
+Content-Type: application/json
+
+###
+
+PUT  http://{{baseURL}}:3000/api/receitas/2
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "nome": "salario unidade 1",
+  "valorEstimado": 1020,
+  "usuarioCriou": 1,
+  "dataPrevisao": 15,
+  "empresaId": 1
+}
+
+###
+
+POST http://{{baseURL}}:3000/api/receitas
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "nome": "receita qualquer",
+  "valorEstimado": 1020,
+  "usuarioCriou": 1,
+  "dataPrevisao": 15,
+  "empresaId": 2
+}
+###
+
+GET http://{{baseURL}}:3000/api/receitas
+Authorization: {{authToken}}
+Content-Type: application/json
+
+###
+
+GET http://{{baseURL}}:3000/api/receitas/2
+Authorization: {{authToken}}
+Content-Type: application/json
+
+###
+GET http://{{baseURL}}:3000/api/receitas?nome=rec&empresaId=2
+Authorization: {{authToken}}
+Content-Type: application/json
+
+###
+
+DELETE http://{{baseURL}}:3000/api/receitas/1
+Authorization: {{authToken}}
+Content-Type: application/json
+
+
+###
+
+POST http://{{baseURL}}:3000/api/lancamentos
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "valor": 1700,
+  "obs": "Aluguel facul 2",
+  "recDesId": 6,
+  "userId": 1,
+  "empresaId": 2,
+  "tipo": "D",
+  "dataHora": "2024-05-23T02:06:38.845Z"
+}
+
+###
+
+GET http://{{baseURL}}:3000/api/lancamentos
+Authorization: {{authToken}}
+Content-Type: application/json
+
+###
+
+GET http://{{baseURL}}:3000/api/usuarios
+Content-Type: application/json
+
+###
+POST http://{{baseURL}}:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "cachopaweb@gmail.com",
+  "senha": "123456"
+}
+
+###
+POST http://{{baseURL}}:3000/api/usuarios
+Content-Type: application/json
+
+{
+   "nome": "Iago",
+   "email": "iago@gmail.com",
+   "senha": "123456",
+   "admin": true
+}
+
+###
+POST http://{{baseURL}}:3000/api/empresas
+Content-Type: application/json
+
+{
+   "nome": "PORTAL DOS ANJOS 2"
+}
+
+
+###
+GET http://{{baseURL}}:3000/api/empresas
+Content-Type: application/json
+
+###
+GET http://{{baseURL}}:3000/api/movimentacoes
+Content-Type: application/json
+
+###
+GET http://{{baseURL}}:3000/api/movimentacoes?empresaId=2
+Content-Type: application/json
+
+###
+GET http://{{baseURL}}:3000/api/google-calendar

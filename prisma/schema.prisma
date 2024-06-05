@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
+datasource db {
+  // provider = "sqlite"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Empresas {
+  id                          Int                           @id @default(autoincrement())
+  nome                        String
+  Lancamentos_receita_despesa Lancamentos_receita_despesa[]
+  Movimentacoes               Movimentacoes[]
+  Despesas                    Despesas[]
+  Receitas                    Receitas[]
+}
+
+model Funcionarios {
+  id                Int     @id @default(autoincrement())
+  nome              String
+  funcao            String
+  salario           Decimal
+  temValeTransporte Boolean
+  chavePix          String
+}
+
+model Usuarios {
+  id                          Int                           @id @default(autoincrement())
+  nome                        String?
+  email                       String                        @unique
+  avatar                      String?
+  senha                       String?
+  admin                       Boolean
+  createAt                    DateTime                      @default(now())
+  Lancamentos_receita_despesa Lancamentos_receita_despesa[]
+}
+
+model Despesas {
+  id            Int      @id @default(autoincrement())
+  nome          String
+  valorEstimado Decimal
+  dataCriacao   DateTime @default(now())
+  usuarioCriou  Int
+  dataPrevisao  Int      @default(0)
+  empresaId     Int      @default(1)
+  empresa       Empresas @relation(fields: [empresaId], references: [id])
+}
+
+model Receitas {
+  id            Int      @id @default(autoincrement())
+  nome          String
+  valorEstimado Decimal
+  dataCriacao   DateTime @default(now())
+  usuarioCriou  Int
+  dataPrevisao  Int      @default(0)
+  empresaId     Int      @default(1)
+  empresa       Empresas @relation(fields: [empresaId], references: [id])
+}
+
+model Lancamentos_receita_despesa {
+  id           Int           @id @default(autoincrement())
+  nome         String
+  estimado     Decimal
+  real         Decimal
+  diferenca    Decimal
+  obs          String?
+  dataCriacao  DateTime      @default(now())
+  usuId        Int
+  recDesId     Int
+  empresaId    Int           @default(1)
+  tipo         String
+  movId        Int
+  usuCriou     Usuarios      @relation(fields: [usuId], references: [id])
+  empresa      Empresas      @relation(fields: [empresaId], references: [id])
+  movimentacao Movimentacoes @relation(fields: [movId], references: [id])
+}
+
+model Movimentacoes {
+  id                          Int                           @id @default(autoincrement())
+  descricao                   String
+  credito                     Decimal
+  debito                      Decimal
+  dataHora                    DateTime
+  empresaId                   Int                           @default(1)
+  empresa                     Empresas                      @relation(fields: [empresaId], references: [id])
+  Lancamentos_receita_despesa Lancamentos_receita_despesa[]
+}

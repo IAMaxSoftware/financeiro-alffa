@@ -1,0 +1,78 @@
+import { DataTable } from "@/components/ui/data-table";
+import { columns } from "./column";
+import { useEffect, useState } from "react";
+import { toast } from "@/components/ui/use-toast";
+import { ReceitaRepository } from "@/repositories/receita_repository";
+import { useAppData } from "@/context/app_context";
+import { ReceitaModel, ReceitaModelTable } from "@/models/receita_model";
+import { Toaster } from "@/components/ui/toaster";
+import { DialogDefault } from "@/components/dialogs/dialogDefault";
+import { Button } from "@/components/ui/button";
+import CadastraReceita from "./cadastrarReceita";
+import { Plus } from "lucide-react";
+
+export default function ListarReceitas() {
+    const { accessToken, empresaSelecionada, controleUniversal, setControleUniversal } = useAppData()
+    const [data, setData] = useState<ReceitaModelTable[]>([])
+
+
+    useEffect(() => {
+        getReceitas()
+
+    }, [])
+
+    useEffect(() => {
+        if(controleUniversal)
+        {
+            getReceitas();
+            setControleUniversal(false);
+        }
+        
+
+    }, [controleUniversal])
+
+
+    const getReceitas = async () => {
+        try {
+            const respository = new ReceitaRepository();
+            const Receitas = await respository.getReceitaValorFormatado(accessToken);
+            setData(Receitas);
+        } catch (error) {
+            toast({
+                variant: "destructive",
+                title: "Dados Incorretos.",
+                description: `Erro ao buscar dados!\n"+${String(error)}`
+            })
+        }
+    }
+
+
+    return (
+        <div className="container mx-auto py-10">
+            <div className="grid grid-cols-2">
+                <h1 className="p-4 text-orange-600 text-start">Receitas Cadastradas</h1>
+                <div className="flex flex-col items-end">
+                    <div className="flex flex-col items-end">
+                        <DialogDefault
+                        size={425}
+                            ButtonOpen={<Button
+                                disabled={empresaSelecionada != null ? false : true}
+                                className="flex flex-row w-44">
+                                <Plus ></Plus>
+                                <p>Cadastrar Receita</p>
+                            </Button>}
+                            Children={<CadastraReceita />}
+                            title='Cadastrar Receita'
+                            descricao=""
+                        />
+                        <p className="text-xs text-red-500">{empresaSelecionada != null ? '' : 'Selecione uma empresa para cadastrar a receita'}</p>
+                    </div>
+                </div>
+            </div>
+            <Toaster />
+
+            <DataTable columns={columns} data={data} />
+        </div>
+    )
+
+}
