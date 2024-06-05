@@ -1,8 +1,20 @@
-import { getUserSession } from "../../../lib/session";
+"use client"
+import { useEffect, useState } from "react";
+import { User, getUserSession } from "../../../lib/session";
 
-export default async function UsuarioLogado() {
-    const userSession = await getUserSession()
+export default function UsuarioLogado() {
+    const [userSession, setUserSession] = useState<User>();
+
+    useEffect(() => {
+        getSession();
+    }, [])
+    const getSession = async () => {
+        const session = await getUserSession()
+        console.log(session)
+        setUserSession(session);
+    }
+
     return (
-        <h1>{userSession.name}</h1>
+        <h1>{userSession?.name}</h1>
     );
 }

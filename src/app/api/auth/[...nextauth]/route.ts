@@ -3,8 +3,6 @@ import { session } from '../../../../../lib/session'
 import { NextAuthOptions, User } from 'next-auth'
 import NextAuth from 'next-auth/next'
 import GoogleProvider from 'next-auth/providers/google'
-import CredentialsProvider from 'next-auth/providers/credentials'
-import { AuthService } from '../auth.service'
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID!
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET!
@@ -18,36 +16,6 @@ const authOption: NextAuthOptions = {
             clientId: GOOGLE_CLIENT_ID,
             clientSecret: GOOGLE_CLIENT_SECRET,
         }),
-        CredentialsProvider({
-            name: "Logar",
-            credentials: {
-                email: {
-                    label: "E-mail",
-                    type: "e-mail",
-                    placeholder: "exemple@exemple.com",
-                },
-                password: {
-                    label: "Senha",
-                    type: "password"
-                }
-            },
-            async authorize(credentials) {
-                if (!credentials || !credentials.email || !credentials.password)
-                    return null;
-                const authService = new AuthService();
-                const usuario = await authService.login(credentials.email, credentials.password)
-                if (usuario) {
-                    const user = {
-                        email: usuario.email,
-                        name: usuario.nome,
-                        id: usuario.id.toString(),
-                    };
-                    return user;
-                }
-
-                return null;
-            }
-        }),
     ],
     callbacks: {
         async signIn({ account, profile }) {
@@ -57,21 +25,34 @@ const authOption: NextAuthOptions = {
             if (!profile?.email) {
                 throw new Error('No profile')
             }
-
-            await prisma.usuarios.upsert({
-                where: {
-                    email: profile.email,
-                },
-                create: {
-                    email: profile.email,
-                    nome: profile.name,
-                    admin: true,
-                },
-                update: {
-                    nome: profile.name,
-                },
-            })
-            return true
+            const listaUsuarios = await prisma.usuarios.findMany();
+            if (listaUsuarios.length === 0) {
+                await prisma.usuarios.upsert({
+                    where: {
+                        email: profile.email,
+                    },
+                    create: {
+                        email: profile.email,
+                        nome: profile.name,
+                        admin: true,
+                    },
+                    update: {
+                        nome: profile.name,
+                    },
+                })
+                return true
+            } else {
+                //validação para aceitar apenas o primeiro usuario que logou pelo login social
+                const user = await prisma.usuarios.findUnique({
+                    where: {
+                        email: profile.email
+                    }
+                });
+                if (user) {
+                    return true
+                }
+                return false;
+            }
         },
         session,
         async jwt({ token, user, account, profile }) {
