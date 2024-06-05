@@ -15,12 +15,12 @@ Content-Type: application/json
 
 ###
 
-PUT http://{{baseURL}}:3000/api/despesas/7
+PUT http://{{baseURL}}:3000/api/despesas/5
 Authorization: {{authToken}}
 Content-Type: application/json
 
 {
-  "nome": "Aluguel facul",
+  "nome": "Agua facul",
   "valorEstimado": 120,
   "usuarioCriou": 1,
   "dataPrevisao": 10,
@@ -35,25 +35,25 @@ Content-Type: application/json
 ###
 
 
-GET http://{{baseURL}}:3000/api/despesas/7
+GET http://{{baseURL}}:3000/api/despesas/5
 Authorization: {{authToken}}
 Content-Type: application/json
 
 ###
 
-GET http://{{baseURL}}:3000/api/despesas?nome=i&empresaId=1
+GET http://{{baseURL}}:3000/api/despesas?nome=agua&empresaId=1
 Authorization: {{authToken}}
 Content-Type: application/json
 
 ###
 
-DELETE http://{{baseURL}}:3000/api/despesas/3
+DELETE http://{{baseURL}}:3000/api/despesas/5
 Authorization: {{authToken}}
 Content-Type: application/json
 
 ###
 
-PUT  http://{{baseURL}}:3000/api/receitas/2
+PUT  http://{{baseURL}}:3000/api/receitas/5
 Authorization: {{authToken}}
 Content-Type: application/json
 
@@ -86,7 +86,7 @@ Content-Type: application/json
 
 ###
 
-GET http://{{baseURL}}:3000/api/receitas/2
+GET http://{{baseURL}}:3000/api/receitas/4
 Authorization: {{authToken}}
 Content-Type: application/json
 
@@ -97,7 +97,7 @@ Content-Type: application/json
 
 ###
 
-DELETE http://{{baseURL}}:3000/api/receitas/1
+DELETE http://{{baseURL}}:3000/api/receitas/5
 Authorization: {{authToken}}
 Content-Type: application/json
 
@@ -110,10 +110,10 @@ Content-Type: application/json
 
 {
   "valor": 1700,
-  "obs": "Aluguel facul 2",
+  "obs": "Aluguel facul 3",
   "recDesId": 6,
-  "userId": 1,
-  "empresaId": 2,
+  "userId": 2,
+  "empresaId": 1,
   "tipo": "D",
   "dataHora": "2024-05-23T02:06:38.845Z"
 }
@@ -167,8 +167,12 @@ GET http://{{baseURL}}:3000/api/movimentacoes
 Content-Type: application/json
 
 ###
-GET http://{{baseURL}}:3000/api/movimentacoes?empresaId=2
+GET http://{{baseURL}}:3000/api/movimentacoes?empresaId=1
 Content-Type: application/json
 
 ###
 GET http://{{baseURL}}:3000/api/google-calendar
+
+
+###
+GET http://{{baseURL}}:3000/api/despesas?nome=TESTE
