@@ -9,22 +9,25 @@ import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
 import { DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../../components/ui/dropdown-menu';
 import { NameRoutes } from '../functions/utils';
 import { useAppData } from '../context/app_context';
-import { useRouter } from 'next/navigation';
-import { getUserSession } from '../../../lib/session';
-import UsuarioLogado from '@/components/usuarioLogado/page';
+import { redirect, useRouter } from 'next/navigation';
+import { signOut, useSession } from 'next-auth/react';
 
 interface homeLayoutProps {
     children: ReactNode;
 }
 
 export default function HomeLayout({ children }: homeLayoutProps) {
+    const { data: session } = useSession({
+        required: true,
+        onUnauthenticated() {
+            redirect("/");
+        },
+    });
     const classPadrao = 'text-slate-600  w-full rounded-full';
     const classSelecionado = 'text-orange-600	bg-orange-200 w-full rounded-full'
     const [avatarAberto, setAvatarAberto] = useState(false);
     const { setUltRota, empresaSelecionada, ultRota } = useAppData();
-    const [classCadastrarDespesa, setClassCadastrarDespesa] = useState(classPadrao);
     const [classListarDespesas, setClassListarDespesa] = useState(classPadrao);
-    const [classCadastrarReceita, setClassCadastrarReceita] = useState(classPadrao);
     const [classRealizarLancamento, setclassRealizarLancamento] = useState(classPadrao);
     const [classListarReceita, setClassListarReceita] = useState(classPadrao);
     const [classListarLancamento, setClassListarLancamento] = useState(classPadrao);
@@ -44,20 +47,11 @@ export default function HomeLayout({ children }: homeLayoutProps) {
             case NameRoutes.home:
                 resetaClasses();
                 break;
-            case NameRoutes.cadastrarDespesa:
-                setClassCadastrarDespesa(classSelecionado);
-                break;
             case NameRoutes.listarDespesa:
                 setClassListarDespesa(classSelecionado);
                 break;
-            case NameRoutes.cadastrarReceita:
-                setClassCadastrarReceita(classSelecionado);
-                break;
             case NameRoutes.listarReceita:
                 setClassListarReceita(classSelecionado);
-                break;
-            case NameRoutes.cadastrarLancamento:
-                setclassRealizarLancamento(classSelecionado);
                 break;
             case NameRoutes.listarLancamento:
                 setClassListarLancamento(classSelecionado);
@@ -68,15 +62,11 @@ export default function HomeLayout({ children }: homeLayoutProps) {
 
     function resetaClasses() {
         setClassDashBoard(classPadrao);
-        setClassCadastrarDespesa(classPadrao);
         setClassListarDespesa(classPadrao);
-        setClassCadastrarReceita(classPadrao);
         setClassListarReceita(classPadrao);
         setclassRealizarLancamento(classPadrao);
         setClassListarLancamento(classPadrao);
     }
-
-
 
     const Home = () => {
         resetaClasses();
@@ -84,21 +74,6 @@ export default function HomeLayout({ children }: homeLayoutProps) {
         navigate.push(NameRoutes.home);
         setClassDashBoard(classSelecionado);
     }
-
-    const cadastrarDespesa = () => {
-        resetaClasses();
-        setUltRota(NameRoutes.cadastrarDespesa);
-        navigate.push(NameRoutes.cadastrarDespesa);
-        setClassCadastrarDespesa(classSelecionado);
-    }
-
-    const cadastrarReceita = () => {
-        resetaClasses();
-        setUltRota(NameRoutes.cadastrarReceita);
-        navigate.push(NameRoutes.cadastrarReceita);
-        setClassCadastrarReceita(classSelecionado);
-    }
-
 
     const cadastraLacamento = () => {
         resetaClasses();
@@ -169,12 +144,6 @@ export default function HomeLayout({ children }: homeLayoutProps) {
                                 <Button variant="ghost" className={classListarLancamento} onClick={ListarLancamento}>Lançamentos</Button>
                             </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value='2'>
-                            <AccordionTrigger>Receitas</AccordionTrigger>
-                            <AccordionContent>
-                                <Button variant="ghost" className={classCadastrarReceita} onClick={cadastrarReceita}>Cadastrar Receitas</Button>
-                            </AccordionContent>
-                        </AccordionItem>
                         <AccordionItem value='3'>
                             <AccordionTrigger>Lançamentos</AccordionTrigger>
                             <AccordionContent>
@@ -199,18 +168,18 @@ export default function HomeLayout({ children }: homeLayoutProps) {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-56">
-                            <DropdownMenuLabel><UsuarioLogado /></DropdownMenuLabel>
+                            <DropdownMenuLabel>{session?.user?.email}</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuGroup>
                                 <DropdownMenuItem>
                                     <User className="mr-2 h-4 w-4" />
-                                    <span>Profile</span>
+                                    <span>{session?.user?.name}</span>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
                                     <UserRoundPlus className="mr-2 h-4 w-4" />
                                     <span>Cadastrar Perfil</span>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => logout()}>
+                                <DropdownMenuItem onClick={() => signOut()}>
                                     <LogOut className="mr-2 h-4 w-4" />
                                     <span>Sair</span>
                                 </DropdownMenuItem>

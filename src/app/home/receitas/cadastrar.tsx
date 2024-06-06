@@ -1,89 +1,61 @@
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { format } from "date-fns"
-import swal from 'sweetalert'
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon } from "lucide-react"
-import { cn } from "../../../lib/utils"
+import { useAppData } from "@/app/context/app_context";
+import { NameRoutes } from "@/app/functions/utils";
+import { ReceitaRepository } from "@/app/repositories/receita_repository";
+import { Card } from "@/components/ui/card";
+import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form";
 import MoneyInput from "@/components/ui/money-input"
-import { useEffect } from "react"
-import { useAppData } from "../context/app_context"
-import { useRouter } from "next/navigation"
-import { DespesaRepository } from "../repositories/despesa_repository"
-import { DespesaModel } from "../models/despesa_model"
-import { getUserSession } from "../../../lib/session"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { Button } from "react-day-picker";
+import { useForm, Form } from "react-hook-form";
+import { z } from "zod";
+import swal from 'sweetalert'
+import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
-    despesa: z.string().min(2).max(100, {
-        message: "A despesa não pode ser menor que 2 caracteres e maior que 100."
+    receita: z.string().min(2).max(100, {
+        message: "A receita não pode ser menor que 2 caracteres e maior que 100."
     },),
     valorEstimado: z.coerce.number(),
-    dataPrevisao: z.coerce.number()
+    dataPrevisao: z.coerce.number(),
 })
 
-interface ParamsCadastraDespesa {
-    edit: boolean;
-    despesa: number | null;
-}
-
-export default function CadastraDespesa({ edit, despesa }: ParamsCadastraDespesa) {
-    const { usuarioLogado, empresaSelecionada, setControleUniversal } = useAppData()
+export default function CadastraReceita() {
+    const { usuarioLogado, accessToken, empresaSelecionada, setControleUniversal } = useAppData()
     const navigate = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
 
         resolver: zodResolver(formSchema),
         defaultValues: {
-            despesa: "",
+            receita: "",
             valorEstimado: 0,
             dataPrevisao: 0
         },
     })
-    useEffect(() => {
-        if (edit) {
-            getDespesaEdit();
-        }
-
-    }, [])
-
-    async function getDespesaEdit() {
-        const rep = new DespesaRepository();
-        let desp: DespesaModel = await rep.getDespesa(usuarioLogado.accessToken!, 'INTERNET', empresaSelecionada.id);
-
-        console.log(desp);
-
-
-
-    }
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const userSession = await getUserSession();
         try {
-            const repository = new DespesaRepository();
-            const despesa = await repository.create({
-                nome: values.despesa,
+            const repository = new ReceitaRepository();
+            const receita = await repository.create({
+                nome: values.receita,
                 valorEstimado: values.valorEstimado,
-                usuarioCriou: parseInt(userSession.id),
+                usuarioCriou: parseInt(usuarioLogado.id),
                 dataPrevisao: values.dataPrevisao,
                 empresaId: empresaSelecionada.id
-            }, usuarioLogado.accessToken!)
-            if (despesa) {
+            }, accessToken)
+            if (receita) {
                 setControleUniversal(true);
                 swal({
                     title: "ok",
-                    text: "Despesa cadastrada com sucesso!"
+                    text: "Receita cadastrada com sucesso!"
                 })
-                navigate.push('/listarDespesa')
+                navigate.push(NameRoutes.listarReceita)
             }
         } catch (error) {
+
             swal({
                 title: "Dados Incorretos.",
-                text: `Informe o nome da despesa e o valor estimado!\n${String(error)}`,
+                text: `Informe o nome da receita e o valor estimado!\n${String(error)}`,
                 dangerMode: true
             })
         }
@@ -95,15 +67,15 @@ export default function CadastraDespesa({ edit, despesa }: ParamsCadastraDespesa
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <FormField
                         control={form.control}
-                        name="despesa"
+                        name="receita"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Despesa</FormLabel>
+                                <FormLabel>Receita</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Despesa" {...field} />
+                                    <Input placeholder="Receita" {...field} />
                                 </FormControl>
                                 <FormDescription>
-                                    Informe a despesa para cadastrar
+                                    Informe a receita para cadastrar
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>
@@ -126,16 +98,13 @@ export default function CadastraDespesa({ edit, despesa }: ParamsCadastraDespesa
                                     <Input type="number" placeholder="Dia do vencimento" {...field} />
                                 </FormControl>
                                 <FormDescription>
-                                    Informe o dia do mês que vence a despesa
+                                    Informe o dia do mês que vence a Receita
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
                     <FormMessage />
-
-
-
                     <Button type="submit">Cadastrar</Button>
                 </form>
             </Form>

@@ -1,11 +1,10 @@
+"use client"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useAppData } from "@/context/app_context"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
 import { z } from "zod"
 import { format } from "date-fns"
 import swal from 'sweetalert'
@@ -13,18 +12,19 @@ import { Calendar } from "@/components/ui/calendar"
 import { useState } from "react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { CalendarIcon, Search } from "lucide-react"
-import { cn } from "../../../lib/utils"
-import { ReceitaRepository } from "@/repositories/receita_repository"
-import { NameRoutes } from "@/functions/utils"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { BuscaDespesa } from "@/components/dialogs/buscaDespesa"
 import { BuscaReceita } from "@/components/dialogs/buscaReceita"
 import { Label } from "@/components/ui/label"
-import { LancamentoRepository } from "@/repositories/lancamento_repository"
-import { ReceitaModel } from "@/models/receita_model"
-import { DespesaModel } from "@/models/despesa_model"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import MoneyInput from "@/components/ui/money-input"
+import { useAppData } from "@/app/context/app_context"
+import { ReceitaModel } from "@/app/models/receita_model"
+import { DespesaModel } from "@/app/models/despesa_model"
+import { useRouter } from "next/navigation"
+import { LancamentoRepository } from "@/app/repositories/lancamento_repository"
+import { NameRoutes } from "@/app/functions/utils"
+import { cn } from "../../../../lib/utils"
 
 const formSchema = z.object({
     obs: z.string().min(2).max(100, {
@@ -43,7 +43,7 @@ export default function CadastraLancamento() {
     const [despesaSelecionada, setDespesaSelecionada] = useState<DespesaModel | null>(null);
     const [recDesId, setRecDesId] = useState(0);
 
-    const navigate = useNavigate();
+    const navigate = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
 
         resolver: zodResolver(formSchema),
@@ -61,7 +61,7 @@ export default function CadastraLancamento() {
             const lancamento = await repository.create({
                 obs: values.obs,
                 valor: values.valor,
-                userId: usuarioLogado.id,
+                userId: parseInt(usuarioLogado.id),
                 dataHora: values.data,
                 empresaId: empresaSelecionada.id,
                 recDesId: recDesId,
@@ -72,7 +72,7 @@ export default function CadastraLancamento() {
                     title: "ok",
                     text: "Lançamento cadastrada com sucesso!"
                 })
-                navigate(NameRoutes.listarReceita)
+                navigate.push(NameRoutes.listarReceita)
             }
         } catch (error) {
 
@@ -109,7 +109,7 @@ export default function CadastraLancamento() {
                                             <BuscaDespesa />
                                         </div>
                                         <div className="pl-6 pt-8 md:pt-0">
-                                            <BuscaReceita />
+                                            {/* <BuscaReceita /> */}
                                         </div>
                                     </div>
                                 </div>

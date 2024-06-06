@@ -1,19 +1,18 @@
 "use client"
 
-import { useState } from "react";
-import { useRouter } from 'next/navigation';
-import { useAppData } from "./context/app_context";
-import { keyBoardInputEvent } from "./functions/utils";
-import { usuarioAutentico } from "./repositories/usuario_repository";
-import { toast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
+import { redirect } from "next/navigation";
 
 export default function Login() {
+  const { data, status } = useSession();
+
+  if (status === 'authenticated') {
+    redirect('/home')
+  }
+
   const handleSingInGoole = async () => signIn('google', { callbackUrl: 'http://localhost:3000/home' });
 
   return (

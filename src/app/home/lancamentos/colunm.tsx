@@ -1,8 +1,3 @@
-
-import { Toaster } from "@/components/ui/toaster"
-import { useAppData } from "@/context/app_context";
-import { ReceitaModel } from "@/models/receita_model";
-import { DespesaRepository } from "@/repositories/despesa_repository";
 import { ColumnDef } from "@tanstack/react-table"
 import { Ban, DeleteIcon } from 'lucide-react';
 import {
@@ -18,8 +13,8 @@ import {
 import { Toggle } from "@/components/ui/toggle";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast"
-import { LancamentoModel } from "@/models/lancamento_model";
-import { LancamentoRepository } from "@/repositories/lancamento_repository";
+import { LancamentoModel } from "@/app/models/lancamento_model";
+import { useAppData } from "@/app/context/app_context";
 
 export const columns: ColumnDef<LancamentoModel>[] = [
     {
@@ -48,7 +43,7 @@ export const columns: ColumnDef<LancamentoModel>[] = [
                     setControleUniversal(true);
                     cod ? toast({
                         description: "Lançamento deletada com sucesso",
-                    }): null;
+                    }) : null;
                     navigator.clipboard.writeText(lancamento.id!.toString())
                 } catch (error) {
                     toast({
@@ -58,44 +53,44 @@ export const columns: ColumnDef<LancamentoModel>[] = [
                     })
                 }
             }
-           
+
 
             return (
                 <Dialog>
-                <DialogTrigger asChild>
-                    <Toggle
-                        aria-label="Toggle bold">
-                        <Ban color="orange"></Ban>
-                    </Toggle>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                        <DialogTitle>Cancelar Lançamento</DialogTitle>
-                        <DialogDescription>
-                            Tem certeza que deseja cancelar ?
-                        </DialogDescription>
-                    </DialogHeader>
-                    <div>
-                    </div>
-                    <DialogFooter >
-                    <DialogClose asChild>
-                    <Button
-                        variant="confirm"
-                        onClick={() => {
-                            deletar(lancamento.id!);
-                        }}>
-                                Sim
-                            </Button>
+                    <DialogTrigger asChild>
+                        <Toggle
+                            aria-label="Toggle bold">
+                            <Ban color="orange"></Ban>
+                        </Toggle>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                        <DialogHeader>
+                            <DialogTitle>Cancelar Lançamento</DialogTitle>
+                            <DialogDescription>
+                                Tem certeza que deseja cancelar ?
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div>
+                        </div>
+                        <DialogFooter >
+                            <DialogClose asChild>
+                                <Button
+                                    variant="confirm"
+                                    onClick={() => {
+                                        deletar(lancamento.id!);
+                                    }}>
+                                    Sim
+                                </Button>
                             </DialogClose>
-                        <DialogClose asChild>
-                            
-                            <Button variant="destructive">
-                                Não
-                            </Button>
-                        </DialogClose>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+                            <DialogClose asChild>
+
+                                <Button variant="destructive">
+                                    Não
+                                </Button>
+                            </DialogClose>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             );
         }
     },

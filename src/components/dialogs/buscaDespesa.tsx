@@ -15,11 +15,11 @@ import { useEffect, useState } from "react"
 import { Table } from "../ui/table"
 import { DataTable } from "../ui/data-table"
 import { toast } from "@/components/ui/use-toast";
-import { useAppData } from "@/context/app_context";
-import { DespesaModelTable } from "@/models/despesa_model"
-import { DespesaRepository } from "@/repositories/despesa_repository";
 import { ColumnDef } from "@tanstack/react-table"
 import { DeleteIcon } from 'lucide-react';
+import { DespesaModelTable } from "@/app/models/despesa_model"
+import { useAppData } from "@/app/context/app_context"
+import { DespesaRepository } from "@/app/repositories/despesa_repository"
 
 export function BuscaDespesa() {
 
@@ -31,8 +31,8 @@ export function BuscaDespesa() {
         busca();
     }, [textoBusca])
 
-    function busca(){
-        
+    function busca() {
+
     }
 
 
@@ -56,7 +56,7 @@ export function BuscaDespesa() {
                     <div>
                         <Input
                             onChange={(e) => setTextoBusca(e.target.value)}
-                            
+
                         ></Input>
                         <DataTable columns={columns} data={data} />
                     </div>

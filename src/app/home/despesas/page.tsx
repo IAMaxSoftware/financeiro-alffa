@@ -1,15 +1,16 @@
+"use client"
 import { DataTable } from "@/components/ui/data-table";
 import { DialogDefault } from "@/components/dialogs/dialogDefault";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import CadastraDespesa from "../despesas/page";
+import CadastraDespesa from "./cadastrar";
 import { Toaster } from "@/components/ui/toaster";
 import { useEffect, useState } from "react";
-import { DespesaModelTable } from "../models/despesa_model";
-import { useAppData } from "../context/app_context";
-import { DespesaRepository } from "../repositories/despesa_repository";
+import { DespesaModelTable } from "../../models/despesa_model";
+import { useAppData } from "../../context/app_context";
+import { DespesaRepository } from "../../repositories/despesa_repository";
 import { toast } from "@/components/ui/use-toast";
-import { columns } from "../despesas/column";
+import { columns } from "./column";
 
 
 export default function ListarDespesas() {

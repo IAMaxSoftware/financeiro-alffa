@@ -1,17 +1,17 @@
 
 
 export type keyBoardInputEvent = React.KeyboardEvent<HTMLInputElement>;
-export const saidaGraficos:string = '#EB4D5C';
-export const entradaGraficos:string = '#53B987';
+export const saidaGraficos: string = '#EB4D5C';
+export const entradaGraficos: string = '#53B987';
 
-export enum NameRoutes{
-    home = "/Home",
-    cadastrarDespesa = "/cadastrarDespesa",
-    listarDespesa = '/listarDespesa',
-    cadastrarReceita = '/cadastrarReceita',
-    cadastrarLancamento = '/cadastrarLancamento',
-    listarReceita = '/listarReceita',
-    listarLancamento = '/listarLancamento'
+export enum NameRoutes {
+    home = "/home",
+    cadastrarDespesa = "/home/despesas/cadastrar",
+    listarDespesa = '/home/despesas',
+    cadastrarReceita = '/home/receitas/cadastrar',
+    cadastrarLancamento = '/home/lacamentos/cadastrar',
+    listarReceita = '/home/receitas',
+    listarLancamento = '/home/lancamentos'
 
 }
 
@@ -21,12 +21,12 @@ export function getFirstDayOfCurrentMonth(): Date {
     return firstDayOfMonth;
 }
 
-export function formatarNumeroVigula(numero:number) {
+export function formatarNumeroVigula(numero: number) {
     console.log(numero);
     return numero.toFixed(2).replace('.', ',');
 }
-export function formatarNumeroMoedaReal(numero:number) {
+export function formatarNumeroMoedaReal(numero: number) {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
         numero,
-      );
+    );
 }

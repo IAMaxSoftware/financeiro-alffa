@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const api = axios.create({ baseURL: 'https://financeiro-backend.uo41yf.easypanel.host/' })
+const api = axios.create({ baseURL: 'http://localhost:3000/api' })
 
 
 export default api;

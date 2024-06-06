@@ -26,6 +26,7 @@ const authOption: NextAuthOptions = {
                 throw new Error('No profile')
             }
             const listaUsuarios = await prisma.usuarios.findMany();
+            console.log(listaUsuarios)
             if (listaUsuarios.length === 0) {
                 await prisma.usuarios.upsert({
                     where: {

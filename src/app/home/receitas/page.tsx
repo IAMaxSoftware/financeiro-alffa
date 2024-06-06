@@ -1,15 +1,16 @@
+"use client"
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./column";
 import { useEffect, useState } from "react";
 import { toast } from "@/components/ui/use-toast";
-import { ReceitaRepository } from "@/repositories/receita_repository";
-import { useAppData } from "@/context/app_context";
-import { ReceitaModel, ReceitaModelTable } from "@/models/receita_model";
 import { Toaster } from "@/components/ui/toaster";
 import { DialogDefault } from "@/components/dialogs/dialogDefault";
 import { Button } from "@/components/ui/button";
-import CadastraReceita from "./cadastrarReceita";
+import CadastraReceita from "./cadastrar";
 import { Plus } from "lucide-react";
+import { useAppData } from "@/app/context/app_context";
+import { ReceitaModelTable } from "@/app/models/receita_model";
+import { ReceitaRepository } from "@/app/repositories/receita_repository";
 
 export default function ListarReceitas() {
     const { accessToken, empresaSelecionada, controleUniversal, setControleUniversal } = useAppData()
@@ -22,12 +23,11 @@ export default function ListarReceitas() {
     }, [])
 
     useEffect(() => {
-        if(controleUniversal)
-        {
+        if (controleUniversal) {
             getReceitas();
             setControleUniversal(false);
         }
-        
+
 
     }, [controleUniversal])
 
@@ -54,7 +54,7 @@ export default function ListarReceitas() {
                 <div className="flex flex-col items-end">
                     <div className="flex flex-col items-end">
                         <DialogDefault
-                        size={425}
+                            size={425}
                             ButtonOpen={<Button
                                 disabled={empresaSelecionada != null ? false : true}
                                 className="flex flex-row w-44">

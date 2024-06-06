@@ -1,10 +1,6 @@
 
 
 import { toast } from "@/components/ui/use-toast";
-import { useAppData } from "@/context/app_context";
-import { DespesaModel } from "@/models/despesa_model"
-import { DespesaModelTable } from "@/models/despesa_model";
-import { DespesaRepository } from "@/repositories/despesa_repository";
 import {
     Dialog,
     DialogClose,
@@ -20,7 +16,10 @@ import { ColumnDef } from "@tanstack/react-table"
 import { DeleteIcon, Eye } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { DialogDefault } from "@/components/dialogs/dialogDefault";
-import CadastraDespesa from "../listarDespesa/page";
+import { DespesaModelTable } from "../../models/despesa_model";
+import { useAppData } from "../../context/app_context";
+import { DespesaRepository } from "../../repositories/despesa_repository";
+import CadastraDespesa from "./cadastrar";
 
 
 export const columns: ColumnDef<DespesaModelTable>[] = [
