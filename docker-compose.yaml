@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  nextapp-production:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nextapp-production
+    ports:
+      - "3000:3000"

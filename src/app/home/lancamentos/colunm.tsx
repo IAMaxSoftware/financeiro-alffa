@@ -1,3 +1,4 @@
+"use client"
 import { ColumnDef } from "@tanstack/react-table"
 import { Ban, DeleteIcon } from 'lucide-react';
 import {
@@ -12,7 +13,7 @@ import {
 } from "@/components/ui/dialog"
 import { Toggle } from "@/components/ui/toggle";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast"
+import { toast, useToast } from "@/components/ui/use-toast"
 import { LancamentoModel } from "@/app/models/lancamento_model";
 import { useAppData } from "@/app/context/app_context";
 
@@ -32,15 +33,12 @@ export const columns: ColumnDef<LancamentoModel>[] = [
     {
         id: "Ação",
         cell: ({ row }) => {
-            const { toast } = useToast()
-            const { accessToken, setControleUniversal } = useAppData()
             const lancamento = row.original;
             const deletar = async (id: number) => {
                 try {
                     /*const repository = new LancamentoRepository();
                     const cod = await repository.delete(id, accessToken);*/
                     const cod = true;
-                    setControleUniversal(true);
                     cod ? toast({
                         description: "Lançamento deletada com sucesso",
                     }) : null;
@@ -75,7 +73,7 @@ export const columns: ColumnDef<LancamentoModel>[] = [
                         <DialogFooter >
                             <DialogClose asChild>
                                 <Button
-                                    variant="confirm"
+                                    variant="destructive"
                                     onClick={() => {
                                         deletar(lancamento.id!);
                                     }}>

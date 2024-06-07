@@ -24,12 +24,9 @@ export class ReceitaRepository {
         }
     }
 
-    async delete(despesaId: number, token: string): Promise<boolean> {
+    async delete(despesaId: number): Promise<boolean> {
         try {
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            };
-            const response = await api.delete(`/receitas/${despesaId}`, config)
+            const response = await api.delete(`/receitas/${despesaId}`)
             console.log(response.status);
             return response.status === 204;
         } catch (error) {

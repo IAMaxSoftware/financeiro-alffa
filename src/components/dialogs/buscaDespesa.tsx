@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -86,12 +87,11 @@ const columns: ColumnDef<DespesaModelTable>[] = [
     {
         id: "Ação",
         cell: ({ row }) => {
-            const { accessToken } = useAppData()
             const despesa = row.original;
             const deletar = async (id: number) => {
                 try {
                     const repository = new DespesaRepository();
-                    await repository.delete(id, accessToken);
+                    await repository.delete(id);
                     navigator.clipboard.writeText(despesa.id!.toString())
                 } catch (error) {
                     toast({

@@ -1,12 +1,12 @@
-import { NextRequest } from "next/server";
+// import { type NextRequest } from 'next/server'
 import { MovimentacoesService } from "./movimentacoes.service";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
     try {
-        const searchParams = request.nextUrl.searchParams
-        const dataInicial = (searchParams.get('dataInicial') && new Date(searchParams.get('dataInicial') || '')) || undefined
-        const dataFinal = (searchParams.get('dataFinal') && new Date(searchParams.get('dataFinal') || '')) || undefined
-        const empresaId = searchParams.get('empresaId') || ''
+        // const searchParams = request.nextUrl.searchParams
+        const dataInicial = undefined;//(searchParams.get('dataInicial') && new Date(searchParams.get('dataInicial') || '')) || undefined
+        const dataFinal = undefined; //(searchParams.get('dataFinal') && new Date(searchParams.get('dataFinal') || '')) || undefined
+        const empresaId = '1'; //searchParams.get('empresaId') || ''
         const movimentacoesService = new MovimentacoesService();
         const response = await movimentacoesService.getMovimentacoes({
             dataInicial,

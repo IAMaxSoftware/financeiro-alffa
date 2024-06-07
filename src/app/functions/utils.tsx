@@ -9,7 +9,7 @@ export enum NameRoutes {
     cadastrarDespesa = "/home/despesas/cadastrar",
     listarDespesa = '/home/despesas',
     cadastrarReceita = '/home/receitas/cadastrar',
-    cadastrarLancamento = '/home/lacamentos/cadastrar',
+    cadastrarLancamento = '/home/lancamentos/cadastrar',
     listarReceita = '/home/receitas',
     listarLancamento = '/home/lancamentos'
 

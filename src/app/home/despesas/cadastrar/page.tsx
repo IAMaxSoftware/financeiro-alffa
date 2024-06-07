@@ -6,19 +6,14 @@ import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { format } from "date-fns"
 import swal from 'sweetalert'
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon } from "lucide-react"
-import { cn } from "../../../../lib/utils"
 import MoneyInput from "@/components/ui/money-input"
 import { useEffect } from "react"
-import { useAppData } from "../../context/app_context"
+import { useAppData } from "../../../context/app_context"
 import { useRouter } from "next/navigation"
-import { DespesaRepository } from "../../repositories/despesa_repository"
-import { DespesaModel } from "../../models/despesa_model"
-import { getUserSession } from "../../../../lib/session"
+import { DespesaRepository } from "../../../repositories/despesa_repository"
+import { DespesaModel } from "../../../models/despesa_model"
+import { getUserSession } from "../../../../../lib/session"
 
 const formSchema = z.object({
     despesa: z.string().min(2).max(100, {
@@ -30,10 +25,10 @@ const formSchema = z.object({
 
 interface ParamsCadastraDespesa {
     edit: boolean;
-    despesa: number | null;
+    despesa: number;
 }
 
-export default function CadastraDespesa({ edit, despesa }: ParamsCadastraDespesa) {
+export default function CadastraDespesa() {
     const { usuarioLogado, empresaSelecionada, setControleUniversal } = useAppData()
     const navigate = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
@@ -45,22 +40,6 @@ export default function CadastraDespesa({ edit, despesa }: ParamsCadastraDespesa
             dataPrevisao: 0
         },
     })
-    useEffect(() => {
-        if (edit) {
-            getDespesaEdit();
-        }
-
-    }, [])
-
-    async function getDespesaEdit() {
-        const rep = new DespesaRepository();
-        let desp: DespesaModel = await rep.getDespesa(usuarioLogado.accessToken!, 'INTERNET', empresaSelecionada.id);
-
-        console.log(desp);
-
-
-
-    }
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const userSession = await getUserSession();

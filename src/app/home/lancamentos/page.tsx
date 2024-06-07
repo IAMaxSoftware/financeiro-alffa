@@ -6,7 +6,7 @@ import { toast } from "@/components/ui/use-toast";
 import { DialogDefault } from "@/components/dialogs/dialogDefault";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import CadastraLancamento from "./cadastrar";
+import CadastraLancamento from "./cadastrar/page";
 import { useAppData } from "@/app/context/app_context";
 import { LancamentoModel } from "@/app/models/lancamento_model";
 import { LancamentoRepository } from "@/app/repositories/lancamento_repository";
@@ -38,7 +38,7 @@ export default function ListarLancamentos() {
     return (
         <div className="container mx-auto py-10">
             <div className="grid grid-cols-2">
-                <h1 className="p-4 text-orange-600 text-start">Lançamentos Cadastradas</h1>
+                <h1 className="p-4 text-orange-600 text-start">Lançamentos Cadastrados</h1>
                 <div className="flex flex-col items-end">
                     <div className="flex flex-col items-end">
                         <DialogDefault

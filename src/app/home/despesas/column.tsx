@@ -1,5 +1,4 @@
-
-
+"use client"
 import { toast } from "@/components/ui/use-toast";
 import {
     Dialog,
@@ -19,7 +18,7 @@ import { DialogDefault } from "@/components/dialogs/dialogDefault";
 import { DespesaModelTable } from "../../models/despesa_model";
 import { useAppData } from "../../context/app_context";
 import { DespesaRepository } from "../../repositories/despesa_repository";
-import CadastraDespesa from "./cadastrar";
+import CadastraDespesa from "./cadastrar/page";
 
 
 export const columns: ColumnDef<DespesaModelTable>[] = [
@@ -39,33 +38,13 @@ export const columns: ColumnDef<DespesaModelTable>[] = [
         header: "Visualizar",
         id: "visualizar",
         cell: ({ row }) => {
-            const { accessToken, setControleUniversal } = useAppData()
-            const despesa = row.original;
-            const deletar = async (id: number) => {
-                try {
-                    const repository = new DespesaRepository();
-                    const cod = await repository.delete(id, accessToken);
-                    setControleUniversal(true);
-                    cod ? toast({
-                        description: "Receita deletada com sucesso",
-                    }) : null;
-                    navigator.clipboard.writeText(despesa.id!.toString())
-                } catch (error) {
-                    toast({
-                        variant: "destructive",
-                        title: "Erro.",
-                        description: "Não foi possível deletar a despesa!"
-                    })
-                }
-            }
-
             return (
                 <DialogDefault
                     size={425}
                     ButtonOpen={
                         <Eye className="hover:cursor-pointer" color="orange" ></Eye>
                     }
-                    Children={<CadastraDespesa edit={true} despesa={Number(row.original.id)} />}
+                    Children={<CadastraDespesa />}
                     title='Editar Despesa'
                     descricao=""
                 />
@@ -76,13 +55,11 @@ export const columns: ColumnDef<DespesaModelTable>[] = [
         header: "Deletar",
         id: "Ação",
         cell: ({ row }) => {
-            const { accessToken, setControleUniversal } = useAppData()
             const despesa = row.original;
             const deletar = async (id: number) => {
                 try {
                     const repository = new DespesaRepository();
-                    const cod = await repository.delete(id, accessToken);
-                    setControleUniversal(true);
+                    const cod = await repository.delete(id);
                     cod ? toast({
                         description: "Receita deletada com sucesso",
                     }) : null;
@@ -116,7 +93,7 @@ export const columns: ColumnDef<DespesaModelTable>[] = [
                         </div>
                         <DialogFooter >
                             <Button
-                                variant="confirm"
+                                variant="destructive"
                                 onClick={() => deletar(despesa.id!)}>
                                 Sim
                             </Button>

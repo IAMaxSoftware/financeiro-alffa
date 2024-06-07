@@ -1,5 +1,4 @@
-
-import { Toaster } from "@/components/ui/toaster"
+"use client"
 import { ColumnDef } from "@tanstack/react-table"
 import { DeleteIcon } from 'lucide-react';
 import {
@@ -14,7 +13,7 @@ import {
 } from "@/components/ui/dialog"
 import { Toggle } from "@/components/ui/toggle";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast"
+import { toast, useToast } from "@/components/ui/use-toast"
 import { ReceitaModelTable } from "@/app/models/receita_model";
 import { useAppData } from "@/app/context/app_context";
 import { ReceitaRepository } from "@/app/repositories/receita_repository";
@@ -36,14 +35,11 @@ export const columns: ColumnDef<ReceitaModelTable>[] = [
         header: "Deletar",
         id: "Ação",
         cell: ({ row }) => {
-            const { toast } = useToast()
-            const { accessToken, setControleUniversal } = useAppData()
             const receita = row.original;
             const deletar = async (id: number) => {
                 try {
                     const repository = new ReceitaRepository();
-                    const cod = await repository.delete(id, accessToken);
-                    setControleUniversal(true);
+                    const cod = await repository.delete(id);
                     cod ? toast({
                         description: "Receita deletada com sucesso",
                     }) : null;
@@ -78,7 +74,7 @@ export const columns: ColumnDef<ReceitaModelTable>[] = [
                         <DialogFooter >
                             <DialogClose asChild>
                                 <Button
-                                    variant="confirm"
+                                    variant="destructive"
                                     onClick={() => {
                                         deletar(receita.id!);
                                     }}>

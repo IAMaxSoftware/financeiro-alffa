@@ -3,7 +3,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { DialogDefault } from "@/components/dialogs/dialogDefault";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import CadastraDespesa from "./cadastrar";
+import CadastraDespesa from "./cadastrar/page";
 import { Toaster } from "@/components/ui/toaster";
 import { useEffect, useState } from "react";
 import { DespesaModelTable } from "../../models/despesa_model";
@@ -70,7 +70,7 @@ export default function ListarDespesas() {
                                         <Plus ></Plus>
                                         <p>Cadastrar Despesa</p>
                                     </Button>}
-                                    Children={<CadastraDespesa edit={false} despesa={null} />}
+                                    Children={<CadastraDespesa />}
                                     title='Cadastrar Despesa'
                                     descricao=""
                                 />

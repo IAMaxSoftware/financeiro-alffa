@@ -25,14 +25,9 @@ export class DespesaRepository {
         }
     }
 
-    async delete(despesaId: number, token: string): Promise<boolean> {
+    async delete(despesaId: number): Promise<boolean> {
         try {
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            };
-            console.log('aqui');
-
-            const response = await api.delete(`/despesas/${despesaId}`, config)
+            const response = await api.delete(`/despesas/${despesaId}`)
             return response.status === 200;
         } catch (error) {
             throw new Error(String(Error));

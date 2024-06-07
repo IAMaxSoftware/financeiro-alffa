@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -15,36 +16,35 @@ import { useEffect, useState } from "react"
 import { Table } from "../ui/table"
 import { DataTable } from "../ui/data-table"
 import { toast } from "@/components/ui/use-toast";
-import { useAppData } from "@/context/app_context";
 import { ColumnDef } from "@tanstack/react-table"
 import { CirclePlus } from 'lucide-react';
-import { ReceitaModel, ReceitaModelTable } from "@/models/receita_model"
-import { ReceitaRepository } from "@/repositories/receita_repository"
+import { ReceitaModel, ReceitaModelTable } from "@/app/models/receita_model"
+import { useAppData } from "@/app/context/app_context"
+import { ReceitaRepository } from "@/app/repositories/receita_repository"
 
 interface ParamsBuscaReceita {
     setReceita: React.Dispatch<React.SetStateAction<ReceitaModel>>;
 }
 
-export function BuscaReceita({setReceita}:ParamsBuscaReceita) {
+export function BuscaReceita({ setReceita }: ParamsBuscaReceita) {
 
     const [textoBusca, setTextoBusca] = useState('');
     const [data, setData] = useState<ReceitaModelTable[]>([])
-    const {accessToken, empresaSelecionada} = useAppData();
+    const { accessToken, empresaSelecionada } = useAppData();
 
 
     useEffect(() => {
         busca();
     }, [textoBusca])
 
-    async function busca(){
-        if(textoBusca != "")
-        {
+    async function busca() {
+        if (textoBusca != "") {
             let rep = new ReceitaRepository();
-            var Receitas: ReceitaModelTable[] = await rep.getReceitasPorNome(accessToken, textoBusca,empresaSelecionada.id);
+            var Receitas: ReceitaModelTable[] = await rep.getReceitasPorNome(accessToken, textoBusca, empresaSelecionada.id);
             setData(Receitas);
         }
 
-        
+
     }
 
 
@@ -68,7 +68,7 @@ export function BuscaReceita({setReceita}:ParamsBuscaReceita) {
                     <div>
                         <Input
                             onChange={(e) => setTextoBusca(e.target.value)}
-                            
+
                         ></Input>
                         <DataTable columns={columns} data={data} />
                     </div>
@@ -98,12 +98,11 @@ const columns: ColumnDef<ReceitaModelTable>[] = [
     {
         id: "Ação",
         cell: ({ row }) => {
-            const { accessToken } = useAppData()
             const receita = row.original;
             const selecionar = async (id: number) => {
                 try {
                     const repository = new ReceitaRepository();
-                    await repository.delete(id, accessToken);
+                    await repository.delete(id);
                     navigator.clipboard.writeText(receita.id!.toString())
                 } catch (error) {
                     toast({

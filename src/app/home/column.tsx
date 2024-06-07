@@ -1,6 +1,6 @@
-import { MovimentacoesModel } from "@/models/movimentacoes_model";
 import { ColumnDef } from "@tanstack/react-table"
 import { IntlProvider, FormattedNumber } from 'react-intl'
+import { MovimentacoesModel } from "../models/movimentacoes_model";
 
 export const columns: ColumnDef<MovimentacoesModel>[] = [
     {

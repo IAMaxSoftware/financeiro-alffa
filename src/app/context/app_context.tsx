@@ -1,4 +1,5 @@
-"use client"
+'use client'
+
 import React, { ReactNode, useState, useContext, createContext, SetStateAction } from "react";
 import { EmpresaModel } from "../models/empresa_model";
 import { User } from "../../../lib/session";
@@ -24,10 +25,19 @@ interface AppProviderProps {
 }
 
 function AppProvider({ children }: AppProviderProps) {
+    let usuLogado: User = {
+        id: '0'
+    }
+    let token = '';
+    if (typeof window !== "undefined") {
+        usuLogado = JSON.parse(localStorage.getItem('usuario_logado') ?? '{}');
+        token = localStorage.getItem('accessToken') ?? ''
+    }
+
     const [ultRota, setUltRota] = useState<string>('home');
-    const [usuarioLogado, setUsuarioLogado] = useState<User | null>(JSON.parse(localStorage.getItem('usuario_logado') ?? '{}'));
+    const [usuarioLogado, setUsuarioLogado] = useState<User | null>(usuLogado);
     const [empresaSelecionada, setEmpresaSelecionada] = useState<EmpresaModel | null>(null);
-    const [accessToken, setAccessToken] = useState<string | null>(localStorage.getItem('accessToken'));
+    const [accessToken, setAccessToken] = useState<string | null>(token);
     const [controleUniversal, setControleUniversal] = useState(false);
     return (
         <AppDataContext.Provider value={{

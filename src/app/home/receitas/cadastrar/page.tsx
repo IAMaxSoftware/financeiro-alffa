@@ -1,3 +1,4 @@
+"use client"
 import { useAppData } from "@/app/context/app_context";
 import { NameRoutes } from "@/app/functions/utils";
 import { ReceitaRepository } from "@/app/repositories/receita_repository";
