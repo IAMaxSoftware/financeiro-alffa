@@ -1,10 +1,22 @@
 version: "3"
 
 services:
-  nextapp-production:
+  financeiro-alffa:
     build:
       context: .
       dockerfile: Dockerfile
-    image: nextapp-production
+    image: financeiro-alffa    
     ports:
       - "3000:3000"
+
+  # postgres:
+  #   image: postgres
+  #   volumes:
+  #     - /tmp/database:/var/lib/postgresql/data
+  #   environment:
+  #     POSTGRES_PASSWORD: "ipec2024"
+  #     POSTGRESS_USER: "ipec"
+  #     POSTGRESS_DB: "financeiro"
+      
+  #   ports:
+  #     - "5432:5432"    

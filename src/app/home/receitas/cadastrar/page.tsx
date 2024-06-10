@@ -3,15 +3,15 @@ import { useAppData } from "@/app/context/app_context";
 import { NameRoutes } from "@/app/functions/utils";
 import { ReceitaRepository } from "@/app/repositories/receita_repository";
 import { Card } from "@/components/ui/card";
-import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form";
+import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage, Form } from "@/components/ui/form";
 import MoneyInput from "@/components/ui/money-input"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { Button } from "react-day-picker";
-import { useForm, Form } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import swal from 'sweetalert'
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
     receita: z.string().min(2).max(100, {

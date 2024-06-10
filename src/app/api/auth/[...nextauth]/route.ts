@@ -7,6 +7,12 @@ import GoogleProvider from 'next-auth/providers/google'
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID!
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET!
 
+type profileType = {
+  name?: string
+  email?: string
+  picture?: string
+}
+
 const authOption: NextAuthOptions = {
     session: {
         strategy: 'jwt',
@@ -19,26 +25,28 @@ const authOption: NextAuthOptions = {
     ],
     callbacks: {
         async signIn({ account, profile }) {
-            if (!profile) {
+            const usuario = profile as profileType;
+            if (!usuario) {
                 return true;
             }
-            if (!profile?.email) {
+            if (!usuario?.email) {
                 throw new Error('No profile')
             }
             const listaUsuarios = await prisma.usuarios.findMany();
-            console.log(listaUsuarios)
             if (listaUsuarios.length === 0) {
                 await prisma.usuarios.upsert({
                     where: {
-                        email: profile.email,
+                        email: usuario.email,
                     },
                     create: {
-                        email: profile.email,
-                        nome: profile.name,
+                        email: usuario.email,
+                        nome: usuario.name,
+                        avatar: usuario.picture,
                         admin: true,
                     },
                     update: {
-                        nome: profile.name,
+                        nome: usuario.name,
+                        avatar: usuario.picture,                        
                     },
                 })
                 return true
@@ -46,10 +54,26 @@ const authOption: NextAuthOptions = {
                 //validação para aceitar apenas o primeiro usuario que logou pelo login social
                 const user = await prisma.usuarios.findUnique({
                     where: {
-                        email: profile.email
+                        email: usuario.email
                     }
                 });
                 if (user) {
+                    console.log(profile)
+                    await prisma.usuarios.upsert({
+                        where: {
+                            email: usuario.email,
+                        },
+                        create: {
+                            email: usuario.email,
+                            nome: usuario.name,
+                            avatar: usuario.picture,
+                            admin: true,
+                        },
+                        update: {
+                            nome: usuario.name,
+                            avatar: usuario.picture,                        
+                        },
+                    })
                     return true
                 }
                 return false;

@@ -124,10 +124,6 @@ GET http://{{baseURL}}:3000/api/lancamentos
 Authorization: {{authToken}}
 Content-Type: application/json
 
-###
-
-GET http://{{baseURL}}:3000/api/usuarios
-Content-Type: application/json
 
 ###
 POST http://{{baseURL}}:3000/api/auth/login
@@ -138,7 +134,7 @@ Content-Type: application/json
   "senha": "123456"
 }
 
-###
+###USUARIOS
 POST http://{{baseURL}}:3000/api/usuarios
 Content-Type: application/json
 
@@ -150,6 +146,12 @@ Content-Type: application/json
 }
 
 ###
+
+GET http://{{baseURL}}:3000/api/usuarios
+Content-Type: application/json
+
+
+###EMPRESAS
 POST http://{{baseURL}}:3000/api/empresas
 Content-Type: application/json
 
@@ -162,7 +164,7 @@ Content-Type: application/json
 GET http://{{baseURL}}:3000/api/empresas
 Content-Type: application/json
 
-###
+###MOVIMENTACOES
 GET http://{{baseURL}}:3000/api/movimentacoes
 Content-Type: application/json
 

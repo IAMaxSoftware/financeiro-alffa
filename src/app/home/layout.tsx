@@ -11,6 +11,7 @@ import { NameRoutes } from '../functions/utils';
 import { useAppData } from '../context/app_context';
 import { redirect, useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface homeLayoutProps {
     children: ReactNode;
@@ -39,6 +40,7 @@ export default function HomeLayout({ children }: homeLayoutProps) {
 
     useEffect(() => {
         personalizaClasse();
+        console.log(session)
     }, []);
 
 
@@ -162,7 +164,10 @@ export default function HomeLayout({ children }: homeLayoutProps) {
                                 onClick={clickAvatar}
                                 size="sm" variant="ghost">
                                 <div className='grid grid-cols-2 justify-items-end'>
-                                    <CircleUserRound size={24} />
+                                    <Avatar>
+                                        {session?.user?.image && (<AvatarImage src={session?.user?.image} alt="@shadcn" />)}
+                                        <AvatarFallback> <CircleUserRound size={24} /></AvatarFallback>
+                                    </Avatar>
                                     {avatarAberto ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
                                 </div>
                             </Button>
