@@ -5,6 +5,7 @@ import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { signIn, useSession } from 'next-auth/react';
 import { redirect } from "next/navigation";
+import { url } from "./services/api";
 
 export default function Login() {
   const { data, status } = useSession();
@@ -13,7 +14,7 @@ export default function Login() {
     redirect('/home')
   }
 
-  const handleSingInGoole = async () => signIn('google', { callbackUrl: 'http://localhost:3000/home' });
+  const handleSingInGoole = async () => signIn('google', { callbackUrl: url+'/home' });
 
   return (
     <div className="flex h-screen w-full bg-gray-900 bg-cover bg-no-repeat bg-[url('../../src/assets/financeiro.png')]">
