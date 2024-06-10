@@ -6,6 +6,7 @@ import GoogleProvider from 'next-auth/providers/google'
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID!
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET!
+const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET ?? 'adb3dcb3830f8ab0ee5d3176e356f3aa'
 
 type profileType = {
   name?: string
@@ -23,7 +24,7 @@ const authOption: NextAuthOptions = {
             clientSecret: GOOGLE_CLIENT_SECRET,
         }),        
     ],
-    secret: process.env.SECRET, // To be added
+    secret: NEXTAUTH_SECRET, // To be added
     callbacks: {
         async signIn({ account, profile }) {
             const usuario = profile as profileType;
