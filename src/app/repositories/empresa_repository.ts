@@ -1,7 +1,7 @@
 
 import { EmpresaModel } from "../models/empresa_model";
 
-import api from "../services/api";
+import {api} from "../services/api";
 
 async function getAllEmpresas(): Promise<EmpresaModel[]> {
     const dados = await api.get('/empresas');

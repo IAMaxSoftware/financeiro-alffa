@@ -1,7 +1,5 @@
 import { User, getUserSession } from "../../../lib/session";
 
-
-
 async function usuarioAutentico() {
     try {
         const userSession = await getUserSession()

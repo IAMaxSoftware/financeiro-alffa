@@ -2,7 +2,7 @@ import { formatarNumeroMoedaReal, formatarNumeroVigula } from "../functions/util
 import { DespesaModel } from "../models/despesa_model";
 import { DespesaModelTable } from "../models/despesa_model";
 
-import api from "../services/api";
+import {api} from "../services/api";
 
 export class DespesaRepository {
 

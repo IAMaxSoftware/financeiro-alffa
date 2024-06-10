@@ -1,5 +1,5 @@
 import { MovimentacoesModel } from "../models/movimentacoes_model";
-import api from "../services/api";
+import {api} from "../services/api";
 
 export class MovimentacoesRepository {
     async getMovimentacoes(): Promise<MovimentacoesModel[]> {

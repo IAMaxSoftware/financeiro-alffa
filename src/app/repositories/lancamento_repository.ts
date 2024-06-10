@@ -2,7 +2,7 @@
 
 import { LancamentoModel, LancamentoTableModel } from "../models/lancamento_model";
 import { formatarNumeroMoedaReal } from "../functions/utils";
-import api from "../services/api";
+import {api} from "../services/api";
 
 export class LancamentoRepository {
 

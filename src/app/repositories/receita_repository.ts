@@ -1,6 +1,6 @@
 import { formatarNumeroMoedaReal } from "../functions/utils";
 import { ReceitaModel, ReceitaModelTable } from "../models/receita_model";
-import api from "../services/api";
+import {api} from "../services/api";
 
 export class ReceitaRepository {
 
