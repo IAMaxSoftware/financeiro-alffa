@@ -21,8 +21,9 @@ const authOption: NextAuthOptions = {
         GoogleProvider({
             clientId: GOOGLE_CLIENT_ID,
             clientSecret: GOOGLE_CLIENT_SECRET,
-        }),
+        }),        
     ],
+    secret: process.env.SECRET, // To be added
     callbacks: {
         async signIn({ account, profile }) {
             const usuario = profile as profileType;
