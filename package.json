@@ -6,7 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migrate:dev": "prisma migrate dev",
+    "migrate:dev:create": "prisma migrate dev --create-only",
+    "migrate:deploy": "npx prisma migrate deploy",
+    "migrate:reset": "npx prisma migrate reset --force",
+    "migrate:resolve": "npx prisma migrate resolve",
+    "prisma:generate": "npx prisma generate",
+    "prisma:studio": "npx prisma studio",
+    "start:migrate:prod": "npm run migrate:deploy && npm run start:prod"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
