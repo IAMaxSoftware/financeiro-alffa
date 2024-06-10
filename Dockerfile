@@ -2,8 +2,10 @@ FROM node:18-alpine as builder
 WORKDIR /app
 
 COPY package.json package-lock.json ./
+COPY prisma ./prisma/
 RUN npm ci
 COPY . .
+RUN npm run migrate:deploy
 RUN npm run build
 
 FROM node:18-alpine as runner
