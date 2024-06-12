@@ -1,7 +1,7 @@
-@baseURL = localhost
+@baseURL = http://localhost:3000
 @authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcxNzI2ODkxNCwiZXhwIjoxNzE3MzU1MzE0fQ.UG82KQWhc6RgKjPVgeDW8tE0oe2Fq1j1Kuj3sccqT0c
 
-POST http://{{baseURL}}:3000/api/despesas
+POST {{baseURL}}/api/despesas
 Authorization: {{authToken}}
 Content-Type: application/json
 
@@ -15,7 +15,7 @@ Content-Type: application/json
 
 ###
 
-PUT http://{{baseURL}}:3000/api/despesas/5
+PUT {{baseURL}}/api/despesas/5
 Authorization: {{authToken}}
 Content-Type: application/json
 
@@ -28,32 +28,32 @@ Content-Type: application/json
 }
 
 ###
-GET http://{{baseURL}}:3000/api/despesas
+GET {{baseURL}}/api/despesas
 Authorization: {{authToken}}
 Content-Type: application/json
 
 ###
 
 
-GET http://{{baseURL}}:3000/api/despesas/5
+GET {{baseURL}}/api/despesas/5
 Authorization: {{authToken}}
 Content-Type: application/json
 
 ###
 
-GET http://{{baseURL}}:3000/api/despesas?nome=agua&empresaId=1
+GET {{baseURL}}/api/despesas?nome=agua&empresaId=1
 Authorization: {{authToken}}
 Content-Type: application/json
 
 ###
 
-DELETE http://{{baseURL}}:3000/api/despesas/5
+DELETE {{baseURL}}/api/despesas/5
 Authorization: {{authToken}}
 Content-Type: application/json
 
 ###
 
-PUT  http://{{baseURL}}:3000/api/receitas/5
+PUT  {{baseURL}}/api/receitas/5
 Authorization: {{authToken}}
 Content-Type: application/json
 
@@ -67,7 +67,7 @@ Content-Type: application/json
 
 ###
 
-POST http://{{baseURL}}:3000/api/receitas
+POST {{baseURL}}/api/receitas
 Authorization: {{authToken}}
 Content-Type: application/json
 
@@ -80,31 +80,31 @@ Content-Type: application/json
 }
 ###
 
-GET http://{{baseURL}}:3000/api/receitas
+GET {{baseURL}}/api/receitas
 Authorization: {{authToken}}
 Content-Type: application/json
 
 ###
 
-GET http://{{baseURL}}:3000/api/receitas/4
+GET {{baseURL}}/api/receitas/4
 Authorization: {{authToken}}
 Content-Type: application/json
 
 ###
-GET http://{{baseURL}}:3000/api/receitas?nome=rec&empresaId=2
+GET {{baseURL}}/api/receitas?nome=rec&empresaId=2
 Authorization: {{authToken}}
 Content-Type: application/json
 
 ###
 
-DELETE http://{{baseURL}}:3000/api/receitas/5
+DELETE {{baseURL}}/api/receitas/5
 Authorization: {{authToken}}
 Content-Type: application/json
 
 
 ###
 
-POST http://{{baseURL}}:3000/api/lancamentos
+POST {{baseURL}}/api/lancamentos
 Authorization: {{authToken}}
 Content-Type: application/json
 
@@ -120,13 +120,13 @@ Content-Type: application/json
 
 ###
 
-GET http://{{baseURL}}:3000/api/lancamentos
+GET {{baseURL}}/api/lancamentos
 Authorization: {{authToken}}
 Content-Type: application/json
 
 
 ###
-POST http://{{baseURL}}:3000/api/auth/login
+POST {{baseURL}}/api/auth/login
 Content-Type: application/json
 
 {
@@ -135,24 +135,24 @@ Content-Type: application/json
 }
 
 ###USUARIOS
-POST http://{{baseURL}}:3000/api/usuarios
+POST {{baseURL}}/api/usuarios
 Content-Type: application/json
 
 {
    "nome": "Iago",
-   "email": "iago@gmail.com",
+   "email": "iagoortiz@gmail.com",
    "senha": "123456",
    "admin": true
 }
 
 ###
 
-GET http://{{baseURL}}:3000/api/usuarios
+GET {{baseURL}}/api/usuarios
 Content-Type: application/json
 
 
 ###EMPRESAS
-POST http://{{baseURL}}:3000/api/empresas
+POST {{baseURL}}/api/empresas
 Content-Type: application/json
 
 {
@@ -161,20 +161,20 @@ Content-Type: application/json
 
 
 ###
-GET http://{{baseURL}}:3000/api/empresas
+GET {{baseURL}}/api/empresas
 Content-Type: application/json
 
 ###MOVIMENTACOES
-GET http://{{baseURL}}:3000/api/movimentacoes
+GET {{baseURL}}/api/movimentacoes
 Content-Type: application/json
 
 ###
-GET http://{{baseURL}}:3000/api/movimentacoes?empresaId=1
+GET {{baseURL}}/api/movimentacoes?empresaId=1
 Content-Type: application/json
 
 ###
-GET http://{{baseURL}}:3000/api/google-calendar
+GET {{baseURL}}/api/google-calendar
 
 
 ###
-GET http://{{baseURL}}:3000/api/despesas?nome=TESTE
+GET {{baseURL}}/api/despesas?nome=TESTE
