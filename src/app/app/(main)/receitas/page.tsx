@@ -8,9 +8,9 @@ import { DialogDefault } from "@/components/dialogs/dialogDefault";
 import { Button } from "@/components/ui/button";
 import CadastraReceita from "./cadastrar/page";
 import { Plus } from "lucide-react";
-import { useAppData } from "@/app/context/app_context";
-import { ReceitaModelTable } from "@/app/models/receita_model";
-import { ReceitaRepository } from "@/app/repositories/receita_repository";
+import { useAppData } from "@/app/app/context/app_context";
+import { ReceitaModelTable } from "@/app/app/models/receita_model";
+import { ReceitaRepository } from "@/app/app/repositories/receita_repository";
 
 export default function ListarReceitas() {
     const { accessToken, empresaSelecionada, controleUniversal, setControleUniversal } = useAppData()

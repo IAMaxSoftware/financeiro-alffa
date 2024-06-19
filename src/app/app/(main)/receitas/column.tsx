@@ -1,6 +1,6 @@
 "use client"
 import { ColumnDef } from "@tanstack/react-table"
-import { Ban, DeleteIcon } from 'lucide-react';
+import { DeleteIcon } from 'lucide-react';
 import {
     Dialog,
     DialogClose,
@@ -14,35 +14,36 @@ import {
 import { Toggle } from "@/components/ui/toggle";
 import { Button } from "@/components/ui/button";
 import { toast, useToast } from "@/components/ui/use-toast"
-import { LancamentoModel } from "@/app/models/lancamento_model";
-import { useAppData } from "@/app/context/app_context";
+import { ReceitaModelTable } from "@/app/app/models/receita_model";
+import { useAppData } from "@/app/app/context/app_context";
+import { ReceitaRepository } from "@/app/app/repositories/receita_repository";
 
-export const columns: ColumnDef<LancamentoModel>[] = [
+export const columns: ColumnDef<ReceitaModelTable>[] = [
     {
-        accessorKey: "obs",
+        accessorKey: "nome",
         header: "Nome",
     },
     {
-        accessorKey: "valor",
-        header: "Valor",
+        accessorKey: "valorEstimado",
+        header: "Valor Estimado",
     },
     {
-        accessorKey: "tipo",
-        header: "Tipo",
+        accessorKey: "dataPrevisao",
+        header: "Dia Pagamento",
     },
     {
+        header: "Deletar",
         id: "Ação",
         cell: ({ row }) => {
-            const lancamento = row.original;
+            const receita = row.original;
             const deletar = async (id: number) => {
                 try {
-                    /*const repository = new LancamentoRepository();
-                    const cod = await repository.delete(id, accessToken);*/
-                    const cod = true;
+                    const repository = new ReceitaRepository();
+                    const cod = await repository.delete(id);
                     cod ? toast({
-                        description: "Lançamento deletada com sucesso",
+                        description: "Receita deletada com sucesso",
                     }) : null;
-                    navigator.clipboard.writeText(lancamento.id!.toString())
+                    navigator.clipboard.writeText(receita.id!.toString())
                 } catch (error) {
                     toast({
                         variant: "destructive",
@@ -58,14 +59,14 @@ export const columns: ColumnDef<LancamentoModel>[] = [
                     <DialogTrigger asChild>
                         <Toggle
                             aria-label="Toggle bold">
-                            <Ban color="orange"></Ban>
+                            <DeleteIcon color="orange"></DeleteIcon>
                         </Toggle>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
                         <DialogHeader>
-                            <DialogTitle>Cancelar Lançamento</DialogTitle>
+                            <DialogTitle>Excluir Receita</DialogTitle>
                             <DialogDescription>
-                                Tem certeza que deseja cancelar ?
+                                Tem certeza que deseja excluir a receita?
                             </DialogDescription>
                         </DialogHeader>
                         <div>
@@ -75,7 +76,7 @@ export const columns: ColumnDef<LancamentoModel>[] = [
                                 <Button
                                     variant="destructive"
                                     onClick={() => {
-                                        deletar(lancamento.id!);
+                                        deletar(receita.id!);
                                     }}>
                                     Sim
                                 </Button>

@@ -1,4 +1,4 @@
-import { ReceitaDto } from "@/app/dtos/receita.dto"
+import { ReceitaDto } from "@/app/app/dtos/receita.dto"
 import { ReceitasService } from "./receitas.service"
 import { type NextRequest } from 'next/server'
 

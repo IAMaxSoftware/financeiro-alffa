@@ -1,9 +1,9 @@
 "use client"
 
 
-import { useAppData } from "@/app/context/app_context";
-import { EmpresaModel } from "@/app/models/empresa_model";
-import { getAllEmpresas } from "@/app/repositories/empresa_repository";
+import { useAppData } from "@/app/app/context/app_context";
+import { EmpresaModel } from "@/app/app/models/empresa_model";
+import { getAllEmpresas } from "@/app/app/repositories/empresa_repository";
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,

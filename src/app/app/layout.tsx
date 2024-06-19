@@ -7,8 +7,8 @@ import { Button } from '../../components/ui/button';
 import { ChevronDown, ChevronUp, CircleUserRound, LogOut, User, UserRoundPlus } from 'lucide-react';
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
 import { DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../../components/ui/dropdown-menu';
-import { NameRoutes } from '../functions/utils';
-import { useAppData } from '../context/app_context';
+import { NameRoutes } from './functions/utils';
+import { useAppData } from './context/app_context';
 import { redirect, useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -18,12 +18,7 @@ interface homeLayoutProps {
 }
 
 export default function HomeLayout({ children }: homeLayoutProps) {
-    const { data: session } = useSession({
-        required: true,
-        onUnauthenticated() {
-            redirect("/");
-        },
-    });
+    const { data: session } = useSession();
     const classPadrao = 'text-slate-600  w-full rounded-full';
     const classSelecionado = 'text-orange-600	bg-orange-200 w-full rounded-full'
     const [avatarAberto, setAvatarAberto] = useState(false);

@@ -2,7 +2,7 @@
 
 import React, { ReactNode, useState, useContext, createContext, SetStateAction } from "react";
 import { EmpresaModel } from "../models/empresa_model";
-import { User } from "../../../lib/session";
+import { User } from "../../../../lib/session";
 
 
 interface AppDataContextType {

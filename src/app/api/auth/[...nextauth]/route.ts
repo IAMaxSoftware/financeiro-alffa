@@ -9,9 +9,9 @@ const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET!
 const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET ?? 'adb3dcb3830f8ab0ee5d3176e356f3aa'
 
 type profileType = {
-  name?: string
-  email?: string
-  picture?: string
+    name?: string
+    email?: string
+    picture?: string
 }
 
 const authOption: NextAuthOptions = {
@@ -22,9 +22,20 @@ const authOption: NextAuthOptions = {
         GoogleProvider({
             clientId: GOOGLE_CLIENT_ID,
             clientSecret: GOOGLE_CLIENT_SECRET,
-        }),        
+            authorization: {
+                params: {
+                    scope: "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
+                },
+            },
+        }),
     ],
     secret: NEXTAUTH_SECRET, // To be added
+    theme: {
+        colorScheme: "dark",
+    },
+    pages: {
+        signIn: "/",
+    },
     callbacks: {
         async signIn({ account, profile }) {
             const usuario = profile as profileType;
@@ -34,6 +45,7 @@ const authOption: NextAuthOptions = {
             if (!usuario?.email) {
                 throw new Error('No profile')
             }
+            console.log(usuario)
             const listaUsuarios = await prisma.usuarios.findMany();
             if (listaUsuarios.length === 0) {
                 await prisma.usuarios.upsert({
@@ -48,7 +60,7 @@ const authOption: NextAuthOptions = {
                     },
                     update: {
                         nome: usuario.name,
-                        avatar: usuario.picture,                        
+                        avatar: usuario.picture,
                     },
                 })
                 return true
@@ -73,7 +85,7 @@ const authOption: NextAuthOptions = {
                         },
                         update: {
                             nome: usuario.name,
-                            avatar: usuario.picture,                        
+                            avatar: usuario.picture,
                         },
                     })
                     return true
@@ -83,21 +95,25 @@ const authOption: NextAuthOptions = {
         },
         session,
         async jwt({ token, user, account, profile }) {
-            if (profile) {
-                const user = await prisma.usuarios.findUnique({
-                    where: {
-                        email: profile.email,
-                    },
-                })
-                if (!user) {
-                    throw new Error('No user found')
-                }
-                token.id = user.id
+            // if (profile) {
+            //     const user = await prisma.usuarios.findUnique({
+            //         where: {
+            //             email: profile.email,
+            //         },
+            //     })
+            //     if (!user) {
+            //         throw new Error('No user found')
+            //     }
+            //     token.id = user.id
+            // }
+            if (account) {
+                token.accessToken = account.access_token;
+                token.refreshToken = account.refresh_token;
             }
-            return token
+            return token;
         },
     },
 }
 
 const handler = NextAuth(authOption)
-export { handler as GET, handler as POST }
+export { handler as GET, handler as POST, authOption }

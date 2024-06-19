@@ -1,4 +1,4 @@
-import { DespesaDto } from "@/app/dtos/despesa.dto"
+import { DespesaDto } from "@/app/app/dtos/despesa.dto"
 import { DespesasService } from "./despesas.service"
 import { type NextRequest } from 'next/server'
 

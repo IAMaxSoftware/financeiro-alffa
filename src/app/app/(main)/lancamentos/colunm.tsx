@@ -1,6 +1,6 @@
 "use client"
 import { ColumnDef } from "@tanstack/react-table"
-import { DeleteIcon } from 'lucide-react';
+import { Ban, DeleteIcon } from 'lucide-react';
 import {
     Dialog,
     DialogClose,
@@ -14,36 +14,35 @@ import {
 import { Toggle } from "@/components/ui/toggle";
 import { Button } from "@/components/ui/button";
 import { toast, useToast } from "@/components/ui/use-toast"
-import { ReceitaModelTable } from "@/app/models/receita_model";
-import { useAppData } from "@/app/context/app_context";
-import { ReceitaRepository } from "@/app/repositories/receita_repository";
+import { LancamentoModel } from "@/app/app/models/lancamento_model";
+import { useAppData } from "@/app/app/context/app_context";
 
-export const columns: ColumnDef<ReceitaModelTable>[] = [
+export const columns: ColumnDef<LancamentoModel>[] = [
     {
-        accessorKey: "nome",
+        accessorKey: "obs",
         header: "Nome",
     },
     {
-        accessorKey: "valorEstimado",
-        header: "Valor Estimado",
+        accessorKey: "valor",
+        header: "Valor",
     },
     {
-        accessorKey: "dataPrevisao",
-        header: "Dia Pagamento",
+        accessorKey: "tipo",
+        header: "Tipo",
     },
     {
-        header: "Deletar",
         id: "Ação",
         cell: ({ row }) => {
-            const receita = row.original;
+            const lancamento = row.original;
             const deletar = async (id: number) => {
                 try {
-                    const repository = new ReceitaRepository();
-                    const cod = await repository.delete(id);
+                    /*const repository = new LancamentoRepository();
+                    const cod = await repository.delete(id, accessToken);*/
+                    const cod = true;
                     cod ? toast({
-                        description: "Receita deletada com sucesso",
+                        description: "Lançamento deletada com sucesso",
                     }) : null;
-                    navigator.clipboard.writeText(receita.id!.toString())
+                    navigator.clipboard.writeText(lancamento.id!.toString())
                 } catch (error) {
                     toast({
                         variant: "destructive",
@@ -59,14 +58,14 @@ export const columns: ColumnDef<ReceitaModelTable>[] = [
                     <DialogTrigger asChild>
                         <Toggle
                             aria-label="Toggle bold">
-                            <DeleteIcon color="orange"></DeleteIcon>
+                            <Ban color="orange"></Ban>
                         </Toggle>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
                         <DialogHeader>
-                            <DialogTitle>Excluir Receita</DialogTitle>
+                            <DialogTitle>Cancelar Lançamento</DialogTitle>
                             <DialogDescription>
-                                Tem certeza que deseja excluir a receita?
+                                Tem certeza que deseja cancelar ?
                             </DialogDescription>
                         </DialogHeader>
                         <div>
@@ -76,7 +75,7 @@ export const columns: ColumnDef<ReceitaModelTable>[] = [
                                 <Button
                                     variant="destructive"
                                     onClick={() => {
-                                        deletar(receita.id!);
+                                        deletar(lancamento.id!);
                                     }}>
                                     Sim
                                 </Button>

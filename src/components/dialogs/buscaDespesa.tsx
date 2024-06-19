@@ -18,9 +18,9 @@ import { DataTable } from "../ui/data-table"
 import { toast } from "@/components/ui/use-toast";
 import { ColumnDef } from "@tanstack/react-table"
 import { DeleteIcon } from 'lucide-react';
-import { DespesaModelTable } from "@/app/models/despesa_model"
-import { useAppData } from "@/app/context/app_context"
-import { DespesaRepository } from "@/app/repositories/despesa_repository"
+import { DespesaModelTable } from "@/app/app/models/despesa_model"
+import { useAppData } from "@/app/app/context/app_context"
+import { DespesaRepository } from "@/app/app/repositories/despesa_repository"
 
 export function BuscaDespesa() {
 

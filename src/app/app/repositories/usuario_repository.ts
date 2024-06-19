@@ -1,4 +1,4 @@
-import { User, getUserSession } from "../../../lib/session";
+import { User, getUserSession } from "../../../../lib/session";
 
 async function usuarioAutentico() {
     try {

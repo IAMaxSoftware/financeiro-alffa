@@ -1,4 +1,4 @@
-import { MovimentacoesDto, MovimentacoesQuery } from "@/app/dtos/movimentacoes.dto";
+import { MovimentacoesDto, MovimentacoesQuery } from "@/app/app/dtos/movimentacoes.dto";
 import { prisma } from "../../../../lib/prisma";
 
 export class MovimentacoesService {

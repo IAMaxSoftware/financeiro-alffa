@@ -18,9 +18,9 @@ import { DataTable } from "../ui/data-table"
 import { toast } from "@/components/ui/use-toast";
 import { ColumnDef } from "@tanstack/react-table"
 import { CirclePlus } from 'lucide-react';
-import { ReceitaModel, ReceitaModelTable } from "@/app/models/receita_model"
-import { useAppData } from "@/app/context/app_context"
-import { ReceitaRepository } from "@/app/repositories/receita_repository"
+import { ReceitaModel, ReceitaModelTable } from "@/app/app/models/receita_model"
+import { useAppData } from "@/app/app/context/app_context"
+import { ReceitaRepository } from "@/app/app/repositories/receita_repository"
 
 interface ParamsBuscaReceita {
     setReceita: React.Dispatch<React.SetStateAction<ReceitaModel>>;

@@ -1,4 +1,4 @@
-import { entradaGraficos, saidaGraficos } from '@/app/functions/utils';
+import { entradaGraficos, saidaGraficos } from '@/app/app/functions/utils';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
 
 const data = [

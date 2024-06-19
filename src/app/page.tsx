@@ -1,38 +1,13 @@
-"use client"
+import Link from "next/link";
 
-import { Toaster } from "@/components/ui/toaster";
-import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { signIn, useSession } from 'next-auth/react';
-import { redirect } from "next/navigation";
-import { url } from "./services/api";
-
-export default function Login() {
-  const { data, status } = useSession();
-
-  if (status === 'authenticated') {
-    redirect('/home')
-  }
-
-  const handleSingInGoole = async () => signIn('google', { callbackUrl: url+'/home' });
-
-  return (
-    <div className="flex h-screen w-full bg-gray-900 bg-cover bg-no-repeat bg-[url('../../src/assets/financeiro.png')]">
-      <Toaster />
-      <div id="backgroundLogin" className=" h-full w-full sm:w-1/2 md:w-1/2 lg:w-1/2 ">
-        <div className="rounded-xl mt-40 self-start mx-auto">
-          <div className='flex flex-col items-center'>
-            <Card className="w-80 h-100 opacity-100 bg-neutral-200 text-orange-600">
-              <CardHeader>
-                <CardTitle className="text-center">FINANCEIRO</CardTitle>
-              </CardHeader>
-              <CardFooter className="flex flex-col justify-center">
-                <Button onClick={handleSingInGoole}>Login com Google</Button>
-              </CardFooter>
-            </Card>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+export default function Home() {
+    return (
+        <main className="flex flex-col items-center justify-center h-screen bg-gray-100 text-xl">
+            <h1>Bem vindo ao Sistema financeiro Alffa</h1>
+            <p>Seu sistema financeiro completo em um só lugar.</p>
+            <Link className="mt-4 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" href="/auth">
+                Entrar
+            </Link>
+        </main>
+    );
 }

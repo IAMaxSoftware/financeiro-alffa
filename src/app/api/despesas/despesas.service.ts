@@ -1,4 +1,4 @@
-import { DespesaDto, DespesaQuery } from "@/app/dtos/despesa.dto";
+import { DespesaDto, DespesaQuery } from "@/app/app/dtos/despesa.dto";
 import { prisma } from "../../../../lib/prisma";
 
 export class DespesasService {

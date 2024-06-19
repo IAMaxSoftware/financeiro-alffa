@@ -1,4 +1,4 @@
-import { LancamentoDto } from "@/app/dtos/lancamentos.dto";
+import { LancamentoDto } from "@/app/app/dtos/lancamentos.dto";
 import { LancamentosService } from "./lancamentos.service";
 
 async function GET(request: Request) {

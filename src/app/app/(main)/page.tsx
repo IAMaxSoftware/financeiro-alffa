@@ -12,16 +12,8 @@ import { DateRange } from "react-day-picker"
 import { MovimentacoesModel } from "../models/movimentacoes_model"
 import { getFirstDayOfCurrentMonth } from "../functions/utils"
 import { MovimentacoesRepository } from "../repositories/movimentacoes_repository"
-import { useSession } from "next-auth/react"
-import { redirect } from "next/navigation"
 
 export default function Home() {
-  const { data } = useSession({
-    required: true,
-    onUnauthenticated() {
-      redirect("/");
-    },
-  });
   const [movimentacoes, setMovimentacoes] = useState<MovimentacoesModel[]>([])
   const [dataRange, setDateRange] = React.useState<DateRange | undefined>({
     from: getFirstDayOfCurrentMonth(),

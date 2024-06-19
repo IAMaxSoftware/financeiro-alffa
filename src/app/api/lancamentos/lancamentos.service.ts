@@ -1,4 +1,4 @@
-import { LancamentoDto } from "@/app/dtos/lancamentos.dto";
+import { LancamentoDto } from "@/app/app/dtos/lancamentos.dto";
 import { prisma } from "../../../../lib/prisma";
 import { MovimentacoesService } from "../movimentacoes/movimentacoes.service";
 

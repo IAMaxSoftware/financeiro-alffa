@@ -1,4 +1,4 @@
-import { ReceitaDto, ReceitaQuery } from "@/app/dtos/receita.dto";
+import { ReceitaDto, ReceitaQuery } from "@/app/app/dtos/receita.dto";
 import { prisma } from "../../../../lib/prisma";
 
 export class ReceitasService {
