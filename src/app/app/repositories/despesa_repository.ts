@@ -6,19 +6,16 @@ import {api} from "../services/api";
 
 export class DespesaRepository {
 
-    async create(despesa: DespesaModel, token: string): Promise<DespesaModel> {
+    async create(despesa: DespesaModel): Promise<DespesaModel> {
         try {
             const { nome, valorEstimado, usuarioCriou, dataPrevisao, empresaId } = despesa;
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            };
             const response = await api.post('/despesas', {
                 nome,
                 valorEstimado,
                 usuarioCriou,
                 dataPrevisao,
                 empresaId
-            }, config)
+            })
             return response.data as DespesaModel;
         } catch (error) {
             throw new Error(String(error));
@@ -34,22 +31,18 @@ export class DespesaRepository {
         }
     }
 
-    async getDespesas(token: string): Promise<DespesaModel[]> {
+    async getDespesas(): Promise<DespesaModel[]> {
         try {
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            };
-            const response = await api.get('/despesas', config)
+            const response = await api.get('/despesas')
             return response.data as DespesaModel[];
         } catch (error) {
             throw new Error(String(Error));
         }
     }
 
-    async getDespesa(token: string, nome: string, empresaId: number): Promise<DespesaModel> {
+    async getDespesa(nome: string, empresaId: number): Promise<DespesaModel> {
         try {
             const config = {
-                headers: { Authorization: `Bearer ${token}` },
                 params: {
                     nome: nome,
                     empresaId: empresaId
@@ -63,14 +56,10 @@ export class DespesaRepository {
     }
 
 
-    async getDespesasValorFormatado(token: string): Promise<DespesaModelTable[]> {
+    async getDespesasValorFormatado(): Promise<DespesaModelTable[]> {
         let retorno: DespesaModelTable[] = [];
         try {
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            };
-            const response = await api.get('/despesas', config)
-
+            const response = await api.get('/despesas')
 
             response.data.forEach((value: DespesaModel) => {
                 retorno.push({

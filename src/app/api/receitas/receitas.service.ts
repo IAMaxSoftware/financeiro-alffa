@@ -1,5 +1,5 @@
 import { ReceitaDto, ReceitaQuery } from "@/app/app/dtos/receita.dto";
-import { prisma } from "../../../../lib/prisma";
+import { prisma } from "../../../lib/prisma";
 
 export class ReceitasService {
     async getReceitas(receitaQuery: ReceitaQuery) {

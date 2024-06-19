@@ -24,7 +24,7 @@ import { DespesaModel } from "@/app/app/models/despesa_model"
 import { useRouter } from "next/navigation"
 import { LancamentoRepository } from "@/app/app/repositories/lancamento_repository"
 import { NameRoutes } from "@/app/app/functions/utils"
-import { cn } from "../../../../../../lib/utils"
+import { cn } from "../../../../../lib/utils"
 
 const formSchema = z.object({
     obs: z.string().min(2).max(100, {

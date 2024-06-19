@@ -13,7 +13,7 @@ import { ReceitaModelTable } from "@/app/app/models/receita_model";
 import { ReceitaRepository } from "@/app/app/repositories/receita_repository";
 
 export default function ListarReceitas() {
-    const { accessToken, empresaSelecionada, controleUniversal, setControleUniversal } = useAppData()
+    const { empresaSelecionada, controleUniversal, setControleUniversal } = useAppData()
     const [data, setData] = useState<ReceitaModelTable[]>([])
 
 
@@ -35,7 +35,7 @@ export default function ListarReceitas() {
     const getReceitas = async () => {
         try {
             const respository = new ReceitaRepository();
-            const Receitas = await respository.getReceitaValorFormatado(accessToken);
+            const Receitas = await respository.getReceitaValorFormatado();
             setData(Receitas);
         } catch (error) {
             toast({

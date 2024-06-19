@@ -3,12 +3,10 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { signIn, useSession } from 'next-auth/react';
-import { redirect } from "next/navigation";
-import { url } from "../app/services/api";
+import { signIn } from 'next-auth/react';
 
 export default function Login() {
-  const handleSingInGoole = async () => signIn('google', { callbackUrl: url + '/home' });
+  const handleSingInGoole = async () => signIn('google', { callbackUrl: '/' });
 
   return (
     <div className="flex h-screen w-full bg-gray-900 bg-cover bg-no-repeat bg-[url('../../src/assets/financeiro.png')]">

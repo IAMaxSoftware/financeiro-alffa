@@ -1,5 +1,5 @@
 import { LancamentoDto } from "@/app/app/dtos/lancamentos.dto";
-import { prisma } from "../../../../lib/prisma";
+import { prisma } from "../../../lib/prisma";
 import { MovimentacoesService } from "../movimentacoes/movimentacoes.service";
 
 export class LancamentosService {

@@ -4,20 +4,17 @@ import {api} from "../services/api";
 
 export class ReceitaRepository {
 
-    async create(receita: ReceitaModel, token: string): Promise<ReceitaModel> {
+    async create(receita: ReceitaModel): Promise<ReceitaModel> {
 
         const { nome, valorEstimado, usuarioCriou, dataPrevisao, empresaId } = receita;
         try {
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            };
             const response = await api.post('/receitas', {
                 nome,
                 valorEstimado,
                 usuarioCriou,
                 dataPrevisao,
                 empresaId
-            }, config)
+            })
             return response.data as ReceitaModel;
         } catch (error) {
             throw new Error(String(error));
@@ -34,23 +31,19 @@ export class ReceitaRepository {
         }
     }
 
-    async getReceitas(token: string): Promise<ReceitaModel[]> {
+    async getReceitas(): Promise<ReceitaModel[]> {
         try {
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            };
-            const response = await api.get('/receitas', config)
+            const response = await api.get('/receitas')
             return response.data as ReceitaModel[];
         } catch (error) {
             throw new Error(String(Error));
         }
     }
 
-    async getReceitasPorNome(token: string, nome: string, empresaId: number): Promise<ReceitaModelTable[]> {
+    async getReceitasPorNome(nome: string, empresaId: number): Promise<ReceitaModelTable[]> {
         let retorno: ReceitaModelTable[] = [];
         try {
             const config = {
-                headers: { Authorization: `Bearer ${token}` },
                 params: {
                     nome: nome,
                     empresaId: empresaId
@@ -73,13 +66,10 @@ export class ReceitaRepository {
         }
     }
 
-    async getReceitaValorFormatado(token: string): Promise<ReceitaModelTable[]> {
+    async getReceitaValorFormatado(): Promise<ReceitaModelTable[]> {
         let retorno: ReceitaModelTable[] = [];
         try {
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            };
-            const response = await api.get('/receitas', config)
+            const response = await api.get('/receitas')
 
 
             response.data.forEach((value: ReceitaModel) => {

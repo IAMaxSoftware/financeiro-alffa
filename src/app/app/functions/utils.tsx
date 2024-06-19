@@ -5,13 +5,13 @@ export const saidaGraficos: string = '#EB4D5C';
 export const entradaGraficos: string = '#53B987';
 
 export enum NameRoutes {
-    home = "/home",
-    cadastrarDespesa = "/home/despesas/cadastrar",
-    listarDespesa = '/home/despesas',
-    cadastrarReceita = '/home/receitas/cadastrar',
-    cadastrarLancamento = '/home/lancamentos/cadastrar',
-    listarReceita = '/home/receitas',
-    listarLancamento = '/home/lancamentos'
+    app = "/app",
+    cadastrarDespesa = "/app/despesas/cadastrar",
+    listarDespesa = '/app/despesas',
+    cadastrarReceita = '/app/receitas/cadastrar',
+    cadastrarLancamento = '/app/lancamentos/cadastrar',
+    listarReceita = '/app/receitas',
+    listarLancamento = '/app/lancamentos'
 
 }
 

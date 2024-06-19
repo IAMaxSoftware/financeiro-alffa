@@ -1,5 +1,5 @@
 import { DespesaDto, DespesaQuery } from "@/app/app/dtos/despesa.dto";
-import { prisma } from "../../../../lib/prisma";
+import { prisma } from "../../../lib/prisma";
 
 export class DespesasService {
     async getDespesas(despesaQuery: DespesaQuery) {

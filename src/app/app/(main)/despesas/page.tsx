@@ -14,7 +14,7 @@ import { columns } from "./column";
 
 
 export default function ListarDespesas() {
-    const { usuarioLogado, empresaSelecionada, controleUniversal, setControleUniversal } = useAppData()
+    const { empresaSelecionada, controleUniversal, setControleUniversal } = useAppData()
     const [data, setData] = useState<DespesaModelTable[]>([])
     const [carregando, setCarregando] = useState(true);
     useEffect(() => {
@@ -39,7 +39,7 @@ export default function ListarDespesas() {
         setCarregando(true);
         try {
             const respository = new DespesaRepository();
-            const despesas = await respository.getDespesasValorFormatado(usuarioLogado.accessToken!);
+            const despesas = await respository.getDespesasValorFormatado();
             setData(despesas);
             setCarregando(false);
         } catch (error) {

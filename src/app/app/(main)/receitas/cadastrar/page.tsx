@@ -12,6 +12,7 @@ import { z } from "zod";
 import swal from 'sweetalert'
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { auth } from "@/services/auth";
 
 const formSchema = z.object({
     receita: z.string().min(2).max(100, {
@@ -22,7 +23,7 @@ const formSchema = z.object({
 })
 
 export default function CadastraReceita() {
-    const { usuarioLogado, accessToken, empresaSelecionada, setControleUniversal } = useAppData()
+    const { empresaSelecionada, setControleUniversal } = useAppData()
     const navigate = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
 
@@ -35,15 +36,16 @@ export default function CadastraReceita() {
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        const session = await auth()
         try {
             const repository = new ReceitaRepository();
             const receita = await repository.create({
                 nome: values.receita,
                 valorEstimado: values.valorEstimado,
-                usuarioCriou: parseInt(usuarioLogado.id),
+                usuarioCriou: parseInt(session?.user?.id),
                 dataPrevisao: values.dataPrevisao,
                 empresaId: empresaSelecionada.id
-            }, accessToken)
+            })
             if (receita) {
                 setControleUniversal(true);
                 swal({

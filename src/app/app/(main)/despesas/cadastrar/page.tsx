@@ -12,8 +12,7 @@ import { useEffect } from "react"
 import { useAppData } from "../../../context/app_context"
 import { useRouter } from "next/navigation"
 import { DespesaRepository } from "../../../repositories/despesa_repository"
-import { DespesaModel } from "../../../models/despesa_model"
-import { getUserSession } from "../../../../../../lib/session"
+import { auth } from "@/services/auth"
 
 const formSchema = z.object({
     despesa: z.string().min(2).max(100, {
@@ -29,7 +28,7 @@ interface ParamsCadastraDespesa {
 }
 
 export default function CadastraDespesa() {
-    const { usuarioLogado, empresaSelecionada, setControleUniversal } = useAppData()
+    const { empresaSelecionada, setControleUniversal } = useAppData()
     const navigate = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
 
@@ -42,7 +41,7 @@ export default function CadastraDespesa() {
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const userSession = await getUserSession();
+        const userSession = await auth();
         try {
             const repository = new DespesaRepository();
             const despesa = await repository.create({
@@ -51,7 +50,7 @@ export default function CadastraDespesa() {
                 usuarioCriou: parseInt(userSession.id),
                 dataPrevisao: values.dataPrevisao,
                 empresaId: empresaSelecionada.id
-            }, usuarioLogado.accessToken!)
+            })
             if (despesa) {
                 setControleUniversal(true);
                 swal({

@@ -3,13 +3,13 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { getToken } from "next-auth/jwt";
 import { signIn } from "next-auth/react";
-import { authOption } from '@/app/api/auth/[...nextauth]/route'
+import { auth } from '@/services/auth'
 
 export async function getOAuth2Client(
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<Auth.OAuth2Client> {
-  const session = await getServerSession(req, res, authOption);
+  const session = await getServerSession(req, res, auth);
 
   const token = await getToken({ req });
   if (!session || !token) signIn();

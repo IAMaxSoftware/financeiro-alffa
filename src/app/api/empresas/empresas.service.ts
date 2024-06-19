@@ -1,5 +1,5 @@
 import { EmpresaDto } from "@/app/app/dtos/empresa.dto";
-import { prisma } from "../../../../lib/prisma";
+import { prisma } from "../../../lib/prisma";
 
 export class EmpresaService {
     async getEmpresas() {

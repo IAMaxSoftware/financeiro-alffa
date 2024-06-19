@@ -41,7 +41,7 @@ export default function HomeLayout({ children }: homeLayoutProps) {
 
     function personalizaClasse() {
         switch (ultRota) {
-            case NameRoutes.home:
+            case NameRoutes.app:
                 resetaClasses();
                 break;
             case NameRoutes.listarDespesa:
@@ -67,8 +67,8 @@ export default function HomeLayout({ children }: homeLayoutProps) {
 
     const Home = () => {
         resetaClasses();
-        setUltRota(NameRoutes.home);
-        navigate.push(NameRoutes.home);
+        setUltRota(NameRoutes.app);
+        navigate.push(NameRoutes.app);
         setClassDashBoard(classSelecionado);
     }
 
