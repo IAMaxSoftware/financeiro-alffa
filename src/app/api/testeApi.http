@@ -91,7 +91,7 @@ Authorization: {{authToken}}
 Content-Type: application/json
 
 ###
-GET {{baseURL}}/api/receitas?nome=rec&empresaId=2
+GET {{baseURL}}/api/receitas?empresaId=1
 Authorization: {{authToken}}
 Content-Type: application/json
 

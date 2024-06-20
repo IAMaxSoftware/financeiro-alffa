@@ -1,17 +1,17 @@
 import { formatarNumeroMoedaReal } from "../functions/utils";
 import { ReceitaModel, ReceitaModelTable } from "../models/receita_model";
-import {api} from "../services/api";
+import { api } from "../services/api";
 
 export class ReceitaRepository {
 
     async create(receita: ReceitaModel): Promise<ReceitaModel> {
 
-        const { nome, valorEstimado, usuarioCriou, dataPrevisao, empresaId } = receita;
+        const { nome, valorEstimado, emailUsuario, dataPrevisao, empresaId } = receita;
         try {
             const response = await api.post('/receitas', {
                 nome,
                 valorEstimado,
-                usuarioCriou,
+                emailUsuario,
                 dataPrevisao,
                 empresaId
             })
@@ -55,7 +55,6 @@ export class ReceitaRepository {
                     id: value.id,
                     nome: value.nome,
                     valorEstimado: formatarNumeroMoedaReal(value.valorEstimado),
-                    usuarioCriou: value.usuarioCriou,
                     dataPrevisao: value.dataPrevisao,
                 })
 
@@ -66,10 +65,15 @@ export class ReceitaRepository {
         }
     }
 
-    async getReceitaValorFormatado(): Promise<ReceitaModelTable[]> {
+    async getReceitaValorFormatado(empresaId: number): Promise<ReceitaModelTable[]> {
         let retorno: ReceitaModelTable[] = [];
         try {
-            const response = await api.get('/receitas')
+            let response;
+            if (empresaId > 0) {
+                response = await api.get(`/receitas?empresaId=${empresaId}`)
+            } else {
+                response = await api.get(`/receitas`)
+            }
 
 
             response.data.forEach((value: ReceitaModel) => {
@@ -77,7 +81,6 @@ export class ReceitaRepository {
                     id: value.id,
                     nome: value.nome,
                     valorEstimado: formatarNumeroMoedaReal(value.valorEstimado),
-                    usuarioCriou: value.usuarioCriou,
                     dataPrevisao: value.dataPrevisao,
                 })
 

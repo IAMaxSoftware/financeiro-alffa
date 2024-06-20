@@ -1,7 +1,7 @@
 export interface ReceitaDto {
     nome: string;
     valorEstimado: number;
-    usuarioCriou: number;
+    emailUsuario: string;
     dataPrevisao: number;
     empresaId: number;
 }

@@ -1,9 +1,11 @@
-import { ReceitaDto, ReceitaQuery } from "@/app/app/dtos/receita.dto";
+import { ReceitaDto, ReceitaQuery } from "@/app/api/dtos/receita.dto";
 import { prisma } from "../../../lib/prisma";
+import { getIdByEmail } from "../lib/getIdByEmail";
 
 export class ReceitasService {
     async getReceitas(receitaQuery: ReceitaQuery) {
         const { nome, empresaId } = receitaQuery;
+        console.log(empresaId)
         try {
             if (nome && !empresaId) {
                 // const receitas = await prisma.$queryRaw<receitas[]>`SELECT * FROM receitaS WHERE nome like '%${nome}%'`;
@@ -57,8 +59,9 @@ export class ReceitasService {
     }
 
     async createReceita(receita: ReceitaDto) {
-        const { nome, usuarioCriou, valorEstimado, dataPrevisao, empresaId } = receita;
+        const { nome, emailUsuario, valorEstimado, dataPrevisao, empresaId } = receita;
         try {
+            const usuarioCriou = await getIdByEmail(emailUsuario ?? "");
             const receita = prisma.receitas.create({
                 data: {
                     nome: nome.toUpperCase(),

@@ -2,17 +2,17 @@ import { formatarNumeroMoedaReal, formatarNumeroVigula } from "../functions/util
 import { DespesaModel } from "../models/despesa_model";
 import { DespesaModelTable } from "../models/despesa_model";
 
-import {api} from "../services/api";
+import { api } from "../services/api";
+
 
 export class DespesaRepository {
 
     async create(despesa: DespesaModel): Promise<DespesaModel> {
         try {
-            const { nome, valorEstimado, usuarioCriou, dataPrevisao, empresaId } = despesa;
+            const { nome, valorEstimado, dataPrevisao, empresaId } = despesa;
             const response = await api.post('/despesas', {
                 nome,
                 valorEstimado,
-                usuarioCriou,
                 dataPrevisao,
                 empresaId
             })
@@ -56,17 +56,22 @@ export class DespesaRepository {
     }
 
 
-    async getDespesasValorFormatado(): Promise<DespesaModelTable[]> {
+    async getDespesasValorFormatado(empresaId: number): Promise<DespesaModelTable[]> {
         let retorno: DespesaModelTable[] = [];
         try {
-            const response = await api.get('/despesas')
+
+            let response;
+            if (empresaId > 0) {
+                response = await api.get(`/despesas?empresaId=${empresaId}`)
+            } else {
+                response = await api.get(`/despesas`)
+            }
 
             response.data.forEach((value: DespesaModel) => {
                 retorno.push({
                     id: value.id,
                     nome: value.nome,
                     valorEstimado: formatarNumeroMoedaReal(value.valorEstimado),
-                    usuarioCriou: value.usuarioCriou,
                     dataPrevisao: value.dataPrevisao,
                 })
 

@@ -142,9 +142,9 @@ export default function HomeLayout({ children }: homeLayoutProps) {
                             </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value='3'>
-                            <AccordionTrigger>Lançamentos</AccordionTrigger>
+                            <AccordionTrigger>Funcionários</AccordionTrigger>
                             <AccordionContent>
-                                <Button variant="ghost" className={classRealizarLancamento} onClick={cadastraLacamento}>Realizar Lançamento</Button>
+                                <Button variant="ghost" className={classRealizarLancamento} >Folha de Pagamentos</Button>
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>

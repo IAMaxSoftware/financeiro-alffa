@@ -2,17 +2,14 @@
 
 import { LancamentoModel, LancamentoTableModel } from "../models/lancamento_model";
 import { formatarNumeroMoedaReal } from "../functions/utils";
-import {api} from "../services/api";
+import { api } from "../services/api";
 
 export class LancamentoRepository {
 
-    async create(lancamento: LancamentoModel, token: string): Promise<LancamentoModel> {
+    async create(lancamento: LancamentoModel): Promise<LancamentoModel> {
 
         try {
-            const { id, obs, recDesId, userId, empresaId, tipo, dataHora, valor } = lancamento;
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            };
+            const { id, obs, recDesId, userId, empresaId, tipo, dataHora, real } = lancamento;
             const response = await api.post('/lancamentos', {
                 id,
                 obs,
@@ -21,53 +18,50 @@ export class LancamentoRepository {
                 empresaId,
                 tipo,
                 dataHora,
-                valor
-            }, config)
+                real
+            })
             return response.data as LancamentoModel;
         } catch (error) {
             throw new Error(String(error));
         }
     }
 
-    async delete(lancamentoId: number, token: string): Promise<boolean> {
+    async delete(lancamentoId: number): Promise<boolean> {
         try {
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            };
-            const response = await api.delete(`/lancamentos/${lancamentoId}`, config)
+            const response = await api.delete(`/lancamentos/${lancamentoId}`)
             return response.status === 200;
         } catch (error) {
-            throw new Error(String(Error));
+            throw new Error(String(error));
         }
     }
 
-    async getLancamentos(token: string): Promise<LancamentoModel[]> {
+    async getLancamentos(): Promise<LancamentoModel[]> {
         try {
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            };
-            const response = await api.get('/lancamentos', config)
+            const response = await api.get('/lancamentos')
             return response.data as LancamentoModel[];
         } catch (error) {
-            throw new Error(String(Error));
+            throw new Error(String(error));
         }
     }
 
 
-    async getDespesasValorFormatado(token: string): Promise<LancamentoTableModel[]> {
+    async getLancamentosValorFormatado(empresaId: number): Promise<LancamentoTableModel[]> {
         let retorno: LancamentoTableModel[] = [];
         try {
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            };
-            const response = await api.get('/despesas', config)
+            let response;
+            console.log(empresaId)
+            if (empresaId > 0) {
+                response = await api.get(`/lancamentos?empresaId=${empresaId}`)
+            } else {
+                response = await api.get(`/lancamentos`)
+            }
 
 
             response.data.forEach((value: LancamentoModel) => {
                 retorno.push({
                     id: value.id,
                     obs: value.obs,
-                    valor: formatarNumeroMoedaReal(value.valor),
+                    real: formatarNumeroMoedaReal(value.real),
                     recDesId: value.recDesId,
                     empresaId: value.empresaId,
                     tipo: value.tipo,
@@ -76,10 +70,11 @@ export class LancamentoRepository {
                 })
 
             });
+            console.log('Retorno: ', retorno);
             return retorno;
 
         } catch (error) {
-            throw new Error(String(Error));
+            throw new Error(String(error));
         }
     }
 }

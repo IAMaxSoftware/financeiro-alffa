@@ -1,5 +1,7 @@
-import { DespesaDto, DespesaQuery } from "@/app/app/dtos/despesa.dto";
+import { DespesaDto, DespesaQuery } from "@/app/api/dtos/despesa.dto";
 import { prisma } from "../../../lib/prisma";
+import { auth } from "@/services/auth";
+import { getIdByEmail } from "../lib/getIdByEmail";
 
 export class DespesasService {
     async getDespesas(despesaQuery: DespesaQuery) {
@@ -57,8 +59,10 @@ export class DespesasService {
     }
 
     async create(despesa: DespesaDto) {
-        const { nome, valorEstimado, usuarioCriou, dataPrevisao, empresaId } = despesa;
+
+        const { nome, valorEstimado, dataPrevisao, empresaId, emailUsuario } = despesa;
         try {
+            const usuarioCriou = await getIdByEmail(emailUsuario);
             const despesa = await prisma.despesas.create({
                 data: {
                     nome: nome.toUpperCase(),

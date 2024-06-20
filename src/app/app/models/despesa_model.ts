@@ -4,9 +4,9 @@ export interface DespesaModel {
     id?: number;
     nome: string;
     valorEstimado: number;
-    usuarioCriou?: number;
+    emailUsuario?: string;
     dataPrevisao: number;
-    empresaId?:number;
+    empresaId?: number;
     empresa?: EmpresaModel;
 }
 

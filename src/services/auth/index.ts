@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/prisma'
-import { session } from '@/lib/session'
 import { NextAuthOptions } from 'next-auth'
 import NextAuth from 'next-auth/next'
 import GoogleProvider from 'next-auth/providers/google'
@@ -13,6 +12,8 @@ type profileType = {
     email?: string
     picture?: string
 }
+
+
 
 const auth: NextAuthOptions = {
     session: {
@@ -45,7 +46,6 @@ const auth: NextAuthOptions = {
             if (!usuario?.email) {
                 throw new Error('No profile')
             }
-            console.log(usuario)
             const listaUsuarios = await prisma.usuarios.findMany();
             if (listaUsuarios.length === 0) {
                 await prisma.usuarios.upsert({
@@ -94,21 +94,21 @@ const auth: NextAuthOptions = {
             }
         },
         async jwt({ token, user, account, profile }) {
-            // if (profile) {
-            //     const user = await prisma.usuarios.findUnique({
-            //         where: {
-            //             email: profile.email,
-            //         },
-            //     })
-            //     if (!user) {
-            //         throw new Error('No user found')
-            //     }
-            //     token.id = user.id
-            // }
-            if (account) {
-                token.accessToken = account.access_token;
-                token.refreshToken = account.refresh_token;
+            if (profile) {
+                const user = await prisma.usuarios.findUnique({
+                    where: {
+                        email: profile.email,
+                    },
+                })
+                if (!user) {
+                    throw new Error('No user found')
+                }
+                token.id = user.id
             }
+            // if (account) {
+            //     token.accessToken = account.access_token;
+            //     token.refreshToken = account.refresh_token;
+            // }
             return token;
         },
     },

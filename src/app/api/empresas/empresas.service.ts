@@ -1,4 +1,4 @@
-import { EmpresaDto } from "@/app/app/dtos/empresa.dto";
+import { EmpresaDto } from "@/app/api/dtos/empresa.dto";
 import { prisma } from "../../../lib/prisma";
 
 export class EmpresaService {

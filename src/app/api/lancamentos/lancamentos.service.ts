@@ -1,14 +1,49 @@
-import { LancamentoDto } from "@/app/app/dtos/lancamentos.dto";
+import { LancamentoDto, LancamentoQuery } from "@/app/api/dtos/lancamentos.dto";
 import { prisma } from "../../../lib/prisma";
 import { MovimentacoesService } from "../movimentacoes/movimentacoes.service";
 
 export class LancamentosService {
-    async getLancamentos() {
+    async getLancamentos(query: LancamentoQuery) {
+        const { nome, empresaId } = query;
+        console.log(nome, empresaId)
         try {
-            const lancamentos = await prisma.lancamentos_receita_despesa.findMany();
-            return lancamentos;
+
+            if (nome && !empresaId) {
+                const lancamentos = await prisma.lancamentos_receita_despesa.findMany({
+                    where: {
+                        nome: {
+                            contains: nome.toUpperCase()
+                        }
+                    }
+                });
+                return lancamentos;
+            }
+            if (empresaId && !nome) {
+                const lancamentos = await prisma.lancamentos_receita_despesa.findMany({
+                    where: {
+                        empresaId: parseInt(empresaId.toString())
+                    }
+                });
+                return lancamentos;
+            }
+
+            if (empresaId && nome) {
+                const lancamentos = await prisma.lancamentos_receita_despesa.findMany({
+                    where: {
+                        empresaId: parseInt(empresaId.toString()),
+                        nome: {
+                            contains: nome.toUpperCase()
+                        }
+                    }
+                });
+                return lancamentos;
+            }
+            if (!empresaId || empresaId === '0') {
+                const lancamentos = await prisma.lancamentos_receita_despesa.findMany();
+                return lancamentos;
+            }
         } catch (error) {
-            throw new Error(String(error))
+            throw new Error(String(error));
         }
     }
 

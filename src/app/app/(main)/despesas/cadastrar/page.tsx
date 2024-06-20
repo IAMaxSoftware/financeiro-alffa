@@ -8,11 +8,10 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import swal from 'sweetalert'
 import MoneyInput from "@/components/ui/money-input"
-import { useEffect } from "react"
 import { useAppData } from "../../../context/app_context"
 import { useRouter } from "next/navigation"
 import { DespesaRepository } from "../../../repositories/despesa_repository"
-import { auth } from "@/services/auth"
+import { useSession } from "next-auth/react"
 
 const formSchema = z.object({
     despesa: z.string().min(2).max(100, {
@@ -29,6 +28,7 @@ interface ParamsCadastraDespesa {
 
 export default function CadastraDespesa() {
     const { empresaSelecionada, setControleUniversal } = useAppData()
+    const { data: session } = useSession();
     const navigate = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
 
@@ -41,15 +41,14 @@ export default function CadastraDespesa() {
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const userSession = await auth();
         try {
             const repository = new DespesaRepository();
             const despesa = await repository.create({
                 nome: values.despesa,
                 valorEstimado: values.valorEstimado,
-                usuarioCriou: parseInt(userSession.id),
                 dataPrevisao: values.dataPrevisao,
-                empresaId: empresaSelecionada.id
+                empresaId: empresaSelecionada.id,
+                emailUsuario: session?.user?.email ?? ""
             })
             if (despesa) {
                 setControleUniversal(true);
@@ -57,12 +56,12 @@ export default function CadastraDespesa() {
                     title: "ok",
                     text: "Despesa cadastrada com sucesso!"
                 })
-                navigate.push('/listarDespesa')
+                navigate.push('/app/despesas')
             }
         } catch (error) {
             swal({
                 title: "Dados Incorretos.",
-                text: `Informe o nome da despesa e o valor estimado!\n${String(error)}`,
+                text: `Erro ao cadastrar despesa!\n${String(error)}`,
                 dangerMode: true
             })
         }

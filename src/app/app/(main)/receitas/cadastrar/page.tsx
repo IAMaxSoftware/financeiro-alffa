@@ -13,6 +13,7 @@ import swal from 'sweetalert'
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/services/auth";
+import { useSession } from "next-auth/react";
 
 const formSchema = z.object({
     receita: z.string().min(2).max(100, {
@@ -24,6 +25,7 @@ const formSchema = z.object({
 
 export default function CadastraReceita() {
     const { empresaSelecionada, setControleUniversal } = useAppData()
+    const { data: session } = useSession();
     const navigate = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
 
@@ -36,13 +38,12 @@ export default function CadastraReceita() {
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const session = await auth()
         try {
             const repository = new ReceitaRepository();
             const receita = await repository.create({
                 nome: values.receita,
                 valorEstimado: values.valorEstimado,
-                usuarioCriou: parseInt(session?.user?.id),
+                emailUsuario: session?.user?.email ?? "",
                 dataPrevisao: values.dataPrevisao,
                 empresaId: empresaSelecionada.id
             })

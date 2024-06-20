@@ -8,23 +8,29 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import CadastraLancamento from "./cadastrar/page";
 import { useAppData } from "@/app/app/context/app_context";
-import { LancamentoModel } from "@/app/app/models/lancamento_model";
+import { LancamentoModel, LancamentoTableModel } from "@/app/app/models/lancamento_model";
 import { LancamentoRepository } from "@/app/app/repositories/lancamento_repository";
 import { Toaster } from "@/components/ui/toaster";
 
 export default function ListarLancamentos() {
-    const { accessToken, usuarioLogado, empresaSelecionada, controleUniversal, setControleUniversal } = useAppData()
-    const [data, setData] = useState<LancamentoModel[]>([])
+    const { empresaSelecionada } = useAppData()
+    const [data, setData] = useState<LancamentoTableModel[]>([])
 
     useEffect(() => {
-        getReceitas()
+        console.log('Empresa selecionada: effect1', empresaSelecionada);
+        getLancamentos()
     }, [])
 
-    const getReceitas = async () => {
+    useEffect(() => {
+        getLancamentos()
+    }, [empresaSelecionada])
+
+    const getLancamentos = async () => {
         try {
             const respository = new LancamentoRepository();
-            const Receitas = await respository.getLancamentos(accessToken);
-            setData(Receitas);
+            const lancamentos = await respository.getLancamentosValorFormatado(empresaSelecionada?.id ?? 0);
+            console.log(lancamentos);
+            setData(lancamentos);
         } catch (error) {
             toast({
                 variant: "destructive",

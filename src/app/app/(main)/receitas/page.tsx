@@ -19,23 +19,24 @@ export default function ListarReceitas() {
 
     useEffect(() => {
         getReceitas()
-
     }, [])
+
+    useEffect(() => {
+        getReceitas()
+    }, [empresaSelecionada])
 
     useEffect(() => {
         if (controleUniversal) {
             getReceitas();
             setControleUniversal(false);
         }
-
-
     }, [controleUniversal])
 
 
     const getReceitas = async () => {
         try {
             const respository = new ReceitaRepository();
-            const Receitas = await respository.getReceitaValorFormatado();
+            const Receitas = await respository.getReceitaValorFormatado(empresaSelecionada?.id || 0);
             setData(Receitas);
         } catch (error) {
             toast({

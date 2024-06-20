@@ -1,4 +1,4 @@
-import { DespesaDto } from "@/app/app/dtos/despesa.dto";
+import { DespesaDto } from "@/app/api/dtos/despesa.dto";
 import { ReceitasService } from "../receitas.service";
 
 async function GET(request: Request, { params }: { params: { id: string } }) {

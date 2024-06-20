@@ -6,7 +6,7 @@ export interface LancamentoModel {
     empresaId: number,
     tipo: string,
     dataHora: Date
-    valor: number
+    real: number
 }
 
 export interface LancamentoTableModel {
@@ -17,5 +17,5 @@ export interface LancamentoTableModel {
     empresaId: number,
     tipo: string,
     dataHora: Date,
-    valor: string
+    real: string
 }

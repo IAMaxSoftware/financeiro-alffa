@@ -22,6 +22,7 @@ export default function ListarDespesas() {
     }, [])
 
     useEffect(() => {
+        getDespesas()
     }, [empresaSelecionada])
 
     useEffect(() => {
@@ -39,7 +40,7 @@ export default function ListarDespesas() {
         setCarregando(true);
         try {
             const respository = new DespesaRepository();
-            const despesas = await respository.getDespesasValorFormatado();
+            const despesas = await respository.getDespesasValorFormatado(empresaSelecionada?.id || 0);
             setData(despesas);
             setCarregando(false);
         } catch (error) {

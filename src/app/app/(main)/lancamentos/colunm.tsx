@@ -1,6 +1,6 @@
 "use client"
 import { ColumnDef } from "@tanstack/react-table"
-import { Ban, DeleteIcon } from 'lucide-react';
+import { Ban } from 'lucide-react';
 import {
     Dialog,
     DialogClose,
@@ -13,17 +13,16 @@ import {
 } from "@/components/ui/dialog"
 import { Toggle } from "@/components/ui/toggle";
 import { Button } from "@/components/ui/button";
-import { toast, useToast } from "@/components/ui/use-toast"
-import { LancamentoModel } from "@/app/app/models/lancamento_model";
-import { useAppData } from "@/app/app/context/app_context";
+import { toast } from "@/components/ui/use-toast"
+import { LancamentoTableModel } from "@/app/app/models/lancamento_model";
 
-export const columns: ColumnDef<LancamentoModel>[] = [
+export const columns: ColumnDef<LancamentoTableModel>[] = [
     {
         accessorKey: "obs",
         header: "Nome",
     },
     {
-        accessorKey: "valor",
+        accessorKey: "real",
         header: "Valor",
     },
     {
