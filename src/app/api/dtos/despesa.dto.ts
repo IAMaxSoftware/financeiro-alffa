@@ -9,4 +9,6 @@ export interface DespesaDto {
 export interface DespesaQuery {
     nome?: string;
     empresaId?: string;
+    max?: string;
+    id?:number;
 }

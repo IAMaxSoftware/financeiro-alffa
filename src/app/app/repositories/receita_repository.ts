@@ -24,7 +24,6 @@ export class ReceitaRepository {
     async delete(despesaId: number): Promise<boolean> {
         try {
             const response = await api.delete(`/receitas/${despesaId}`)
-            console.log(response.status);
             return response.status === 204;
         } catch (error) {
             throw new Error(String(Error));

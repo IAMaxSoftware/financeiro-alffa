@@ -20,4 +20,5 @@ services:
       
     ports:
       - "5432:5432"    
+ #sudo service docker start
  # sudo docker run -p 5432:5432 -v /tmp/database:/var/lib/postgresql/data -e POSTGRES_PASSWORD=ipec2024 -e POSTGRESS_USER=ipec -e POSTGRESS_DB=financeiro -d postgres

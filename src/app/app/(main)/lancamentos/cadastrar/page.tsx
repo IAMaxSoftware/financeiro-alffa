@@ -25,6 +25,8 @@ import { useRouter } from "next/navigation"
 import { LancamentoRepository } from "@/app/app/repositories/lancamento_repository"
 import { NameRoutes } from "@/app/app/functions/utils"
 import { cn } from "../../../../../lib/utils"
+import { getIdByEmail } from "@/app/api/lib/getIdByEmail"
+import { useSession } from "next-auth/react";
 
 const formSchema = z.object({
     obs: z.string().min(2).max(100, {
@@ -37,10 +39,11 @@ const formSchema = z.object({
     }),
 })
 
-export default function CadastraLancamento() {
-    const { usuarioLogado, accessToken, empresaSelecionada } = useAppData()
+export default function CadasraLancamento() {
+    const {empresaSelecionada } = useAppData()
     const [receitaSelecionada, setReceitaSelecionada] = useState<ReceitaModel | null>(null);
     const [despesaSelecionada, setDespesaSelecionada] = useState<DespesaModel | null>(null);
+    const { data: session } = useSession();
     const [recDesId, setRecDesId] = useState(0);
 
     const navigate = useRouter();
@@ -60,13 +63,13 @@ export default function CadastraLancamento() {
             const repository = new LancamentoRepository();
             const lancamento = await repository.create({
                 obs: values.obs,
-                valor: values.valor,
-                userId: parseInt(usuarioLogado.id),
+                real: values.valor,
+                userId: await getIdByEmail(session?.user?.email?? " "),
                 dataHora: values.data,
                 empresaId: empresaSelecionada.id,
                 recDesId: recDesId,
                 tipo: values.tipo
-            }, accessToken)
+            })
             if (lancamento) {
                 swal({
                     title: "ok",
@@ -106,7 +109,7 @@ export default function CadastraLancamento() {
                                     </FormItem>
                                     <div className="flex md:flex-row md:pt-1">
                                         <div className="pl-6 pt-8 md:pt-0">
-                                            <BuscaDespesa />
+                                            <BuscaDespesa empresaId={empresaSelecionada.id} />
                                         </div>
                                         <div className="pl-6 pt-8 md:pt-0">
                                             {/* <BuscaReceita /> */}

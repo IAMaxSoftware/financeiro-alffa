@@ -18,11 +18,15 @@ import { DataTable } from "../ui/data-table"
 import { toast } from "@/components/ui/use-toast";
 import { ColumnDef } from "@tanstack/react-table"
 import { DeleteIcon } from 'lucide-react';
-import { DespesaModelTable } from "@/app/app/models/despesa_model"
+import { DespesaModel, DespesaModelTable } from "@/app/app/models/despesa_model"
 import { useAppData } from "@/app/app/context/app_context"
 import { DespesaRepository } from "@/app/app/repositories/despesa_repository"
 
-export function BuscaDespesa() {
+interface propsBuscaDespesa{
+    empresaId:number;
+}
+
+export function BuscaDespesa({empresaId}:propsBuscaDespesa) {
 
     const [textoBusca, setTextoBusca] = useState('');
     const [data, setData] = useState<DespesaModelTable[]>([])
@@ -32,7 +36,12 @@ export function BuscaDespesa() {
         busca();
     }, [textoBusca])
 
-    function busca() {
+    async function busca()
+    {
+        const rep = new DespesaRepository();
+        let despesas: DespesaModelTable[] = [];
+        despesas = await rep.getDespesasByNomeFormatado(textoBusca, empresaId );
+        console.log('DESPESAS:'+despesas);
 
     }
 
@@ -88,10 +97,11 @@ const columns: ColumnDef<DespesaModelTable>[] = [
         id: "Ação",
         cell: ({ row }) => {
             const despesa = row.original;
-            const deletar = async (id: number) => {
+            const selecionar = async (id: number) => {
                 try {
+                    
                     const repository = new DespesaRepository();
-                    await repository.delete(id);
+                    const despesa = await  repository.getDespesaById(id);
                     navigator.clipboard.writeText(despesa.id!.toString())
                 } catch (error) {
                     toast({
@@ -103,7 +113,7 @@ const columns: ColumnDef<DespesaModelTable>[] = [
             }
 
             return (
-                <DeleteIcon color="orange" onClick={() => deletar(despesa.id!)}>Excluir</DeleteIcon>
+                <DeleteIcon color="orange" onClick={() => selecionar(despesa.id!)}>Excluir</DeleteIcon>
             );
         }
     },

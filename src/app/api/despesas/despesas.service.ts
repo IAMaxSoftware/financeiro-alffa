@@ -5,11 +5,15 @@ import { getIdByEmail } from "../lib/getIdByEmail";
 
 export class DespesasService {
     async getDespesas(despesaQuery: DespesaQuery) {
-        const { nome, empresaId } = despesaQuery;
+        const { nome, empresaId, max, id } = despesaQuery;
+        const maxDefault = 5
         try {
+            console.log("nome:", nome, "empresaId:", empresaId, "max:", max, "id:", id);
+            
             if (nome && !empresaId) {
                 // const despesas = await this.prisma.$queryRaw<Despesas[]>`SELECT * FROM DESPESAS WHERE nome like '%${nome}%'`;
                 const despesas = await prisma.despesas.findMany({
+                    take: max ? parseInt(max): maxDefault,
                     where: {
                         nome: {
                             contains: nome.toUpperCase()
@@ -20,6 +24,7 @@ export class DespesasService {
             }
             if (empresaId && !nome) {
                 const despesas = await prisma.despesas.findMany({
+                    take: max ? parseInt(max): maxDefault,
                     where: {
                         empresaId: parseInt(empresaId.toString())
                     }
@@ -29,6 +34,7 @@ export class DespesasService {
 
             if (empresaId && nome) {
                 const despesas = await prisma.despesas.findMany({
+                    take: max ? parseInt(max): maxDefault,
                     where: {
                         empresaId: parseInt(empresaId.toString()),
                         nome: {

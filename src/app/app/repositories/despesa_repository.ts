@@ -40,6 +40,21 @@ export class DespesaRepository {
         }
     }
 
+
+    async getDespesaById(id:number): Promise<DespesaModel> {
+        try {
+            const config = {
+                params: {
+                    id
+                }
+            };
+            const response = await api.get('/despesas', config)
+            return response.data as DespesaModel;
+        } catch (error) {
+            throw new Error(String(Error));
+        }
+    }
+
     async getDespesa(nome: string, empresaId: number): Promise<DespesaModel> {
         try {
             const config = {
@@ -54,6 +69,44 @@ export class DespesaRepository {
             throw new Error(String(Error));
         }
     }
+
+    async getDespesasByNomeFormatado(nome: string, empresaId: number): Promise<DespesaModelTable[]> {
+        let retorno: DespesaModelTable[] = [];
+        try {
+            const config = {
+                params: {
+                    nome: nome,
+                    empresaId: empresaId,
+                    max:1
+                }
+            };
+            const response = await api.get('/despesas', config)
+
+            if(!Array.isArray(response.data))
+            {
+                let aux = response.data as DespesaModelTable;
+                aux.valorEstimado = formatarNumeroMoedaReal(response.data.valorEstimado);
+                return [aux] as DespesaModelTable[];
+            }
+
+            response.data.forEach((value: DespesaModel) => {
+                retorno.push({
+                    id: value.id,
+                    nome: value.nome,
+                    valorEstimado: formatarNumeroMoedaReal(value.valorEstimado),
+                    dataPrevisao: value.dataPrevisao,
+                })
+
+            });
+
+
+
+            return retorno as DespesaModelTable[];
+        } catch (error) {
+            throw new Error(String(Error));
+        }
+    }
+
 
 
     async getDespesasValorFormatado(empresaId: number): Promise<DespesaModelTable[]> {

@@ -49,7 +49,6 @@ export class LancamentoRepository {
         let retorno: LancamentoTableModel[] = [];
         try {
             let response;
-            console.log(empresaId)
             if (empresaId > 0) {
                 response = await api.get(`/lancamentos?empresaId=${empresaId}`)
             } else {
@@ -70,7 +69,6 @@ export class LancamentoRepository {
                 })
 
             });
-            console.log('Retorno: ', retorno);
             return retorno;
 
         } catch (error) {

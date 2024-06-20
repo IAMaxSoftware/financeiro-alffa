@@ -1,5 +1,5 @@
 @baseURL = http://localhost:3000
-@authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcxNzI2ODkxNCwiZXhwIjoxNzE3MzU1MzE0fQ.UG82KQWhc6RgKjPVgeDW8tE0oe2Fq1j1Kuj3sccqT0c
+@authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcxNjQxODY4NywiZXhwIjoxNzE2NTA1MDg3fQ.Q4KXNEVHibfDw2L--nOalxvHsTYeh5MFcfuHcg-MDMQ
 
 POST {{baseURL}}/api/despesas
 Authorization: {{authToken}}
@@ -156,7 +156,7 @@ POST {{baseURL}}/api/empresas
 Content-Type: application/json
 
 {
-   "nome": "PORTAL DOS ANJOS 2"
+   "nome": "PORTAL DOS ANJOS"
 }
 
 
