@@ -17,20 +17,23 @@ import { Table } from "../ui/table"
 import { DataTable } from "../ui/data-table"
 import { toast } from "@/components/ui/use-toast";
 import { ColumnDef } from "@tanstack/react-table"
-import { DeleteIcon } from 'lucide-react';
+import { SquarePlus  } from 'lucide-react';
 import { DespesaModel, DespesaModelTable } from "@/app/app/models/despesa_model"
-import { useAppData } from "@/app/app/context/app_context"
+import { AppProvider, useAppData } from "@/app/app/context/app_context"
 import { DespesaRepository } from "@/app/app/repositories/despesa_repository"
+import { DialogClose } from "@radix-ui/react-dialog"
 
 interface propsBuscaDespesa{
     empresaId:number;
 }
 
+
+
 export function BuscaDespesa({empresaId}:propsBuscaDespesa) {
 
     const [textoBusca, setTextoBusca] = useState('');
     const [data, setData] = useState<DespesaModelTable[]>([])
-
+    const {despesaSelecionada} = useAppData();
 
     useEffect(() => {
         busca();
@@ -41,8 +44,8 @@ export function BuscaDespesa({empresaId}:propsBuscaDespesa) {
         const rep = new DespesaRepository();
         let despesas: DespesaModelTable[] = [];
         despesas = await rep.getDespesasByNomeFormatado(textoBusca, empresaId );
-        console.log('DESPESAS:'+despesas);
-
+        setData(despesas);
+        
     }
 
 
@@ -55,7 +58,7 @@ export function BuscaDespesa({empresaId}:propsBuscaDespesa) {
                     <p>Buscar Despesa</p>
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
                     <DialogTitle>Busca Despesa</DialogTitle>
                     <DialogDescription>
@@ -66,7 +69,6 @@ export function BuscaDespesa({empresaId}:propsBuscaDespesa) {
                     <div>
                         <Input
                             onChange={(e) => setTextoBusca(e.target.value)}
-
                         ></Input>
                         <DataTable columns={columns} data={data} />
                     </div>
@@ -97,23 +99,27 @@ const columns: ColumnDef<DespesaModelTable>[] = [
         id: "Ação",
         cell: ({ row }) => {
             const despesa = row.original;
+            const {setDespesaSelecionada} = useAppData()
             const selecionar = async (id: number) => {
                 try {
-                    
                     const repository = new DespesaRepository();
                     const despesa = await  repository.getDespesaById(id);
-                    navigator.clipboard.writeText(despesa.id!.toString())
+                    setDespesaSelecionada(despesa);
                 } catch (error) {
                     toast({
                         variant: "destructive",
                         title: "Erro.",
-                        description: "Não foi possível deletar a despesa!"
+                        description: "Não foi possível selecionar a despesa!"
                     })
                 }
             }
 
             return (
-                <DeleteIcon color="orange" onClick={() => selecionar(despesa.id!)}>Excluir</DeleteIcon>
+                <DialogClose asChild>
+                    <Button  variant="secondary">
+                        <SquarePlus color="orange" onClick={() => selecionar(despesa.id!)}>Selecionar</SquarePlus  >
+                    </Button>
+                </DialogClose>
             );
         }
     },

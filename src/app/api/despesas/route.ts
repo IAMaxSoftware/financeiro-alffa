@@ -7,10 +7,14 @@ async function GET(request: NextRequest) {
         const searchParams = request.nextUrl.searchParams
         const nome = searchParams.get('nome') || undefined
         const empresaId = searchParams.get('empresaId') || undefined
+        const max = searchParams.get('max') || undefined
+        const id = searchParams.get('id') || undefined
         const despesaService = new DespesasService();
         const response = await despesaService.getDespesas({
             nome,
-            empresaId
+            empresaId,
+            max,
+            id,
         })
         return Response.json(response)
     } catch (error) {

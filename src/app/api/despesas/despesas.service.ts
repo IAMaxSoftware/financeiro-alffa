@@ -6,10 +6,19 @@ import { getIdByEmail } from "../lib/getIdByEmail";
 export class DespesasService {
     async getDespesas(despesaQuery: DespesaQuery) {
         const { nome, empresaId, max, id } = despesaQuery;
-        const maxDefault = 5
+        const maxDefault = 100
         try {
-            console.log("nome:", nome, "empresaId:", empresaId, "max:", max, "id:", id);
-            
+            //console.log(`Nome: ${nome}, Empresa ID: ${empresaId}, Max: ${max}, ID: ${id}`);
+            if(id){
+                const despesa = await prisma.despesas.findMany({
+                    where: {
+                        id: parseInt(id)
+                    }
+                })
+                return despesa;
+
+            }
+
             if (nome && !empresaId) {
                 // const despesas = await this.prisma.$queryRaw<Despesas[]>`SELECT * FROM DESPESAS WHERE nome like '%${nome}%'`;
                 const despesas = await prisma.despesas.findMany({

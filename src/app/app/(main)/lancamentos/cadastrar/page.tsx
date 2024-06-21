@@ -9,7 +9,7 @@ import { z } from "zod"
 import { format } from "date-fns"
 import swal from 'sweetalert'
 import { Calendar } from "@/components/ui/calendar"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { CalendarIcon, Search } from "lucide-react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -39,13 +39,19 @@ const formSchema = z.object({
     }),
 })
 
+
+
 export default function CadasraLancamento() {
-    const {empresaSelecionada } = useAppData()
-    const [receitaSelecionada, setReceitaSelecionada] = useState<ReceitaModel | null>(null);
-    const [despesaSelecionada, setDespesaSelecionada] = useState<DespesaModel | null>(null);
+    const {empresaSelecionada, despesaSelecionada } = useAppData()
     const { data: session } = useSession();
+    const [editCampoObs, setEditCampoObs] = useState(false);
     const [recDesId, setRecDesId] = useState(0);
 
+    useEffect(() => {
+        form.setValue('obs', despesaSelecionada?.nome ?? 'teste');
+        setEditCampoObs(true);
+    }, [despesaSelecionada])
+    
     const navigate = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
 
@@ -100,7 +106,7 @@ export default function CadasraLancamento() {
                                     <FormItem>
                                         <FormLabel>Lançamento</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="lançamento" {...field} />
+                                            <Input disabled={editCampoObs} placeholder="lançamento" {...field} />
                                         </FormControl>
                                         <FormDescription>
                                             Informe a descrição do lançamento para cadastrar

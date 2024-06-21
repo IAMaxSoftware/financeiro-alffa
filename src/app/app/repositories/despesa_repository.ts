@@ -49,6 +49,10 @@ export class DespesaRepository {
                 }
             };
             const response = await api.get('/despesas', config)
+            if(Array.isArray(response.data))
+            {
+                return response.data[0] as DespesaModel;
+            }
             return response.data as DespesaModel;
         } catch (error) {
             throw new Error(String(Error));
@@ -77,7 +81,7 @@ export class DespesaRepository {
                 params: {
                     nome: nome,
                     empresaId: empresaId,
-                    max:1
+                    max:5
                 }
             };
             const response = await api.get('/despesas', config)
@@ -98,9 +102,6 @@ export class DespesaRepository {
                 })
 
             });
-
-
-
             return retorno as DespesaModelTable[];
         } catch (error) {
             throw new Error(String(Error));
