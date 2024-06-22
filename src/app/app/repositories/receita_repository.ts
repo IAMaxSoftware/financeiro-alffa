@@ -21,9 +21,9 @@ export class ReceitaRepository {
         }
     }
 
-    async delete(despesaId: number): Promise<boolean> {
+    async delete(ReceitaId: number): Promise<boolean> {
         try {
-            const response = await api.delete(`/receitas/${despesaId}`)
+            const response = await api.delete(`/receitas/${ReceitaId}`)
             return response.status === 204;
         } catch (error) {
             throw new Error(String(Error));
@@ -59,6 +59,58 @@ export class ReceitaRepository {
 
             });
             return retorno;
+        } catch (error) {
+            throw new Error(String(Error));
+        }
+    }
+    async getReceitaById(id:number): Promise<ReceitaModel> {
+        try {
+            const config = {
+                params: {
+                    id
+                }
+            };
+            const response = await api.get('/receitas', config)
+            if(Array.isArray(response.data))
+            {
+                return response.data[0] as ReceitaModel;
+            }
+            return response.data as ReceitaModel;
+        } catch (error) {
+            throw new Error(String(Error));
+        }
+    }
+
+
+    async getReceitasByNomeFormatado(nome: string, empresaId: number): Promise<ReceitaModelTable[]> {
+        let retorno: ReceitaModelTable[] = [];
+        try {
+            const config = {
+                params: {
+                    nome: nome,
+                    empresaId: empresaId,
+                    max:5
+                }
+            };
+            const response = await api.get('/receitas', config)
+
+            if(!Array.isArray(response.data))
+            {
+                let aux = response.data as ReceitaModelTable;
+                aux.valorEstimado = formatarNumeroMoedaReal(response.data.valorEstimado);
+                return [aux] as ReceitaModelTable[];
+            }
+
+            response.data.forEach((value: ReceitaModel) => {
+                retorno.push({
+                    id: value.id,
+                    nome: value.nome,
+                    valorEstimado: formatarNumeroMoedaReal(value.valorEstimado),
+                    dataPrevisao: value.dataPrevisao,
+                })
+
+            });
+            return retorno as ReceitaModelTable[];
         } catch (error) {
             throw new Error(String(Error));
         }

@@ -42,15 +42,22 @@ const formSchema = z.object({
 
 
 export default function CadasraLancamento() {
-    const {empresaSelecionada, despesaSelecionada } = useAppData()
+    const {empresaSelecionada, despesaSelecionada, receitaSelecionada } = useAppData()
     const { data: session } = useSession();
     const [editCampoObs, setEditCampoObs] = useState(false);
     const [recDesId, setRecDesId] = useState(0);
+    const [habilitaDespesa, setHabilitaDespesa] = useState(true);
 
     useEffect(() => {
         form.setValue('obs', despesaSelecionada?.nome ?? 'teste');
         setEditCampoObs(true);
     }, [despesaSelecionada])
+
+    useEffect(() => {
+        form.setValue('obs', receitaSelecionada?.nome ?? 'teste');
+        setEditCampoObs(true);
+
+    }, [receitaSelecionada])
     
     const navigate = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
@@ -98,6 +105,28 @@ export default function CadasraLancamento() {
             <Card className="p-6">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <FormField
+                            control={form.control}
+                            name='tipo'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <RadioGroup
+                                        defaultValue={field.value}
+                                        onValueChange={field.onChange}
+                                        onChange={e => setHabilitaDespesa(!habilitaDespesa)}
+                                    >
+                                        <div className="flex items-center space-x-2">
+                                            <RadioGroupItem value="D" id="r1" />
+                                            <Label htmlFor="r1">Despesa</Label>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <RadioGroupItem value="R" id="r2" />
+                                            <Label htmlFor="r2">Receita</Label>
+                                        </div>
+                                    </RadioGroup>
+                                </FormItem>
+                            )}
+                        />
                         <FormField
                             control={form.control}
                             name="obs"
@@ -115,10 +144,10 @@ export default function CadasraLancamento() {
                                     </FormItem>
                                     <div className="flex md:flex-row md:pt-1">
                                         <div className="pl-6 pt-8 md:pt-0">
-                                            <BuscaDespesa empresaId={empresaSelecionada.id} />
+                                            <BuscaDespesa enable={habilitaDespesa} empresaId={empresaSelecionada.id} />
                                         </div>
                                         <div className="pl-6 pt-8 md:pt-0">
-                                            {/* <BuscaReceita /> */}
+                                            { <BuscaReceita enable={!habilitaDespesa} empresaId={empresaSelecionada.id} /> }
                                         </div>
                                     </div>
                                 </div>
@@ -129,27 +158,6 @@ export default function CadasraLancamento() {
                             label="Valor"
                             name="valor"
                             placeholder="Valor"
-                        />
-                        <FormField
-                            control={form.control}
-                            name='tipo'
-                            render={({ field }) => (
-                                <FormItem>
-                                    <RadioGroup
-                                        defaultValue={field.value}
-                                        onValueChange={field.onChange}
-                                    >
-                                        <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="D" id="r1" />
-                                            <Label htmlFor="r1">Despesa</Label>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="R" id="r2" />
-                                            <Label htmlFor="r2">Receita</Label>
-                                        </div>
-                                    </RadioGroup>
-                                </FormItem>
-                            )}
                         />
 
                         <FormField

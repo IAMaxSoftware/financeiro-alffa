@@ -25,11 +25,12 @@ import { DialogClose } from "@radix-ui/react-dialog"
 
 interface propsBuscaDespesa{
     empresaId:number;
+    enable:boolean;
 }
 
 
 
-export function BuscaDespesa({empresaId}:propsBuscaDespesa) {
+export function BuscaDespesa({empresaId, enable}:propsBuscaDespesa) {
 
     const [textoBusca, setTextoBusca] = useState('');
     const [data, setData] = useState<DespesaModelTable[]>([])
@@ -48,12 +49,10 @@ export function BuscaDespesa({empresaId}:propsBuscaDespesa) {
         
     }
 
-
-
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className="flex flex-row">
+                <Button disabled={!enable} className="flex flex-row">
                     <Search></Search>
                     <p>Buscar Despesa</p>
                 </Button>
