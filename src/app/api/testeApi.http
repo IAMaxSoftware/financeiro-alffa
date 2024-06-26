@@ -124,6 +124,11 @@ GET {{baseURL}}/api/lancamentos
 Authorization: {{authToken}}
 Content-Type: application/json
 
+###
+DELETE {{baseURL}}/api/lancamentos?id=1
+Authorization: {{authToken}}
+Content-Type: application/json
+
 
 ###
 POST {{baseURL}}/api/auth/login

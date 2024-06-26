@@ -1,11 +1,11 @@
 import { LancamentoDto, LancamentoQuery } from "@/app/api/dtos/lancamentos.dto";
 import { prisma } from "../../../lib/prisma";
 import { MovimentacoesService } from "../movimentacoes/movimentacoes.service";
+import { getIdByEmail } from "../lib/getIdByEmail";
 
 export class LancamentosService {
     async getLancamentos(query: LancamentoQuery) {
         const { nome, empresaId } = query;
-        console.log(nome, empresaId)
         try {
 
             if (nome && !empresaId) {
@@ -13,7 +13,8 @@ export class LancamentosService {
                     where: {
                         nome: {
                             contains: nome.toUpperCase()
-                        }
+                        },
+                        dataCancelamento: null
                     }
                 });
                 return lancamentos;
@@ -21,7 +22,8 @@ export class LancamentosService {
             if (empresaId && !nome) {
                 const lancamentos = await prisma.lancamentos_receita_despesa.findMany({
                     where: {
-                        empresaId: parseInt(empresaId.toString())
+                        empresaId: parseInt(empresaId.toString()),
+                        dataCancelamento: null
                     }
                 });
                 return lancamentos;
@@ -33,13 +35,18 @@ export class LancamentosService {
                         empresaId: parseInt(empresaId.toString()),
                         nome: {
                             contains: nome.toUpperCase()
-                        }
+                        },
+                        dataCancelamento: null
                     }
                 });
                 return lancamentos;
             }
             if (!empresaId || empresaId === '0') {
-                const lancamentos = await prisma.lancamentos_receita_despesa.findMany();
+                const lancamentos = await prisma.lancamentos_receita_despesa.findMany({
+                    where: {
+                        dataCancelamento: null
+                    }
+                });
                 return lancamentos;
             }
         } catch (error) {
@@ -50,7 +57,7 @@ export class LancamentosService {
     async create(lancamento: LancamentoDto) {
         const { tipo } = lancamento;
         try {
-            if (tipo.includes('D')) {
+            if (tipo === 'D') {
                 return this.lancamentoDespesa(lancamento)
             } else {
                 return this.lancamentoReceita(lancamento)
@@ -60,8 +67,41 @@ export class LancamentosService {
         }
     }
 
+    async delete(id: number) {
+        try {
+            const lanc = await prisma.lancamentos_receita_despesa.findUnique({
+                where: {
+                    id
+                }
+            })
+            console.log(lanc)
+            if (!lanc) {
+                throw new Error('Lançamento não encontrado')
+            }
+            const lancamento = await prisma.lancamentos_receita_despesa.update({
+                where: {
+                    id
+                },
+                data: {
+                    dataCancelamento: new Date()
+                }
+            })
+            const movimentacoesService = new MovimentacoesService();
+            await movimentacoesService.insert({
+                dataHora: new Date(),
+                credito: lancamento.tipo === 'D' ? parseFloat(lancamento.real.toString()) : 0,
+                debito: lancamento.tipo === 'R' ? parseFloat(lancamento.real.toString()) : 0,
+                descricao: `CANCELAMENTO - ${lancamento.nome}`,
+                empresaId: lancamento.empresaId
+            })
+            return lancamento;
+        } catch (error) {
+            throw new Error(String(error));
+        }
+    }
+
     async lancamentoDespesa(lancamento: LancamentoDto) {
-        const { valor, obs, recDesId, userId, empresaId, tipo, dataHora } = lancamento;
+        const { real, obs, recDesId, userEmail, empresaId, tipo, dataHora } = lancamento;
         const despesa = await prisma.despesas.findUnique({
             where: {
                 id: recDesId
@@ -85,16 +125,17 @@ export class LancamentosService {
         const movimentacao = await movimentacoesService.insert({
             dataHora,
             credito: 0,
-            debito: valor,
+            debito: real,
             descricao: `DES - ${despesa.nome}`,
             empresaId: empresa.id,
         })
 
-        const diferenca = (parseFloat(despesa.valorEstimado.toString()) - valor);
+        const diferenca = (parseFloat(despesa.valorEstimado.toString()) - real);
+        const userId = await getIdByEmail(userEmail);
         const lancamentos = await prisma.lancamentos_receita_despesa.create({
             data: {
                 nome: despesa.nome,
-                real: valor,
+                real,
                 obs,
                 recDesId: despesa.id,
                 estimado: despesa.valorEstimado,
@@ -109,7 +150,8 @@ export class LancamentosService {
     }
 
     async lancamentoReceita(lancamento: LancamentoDto) {
-        const { valor, obs, recDesId, userId, empresaId, tipo, dataHora } = lancamento;
+        const { real, obs, recDesId, userEmail, empresaId, tipo, dataHora } = lancamento;
+        const userId = await getIdByEmail(userEmail);
         const receita = await prisma.receitas.findUnique({
             where: {
                 id: recDesId
@@ -133,17 +175,17 @@ export class LancamentosService {
         const movimentacoesService = new MovimentacoesService();
         const movimentacao = await movimentacoesService.insert({
             dataHora,
-            credito: valor,
+            credito: real,
             debito: 0,
             descricao: `REC - ${receita.nome}`,
             empresaId: empresa.id
         })
 
-        const diferenca = (parseFloat(receita.valorEstimado.toString()) - valor);
+        const diferenca = (parseFloat(receita.valorEstimado.toString()) - real);
         const lancamentos = await prisma.lancamentos_receita_despesa.create({
             data: {
                 nome: receita.nome,
-                real: valor,
+                real,
                 obs,
                 recDesId: receita.id,
                 estimado: receita.valorEstimado,

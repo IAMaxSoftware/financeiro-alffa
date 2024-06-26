@@ -1,8 +1,8 @@
 export interface LancamentoDto {
-    valor: number;
+    real: number;
     obs?: string;
     recDesId: number;
-    userId: number;
+    userEmail: string;
     empresaId: number;
     tipo: string;
     dataHora: Date;

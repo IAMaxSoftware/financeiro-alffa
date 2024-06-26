@@ -15,6 +15,8 @@ import { Toggle } from "@/components/ui/toggle";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast"
 import { LancamentoTableModel } from "@/app/app/models/lancamento_model";
+import { LancamentoRepository } from "../../repositories/lancamento_repository";
+import { useAppData } from "../../context/app_context";
 
 export const columns: ColumnDef<LancamentoTableModel>[] = [
     {
@@ -33,20 +35,21 @@ export const columns: ColumnDef<LancamentoTableModel>[] = [
         id: "Ação",
         cell: ({ row }) => {
             const lancamento = row.original;
+            const { setControleUniversal } = useAppData()
             const deletar = async (id: number) => {
                 try {
-                    /*const repository = new LancamentoRepository();
-                    const cod = await repository.delete(id, accessToken);*/
-                    const cod = true;
-                    cod ? toast({
-                        description: "Lançamento deletada com sucesso",
+                    const repository = new LancamentoRepository();
+                    const sucess = await repository.delete(id);
+                    sucess ? toast({
+                        description: "Lançamento cancelado com sucesso",
                     }) : null;
+                    setControleUniversal(sucess)
                     navigator.clipboard.writeText(lancamento.id!.toString())
                 } catch (error) {
                     toast({
                         variant: "destructive",
                         title: "Erro.",
-                        description: "Não foi possível deletar a despesa!"
+                        description: "Não foi possível cancelar o lançamento!"
                     })
                 }
             }

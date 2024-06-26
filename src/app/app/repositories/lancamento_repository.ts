@@ -9,12 +9,12 @@ export class LancamentoRepository {
     async create(lancamento: LancamentoModel): Promise<LancamentoModel> {
 
         try {
-            const { id, obs, recDesId, userId, empresaId, tipo, dataHora, real } = lancamento;
+            const { id, obs, recDesId, userEmail, empresaId, tipo, dataHora, real } = lancamento;
             const response = await api.post('/lancamentos', {
                 id,
                 obs,
                 recDesId,
-                userId,
+                userEmail,
                 empresaId,
                 tipo,
                 dataHora,
@@ -28,7 +28,7 @@ export class LancamentoRepository {
 
     async delete(lancamentoId: number): Promise<boolean> {
         try {
-            const response = await api.delete(`/lancamentos/${lancamentoId}`)
+            const response = await api.delete(`/lancamentos?id=${lancamentoId}`)
             return response.status === 200;
         } catch (error) {
             throw new Error(String(error));
@@ -64,7 +64,7 @@ export class LancamentoRepository {
                     recDesId: value.recDesId,
                     empresaId: value.empresaId,
                     tipo: value.tipo,
-                    userId: value.userId,
+                    userEmail: value.userEmail,
                     dataHora: value.dataHora,
                 })
 

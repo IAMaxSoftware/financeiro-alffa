@@ -2,7 +2,7 @@ export interface LancamentoModel {
     id?: number;
     obs: string;
     recDesId: number,
-    userId: number,
+    userEmail: string,
     empresaId: number,
     tipo: string,
     dataHora: Date
@@ -13,9 +13,9 @@ export interface LancamentoTableModel {
     id?: number;
     obs: string;
     recDesId: number,
-    userId: number,
+    userEmail: string,
     empresaId: number,
     tipo: string,
     dataHora: Date,
-    real: string
+    real: string,
 }

@@ -39,27 +39,26 @@ const formSchema = z.object({
     }),
 })
 
-
-
-export default function CadasraLancamento() {
-    const {empresaSelecionada, despesaSelecionada, receitaSelecionada } = useAppData()
+export default function CadastrarLancamento() {
+    const { empresaSelecionada, despesaSelecionada, receitaSelecionada } = useAppData()
     const { data: session } = useSession();
     const [editCampoObs, setEditCampoObs] = useState(false);
     const [recDesId, setRecDesId] = useState(0);
     const [habilitaDespesa, setHabilitaDespesa] = useState(true);
+    const { setControleUniversal } = useAppData()
 
     useEffect(() => {
         form.setValue('obs', despesaSelecionada?.nome ?? 'teste');
+        setRecDesId(despesaSelecionada?.id ?? 0);
         setEditCampoObs(true);
     }, [despesaSelecionada])
 
     useEffect(() => {
         form.setValue('obs', receitaSelecionada?.nome ?? 'teste');
+        setRecDesId(receitaSelecionada?.id ?? 0);
         setEditCampoObs(true);
-
     }, [receitaSelecionada])
-    
-    const navigate = useRouter();
+
     const form = useForm<z.infer<typeof formSchema>>({
 
         resolver: zodResolver(formSchema),
@@ -77,7 +76,7 @@ export default function CadasraLancamento() {
             const lancamento = await repository.create({
                 obs: values.obs,
                 real: values.valor,
-                userId: await getIdByEmail(session?.user?.email?? " "),
+                userEmail: session?.user?.email ?? " ",
                 dataHora: values.data,
                 empresaId: empresaSelecionada.id,
                 recDesId: recDesId,
@@ -88,7 +87,7 @@ export default function CadasraLancamento() {
                     title: "ok",
                     text: "Lançamento cadastrada com sucesso!"
                 })
-                navigate.push(NameRoutes.listarReceita)
+                setControleUniversal(true)
             }
         } catch (error) {
 
@@ -105,7 +104,7 @@ export default function CadasraLancamento() {
             <Card className="p-6">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                    <FormField
+                        <FormField
                             control={form.control}
                             name='tipo'
                             render={({ field }) => (
@@ -138,7 +137,7 @@ export default function CadasraLancamento() {
                                             <Input disabled={editCampoObs} placeholder="lançamento" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            Informe a descrição do lançamento para cadastrar
+                                            Informe a descrição
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -147,7 +146,7 @@ export default function CadasraLancamento() {
                                             <BuscaDespesa enable={habilitaDespesa} empresaId={empresaSelecionada.id} />
                                         </div>
                                         <div className="pl-6 pt-8 md:pt-0">
-                                            { <BuscaReceita enable={!habilitaDespesa} empresaId={empresaSelecionada.id} /> }
+                                            {<BuscaReceita enable={!habilitaDespesa} empresaId={empresaSelecionada.id} />}
                                         </div>
                                     </div>
                                 </div>

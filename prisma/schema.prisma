@@ -68,21 +68,22 @@ model Receitas {
 }
 
 model Lancamentos_receita_despesa {
-  id           Int           @id @default(autoincrement())
-  nome         String
-  estimado     Decimal
-  real         Decimal
-  diferenca    Decimal
-  obs          String?
-  dataCriacao  DateTime      @default(now())
-  usuId        Int
-  recDesId     Int
-  empresaId    Int           @default(1)
-  tipo         String
-  movId        Int
-  usuCriou     Usuarios      @relation(fields: [usuId], references: [id])
-  empresa      Empresas      @relation(fields: [empresaId], references: [id])
-  movimentacao Movimentacoes @relation(fields: [movId], references: [id])
+  id               Int           @id @default(autoincrement())
+  nome             String
+  estimado         Decimal
+  real             Decimal
+  diferenca        Decimal
+  obs              String?
+  dataCriacao      DateTime      @default(now())
+  dataCancelamento DateTime?
+  usuId            Int
+  recDesId         Int
+  empresaId        Int           @default(1)
+  tipo             String
+  movId            Int
+  usuCriou         Usuarios      @relation(fields: [usuId], references: [id])
+  empresa          Empresas      @relation(fields: [empresaId], references: [id])
+  movimentacao     Movimentacoes @relation(fields: [movId], references: [id])
 }
 
 model Movimentacoes {

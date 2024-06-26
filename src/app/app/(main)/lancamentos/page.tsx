@@ -12,12 +12,20 @@ import { LancamentoModel, LancamentoTableModel } from "@/app/app/models/lancamen
 import { LancamentoRepository } from "@/app/app/repositories/lancamento_repository";
 import { Toaster } from "@/components/ui/toaster";
 
+
 export default function ListarLancamentos() {
     const { empresaSelecionada } = useAppData()
     const [data, setData] = useState<LancamentoTableModel[]>([])
+    const { controleUniversal, setControleUniversal } = useAppData()
 
     useEffect(() => {
-        console.log('Empresa selecionada: effect1', empresaSelecionada);
+        if (controleUniversal) {
+            setControleUniversal(false)
+            getLancamentos()
+        }
+    }, [controleUniversal])
+
+    useEffect(() => {
         getLancamentos()
     }, [])
 
@@ -29,8 +37,7 @@ export default function ListarLancamentos() {
         try {
             const respository = new LancamentoRepository();
             const lancamentos = await respository.getLancamentosValorFormatado(empresaSelecionada?.id ?? 0);
-            console.log(lancamentos);
-            setData(lancamentos);
+            setData(lancamentos,);
         } catch (error) {
             toast({
                 variant: "destructive",
@@ -52,7 +59,7 @@ export default function ListarLancamentos() {
                             ButtonOpen={<Button
                                 disabled={empresaSelecionada != null ? false : true}
                                 className="flex flex-row w-44">
-                                <Plus ></Plus>
+                                <Plus />
                                 <p>Cadastrar Lançamento</p>
                             </Button>}
                             Children={<CadastraLancamento />}

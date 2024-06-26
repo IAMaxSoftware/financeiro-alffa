@@ -26,4 +26,16 @@ async function POST(request: Request) {
     }
 }
 
-export { GET, POST }
+async function DELETE(request: NextRequest) {
+    try {
+        const searchParams = request.nextUrl.searchParams
+        const id = searchParams.get('id') || undefined
+        const lancamentoService = new LancamentosService();
+        const response = await lancamentoService.delete(parseInt(id ?? '0'))
+        return Response.json(response)
+    } catch (error) {
+        throw new Error(String(error))
+    }
+}
+
+export { GET, POST, DELETE }
