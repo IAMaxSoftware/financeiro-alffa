@@ -1,5 +1,5 @@
 "use client";
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import {
     FormControl,
     FormField,
@@ -15,6 +15,7 @@ type TextInputProps = {
     name: string;
     label: string;
     placeholder: string;
+    value: number;
 };
 
 // Brazilian currency config
@@ -43,6 +44,12 @@ export default function MoneyInput(props: TextInputProps) {
         realChangeFn(realValue);
     }
 
+    useEffect(() => {
+        if (props.value) {
+            setValue((Number(props.value) * 100).toString());
+        }
+    }, [props.form, props.value]);
+
     return (
         <FormField
             control={props.form.control}
@@ -50,7 +57,6 @@ export default function MoneyInput(props: TextInputProps) {
             render={({ field }) => {
                 field.value = value;
                 const _change = field.onChange;
-
                 return (
                     <FormItem>
                         <FormLabel>{props.label}</FormLabel>

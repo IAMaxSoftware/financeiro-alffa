@@ -58,7 +58,7 @@ export default function CadastrarLancamento() {
 
     useEffect(() => {
         form.setValue('obs', despesaSelecionada?.nome ?? 'teste');
-        form.setValue('valor', despesaSelecionada?.valorEstimado??0);
+        form.setValue('valor', despesaSelecionada?.valorEstimado ?? 0);
         setRecDesId(despesaSelecionada?.id ?? 0);
         setEditCampoObs(true);
     }, [despesaSelecionada])
@@ -66,7 +66,7 @@ export default function CadastrarLancamento() {
     useEffect(() => {
         form.setValue('obs', receitaSelecionada?.nome ?? 'teste');
         console.log(receitaSelecionada?.valorEstimado);
-        form.setValue('valor', receitaSelecionada?.valorEstimado??0);
+        form.setValue('valor', receitaSelecionada?.valorEstimado ?? 0);
         setRecDesId(receitaSelecionada?.id ?? 0);
         setEditCampoObs(true);
     }, [receitaSelecionada])
@@ -162,18 +162,17 @@ export default function CadastrarLancamento() {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             )}
                         />
 
-                    <MoneyInput
-                        form={form}
-                        label="Valor"
-                        placeholder="Valor"
-                        name="valor"
-                    />
-                            
-                        
+                        <MoneyInput
+                            form={form}
+                            label="Valor"
+                            placeholder="Valor"
+                            name="valor"
+                            value={form.getValues('valor')}
+                        />
 
                         <FormField
                             control={form.control}

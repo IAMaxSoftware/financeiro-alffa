@@ -1,10 +1,7 @@
 import { entradaGraficos, saidaGraficos } from '@/app/app/functions/utils';
+import { MovimentacoesModel } from '@/app/app/models/movimentacoes_model';
+import { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
-
-const data = [
-    { name: 'Saidas', value: 400 },
-    { name: 'Entradas', value: 300 }
-];
 
 const COLORS = [saidaGraficos, entradaGraficos];
 
@@ -33,7 +30,27 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
     );
 };
 
-export default function PizzaEntradaSaida() {
+type PropsMovimentacoes = {
+    movimentacoes: MovimentacoesModel[]
+}
+
+export default function PizzaEntradaSaida({ movimentacoes }: PropsMovimentacoes) {
+    const [data, setData] = useState<{ name: string, value: number }[]>([]);
+
+    const processarMovimentacoes = (movimentacoes: MovimentacoesModel[]) => {
+        const entradas = movimentacoes.filter(mov => mov.credito > 0).map(mov => parseFloat(mov.credito.toString())).reduce((acc, mov) => acc + mov, 0);
+        const saidas = movimentacoes.filter(mov => mov.debito > 0).map(mov => parseFloat(mov.debito.toString())).reduce((acc, mov) => acc + mov, 0);
+        // console.log(entradas, saidas);
+        return [
+            { name: 'Saidas', value: parseFloat(saidas.toFixed(2)) },
+            { name: 'Entradas', value: parseFloat(entradas.toFixed(2)) }
+        ];
+    };
+
+    useEffect(() => {
+        const data = processarMovimentacoes(movimentacoes);
+        setData(data);
+    }, [movimentacoes]);
 
 
     return (

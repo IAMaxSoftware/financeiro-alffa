@@ -31,13 +31,13 @@ export default function Home() {
   const getMovimentacoes = async () => {
     try {
       const respository = new MovimentacoesRepository();
-      let movimentacao :MovimentacoesModel[];
+      let movimentacao: MovimentacoesModel[];
       if (dataRange?.from && dataRange?.to) {
-         movimentacao = await respository.getMovimentacoesBetween(dataRange.from, dataRange.to, 1);
+        movimentacao = await respository.getMovimentacoesBetween(dataRange.from, dataRange.to, 1);
       } else {
         movimentacao = await respository.getMovimentacoes();
       }
-      console.log(movimentacao);
+      movimentacao.sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
       setMovimentacoes(movimentacao);
     } catch (error) {
       toast({
@@ -55,10 +55,10 @@ export default function Home() {
         <DatasIntervalo dataRange={dataRange} setDataRange={setDateRange} className="py-2 mx-2.5" />
         <div className="lg:grid lg:grid-cols-2 ">
           <div className="h-60 	flex-column shadow-black mx-2.5 rounded border-2 mt-0.5	">
-            <EntradasSaidasBarras />
+            <EntradasSaidasBarras movimentacoes={movimentacoes} />
           </div>
           <div className="h-60 	flex-column shadow-black mx-2.5 rounded border-2 mt-0.5	">
-            <PizzaEntradaSaida />
+            <PizzaEntradaSaida movimentacoes={movimentacoes} />
           </div>
         </div>
         <div className="container mx-auto py-10">
