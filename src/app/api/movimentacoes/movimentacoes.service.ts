@@ -22,7 +22,6 @@ export class MovimentacoesService {
 
     async getMovimentacoes(movimentacoesQuery: MovimentacoesQuery) {
         const { empresaId, dataInicial, dataFinal } = movimentacoesQuery;
-
         try {
             if (empresaId && !dataInicial && !dataFinal) {
                 const movimentacoes = prisma.movimentacoes.findMany({
@@ -37,7 +36,7 @@ export class MovimentacoesService {
                     where: {
                         dataHora: {
                             gte: new Date(dataInicial),
-                            lt: new Date(dataFinal),
+                            lte: new Date(dataFinal),
                         }
                     }
                 });
@@ -49,7 +48,7 @@ export class MovimentacoesService {
                         empresaId: parseInt(empresaId.toString()),
                         dataHora: {
                             gte: new Date(dataInicial),
-                            lt: new Date(dataFinal),
+                            lte: new Date(dataFinal),
                         }
                     }
                 });

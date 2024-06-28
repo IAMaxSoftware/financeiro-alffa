@@ -96,18 +96,18 @@ const columns: ColumnDef<ReceitaModelTable>[] = [
     {
         id: "Ação",
         cell: ({ row }) => {
-            const despesa = row.original;
+            const receita = row.original;
             const {setReceitaSelecionada} = useAppData()
             const selecionar = async (id: number) => {
                 try {
                     const repository = new ReceitaRepository();
-                    const despesa = await  repository.getReceitaById(id);
-                    setReceitaSelecionada(despesa);
+                    const receita = await  repository.getReceitaById(id);
+                    setReceitaSelecionada(receita);
                 } catch (error) {
                     toast({
                         variant: "destructive",
                         title: "Erro.",
-                        description: "Não foi possível selecionar a despesa!"
+                        description: "Não foi possível selecionar a receita!"
                     })
                 }
             }
@@ -115,7 +115,7 @@ const columns: ColumnDef<ReceitaModelTable>[] = [
             return (
                 <DialogClose asChild>
                     <Button  variant="secondary">
-                        <SquarePlus color="orange" onClick={() => selecionar(despesa.id!)}>Selecionar</SquarePlus  >
+                        <SquarePlus color="orange" onClick={() => selecionar(receita.id!)}>Selecionar</SquarePlus  >
                     </Button>
                 </DialogClose>
             );

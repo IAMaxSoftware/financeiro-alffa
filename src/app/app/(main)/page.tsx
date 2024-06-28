@@ -31,7 +31,13 @@ export default function Home() {
   const getMovimentacoes = async () => {
     try {
       const respository = new MovimentacoesRepository();
-      const movimentacao = await respository.getMovimentacoes();
+      let movimentacao :MovimentacoesModel[];
+      if (dataRange?.from && dataRange?.to) {
+         movimentacao = await respository.getMovimentacoesBetween(dataRange.from, dataRange.to, 1);
+      } else {
+        movimentacao = await respository.getMovimentacoes();
+      }
+      console.log(movimentacao);
       setMovimentacoes(movimentacao);
     } catch (error) {
       toast({

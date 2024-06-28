@@ -3,5 +3,5 @@ export interface MovimentacoesModel {
     descricao: string;
     credito: number;
     debito: number;
-    datahora: Date;
+    dataHora: Date;
 }

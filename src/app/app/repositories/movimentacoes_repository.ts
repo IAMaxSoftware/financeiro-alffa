@@ -10,4 +10,34 @@ export class MovimentacoesRepository {
             throw new Error(String(Error));
         }
     }
+
+    async getMovimentacoesBetween(dataInicial:Date, dataFinal:Date, empresaId:number): Promise<MovimentacoesModel[]> {
+        dataInicial.setHours(0,0,0,0);
+        dataFinal.setHours(23,59,0,0)
+        
+        try {
+            let parametros:any;
+            if(empresaId)
+            {
+                parametros = {
+                    dataInicial: dataInicial,
+                    dataFinal: dataFinal,
+                    empresaId: empresaId
+                }
+            }
+            else
+            {
+                parametros = {
+                    dataInicial: dataInicial,
+                    dataFinal: dataFinal,
+                }
+            }
+            const response = await api.get('/movimentacoes', {
+                params: parametros
+            });
+            return response.data as MovimentacoesModel[];
+        } catch (error) {
+            throw new Error(String(Error));
+        }
+    }
 }

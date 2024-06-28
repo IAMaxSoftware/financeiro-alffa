@@ -65,16 +65,13 @@ export class ReceitaRepository {
     }
     async getReceitaById(id:number): Promise<ReceitaModel> {
         try {
-            const config = {
-                params: {
-                    id
-                }
-            };
-            const response = await api.get('/receitas', config)
+
+            const response = await api.get(`/receitas/${id}`)
             if(Array.isArray(response.data))
             {
                 return response.data[0] as ReceitaModel;
             }
+            
             return response.data as ReceitaModel;
         } catch (error) {
             throw new Error(String(Error));

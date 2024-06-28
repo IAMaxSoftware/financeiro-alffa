@@ -13,6 +13,18 @@ export const columns: ColumnDef<MovimentacoesModel>[] = [
         sortDescFirst: true
     },
     {
+        id: "datahora",
+        header: "Data",
+        cell: ({ row }) => {
+            const mov = row.original;
+            return (
+                <p>
+                    {new Date(mov.dataHora).toLocaleDateString('pt-BR')}
+                </p>
+            );
+        }
+    },
+    {
         id: "credito",
         header: "Crédito",
         cell: ({ row }) => {

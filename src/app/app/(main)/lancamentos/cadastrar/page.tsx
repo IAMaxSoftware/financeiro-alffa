@@ -45,16 +45,28 @@ export default function CadastrarLancamento() {
     const [editCampoObs, setEditCampoObs] = useState(false);
     const [recDesId, setRecDesId] = useState(0);
     const [habilitaDespesa, setHabilitaDespesa] = useState(true);
-    const { setControleUniversal } = useAppData()
+    const { setControleUniversal } = useAppData();
+
+    const moneyFormatter = Intl.NumberFormat("pt-BR", {
+        currency: "BRL",
+        currencyDisplay: "symbol",
+        currencySign: "standard",
+        style: "currency",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
 
     useEffect(() => {
         form.setValue('obs', despesaSelecionada?.nome ?? 'teste');
+        form.setValue('valor', despesaSelecionada?.valorEstimado??0);
         setRecDesId(despesaSelecionada?.id ?? 0);
         setEditCampoObs(true);
     }, [despesaSelecionada])
 
     useEffect(() => {
         form.setValue('obs', receitaSelecionada?.nome ?? 'teste');
+        console.log(receitaSelecionada?.valorEstimado);
+        form.setValue('valor', receitaSelecionada?.valorEstimado??0);
         setRecDesId(receitaSelecionada?.id ?? 0);
         setEditCampoObs(true);
     }, [receitaSelecionada])
@@ -150,14 +162,18 @@ export default function CadastrarLancamento() {
                                         </div>
                                     </div>
                                 </div>
+                                
                             )}
                         />
-                        <MoneyInput
-                            form={form}
-                            label="Valor"
-                            name="valor"
-                            placeholder="Valor"
-                        />
+
+                    <MoneyInput
+                        form={form}
+                        label="Valor"
+                        placeholder="Valor"
+                        name="valor"
+                    />
+                            
+                        
 
                         <FormField
                             control={form.control}

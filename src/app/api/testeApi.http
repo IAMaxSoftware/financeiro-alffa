@@ -86,7 +86,7 @@ Content-Type: application/json
 
 ###
 
-GET {{baseURL}}/api/receitas/4
+GET {{baseURL}}/api/receitas/12
 Authorization: {{authToken}}
 Content-Type: application/json
 
