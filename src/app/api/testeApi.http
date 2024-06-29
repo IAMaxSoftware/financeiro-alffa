@@ -183,3 +183,19 @@ GET {{baseURL}}/api/google-calendar
 
 ###
 GET {{baseURL}}/api/despesas?nome=TESTE
+
+###
+POST {{baseURL}}/api/calendar/create-event
+Content-Type: application/json
+
+{
+  "summary": "Reunião de Projeto",
+  "start": {
+    "dateTime": "2023-05-01T10:00:00-03:00",
+    "timeZone": "America/Sao_Paulo"
+  },
+  "end": {
+    "dateTime": "2023-05-01T11:00:00-03:00",
+    "timeZone": "America/Sao_Paulo"
+  }
+}

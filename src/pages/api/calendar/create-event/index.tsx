@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { google, calendar_v3 } from "googleapis";
 
-import { getOAuth2Client } from "../auth/[...nextauth]/oauth2";
+import { getOAuth2Client } from "../oauth2";
 
 export async function createEvent(
     calendarClient: calendar_v3.Calendar,
