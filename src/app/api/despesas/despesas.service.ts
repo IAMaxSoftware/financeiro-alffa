@@ -19,7 +19,7 @@ export class DespesasService {
 
             }
 
-            if (nome && !empresaId) {
+            if (nome && !empresaId && !dataInicial && !dataFinal) {
                 // const despesas = await this.prisma.$queryRaw<Despesas[]>`SELECT * FROM DESPESAS WHERE nome like '%${nome}%'`;
                 const despesas = await prisma.despesas.findMany({
                     take: max ? parseInt(max): maxDefault,
@@ -31,7 +31,7 @@ export class DespesasService {
                 })
                 return despesas;
             }
-            if (empresaId && !nome) {
+            if (empresaId && !nome && !dataInicial && !dataFinal) {
                 const despesas = await prisma.despesas.findMany({
                     take: max ? parseInt(max): maxDefault,
                     where: {
@@ -40,6 +40,35 @@ export class DespesasService {
                 })
                 return despesas;
             }
+
+            if (!empresaId && dataInicial && dataFinal) {
+                const despesas = await prisma.despesas.findMany({
+                    take: max ? parseInt(max): maxDefault,
+                    where: {
+                        dataPrevisao: {
+                            gte:  dataInicial.getDate(),
+                            lte: dataFinal.getDate()
+                        }
+                    }
+                })
+                return despesas;
+            }
+
+
+            if (empresaId && dataInicial && dataFinal) {
+                const despesas = await prisma.despesas.findMany({
+                    take: max ? parseInt(max): maxDefault,
+                    where: {
+                        empresaId: parseInt(empresaId.toString()),
+                        dataPrevisao: {
+                            gte:  dataInicial.getDate(),
+                            lte: dataFinal.getDate()
+                        }
+                    }
+                })
+                return despesas;
+            }
+
 
             if (empresaId && nome) {
                 const despesas = await prisma.despesas.findMany({

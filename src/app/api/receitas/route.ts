@@ -7,10 +7,11 @@ async function GET(request: NextRequest) {
         const searchParams = request.nextUrl.searchParams
         const nome = searchParams.get('nome') || undefined
         const empresaId = searchParams.get('empresaId') || ''
+        const dataPrevisao = searchParams.get('dataPrevisao') || undefined
         const receitaService = new ReceitasService();
         const response = await receitaService.getReceitas({
             nome,
-            empresaId
+            empresaId,
         })
         return Response.json(response)
     } catch (error) {

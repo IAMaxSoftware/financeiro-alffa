@@ -74,14 +74,19 @@ export class DespesaRepository {
         }
     }
 
-    async getDespesasByNomeFormatado(nome: string, empresaId: number): Promise<DespesaModelTable[]> {
+    async getDespesasByNomeFormatado(nome: string, empresaId: number|undefined): Promise<DespesaModelTable[]> {
         let retorno: DespesaModelTable[] = [];
+        const maximo = 5;
         try {
             const config = {
-                params: {
+                params: empresaId ? {
                     nome: nome,
                     empresaId: empresaId,
-                    max:5
+                    max:maximo
+                } : 
+                {
+                    nome: nome,
+                    max:maximo
                 }
             };
             const response = await api.get('/despesas', config)
@@ -108,9 +113,36 @@ export class DespesaRepository {
         }
     }
 
+    async getDespesasValorFormatadoBetween(dataInicial:Date, dataFinal:Date, empresaId: number): Promise<DespesaModelTable[]> {
+        let retorno: DespesaModelTable[] = [];
+        const url = empresaId>0 ? `/despesas?empresaId=${empresaId}`:`/despesas`;
+        const parametros = {
+            dataInicial: dataInicial,
+            dataFinal: dataFinal,
+        }
+        try {
 
+            const response = await api.get(url,{
+                    params:parametros
+                });
+                
+            response.data.forEach((value: DespesaModel) => {
+                retorno.push({
+                    id: value.id,
+                    nome: value.nome,
+                    valorEstimado: formatarNumeroMoedaReal(value.valorEstimado),
+                    dataPrevisao: value.dataPrevisao,
+                })
 
-    async getDespesasValorFormatado(dataInicial:Date, dataFinal:Date, empresaId: number): Promise<DespesaModelTable[]> {
+            });
+            return retorno;
+
+        } catch (error) {
+            throw new Error(String(Error));
+        }
+    }
+
+    async getDespesasValorFormatado(empresaId: number): Promise<DespesaModelTable[]> {
         let retorno: DespesaModelTable[] = [];
         try {
 

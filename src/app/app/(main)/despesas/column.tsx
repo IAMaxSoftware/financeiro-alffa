@@ -44,7 +44,7 @@ export const columns: ColumnDef<DespesaModelTable>[] = [
                     ButtonOpen={
                         <Eye className="hover:cursor-pointer" color="orange" ></Eye>
                     }
-                    Children={<CadastraDespesa />}
+                    Children={<CadastraDespesa despesaid={row.original.id?? undefined} edit={false} />}
                     title='Editar Despesa'
                     descricao=""
                 />

@@ -1,6 +1,6 @@
 "use client"
 import { ColumnDef } from "@tanstack/react-table"
-import { DeleteIcon } from 'lucide-react';
+import { DeleteIcon, Eye } from 'lucide-react';
 import {
     Dialog,
     DialogClose,
@@ -17,6 +17,8 @@ import { toast, useToast } from "@/components/ui/use-toast"
 import { ReceitaModelTable } from "@/app/app/models/receita_model";
 import { useAppData } from "@/app/app/context/app_context";
 import { ReceitaRepository } from "@/app/app/repositories/receita_repository";
+import { DialogDefault } from "@/components/dialogs/dialogDefault";
+import CadastraReceita from "./cadastrar/page";
 
 export const columns: ColumnDef<ReceitaModelTable>[] = [
     {
@@ -30,6 +32,23 @@ export const columns: ColumnDef<ReceitaModelTable>[] = [
     {
         accessorKey: "dataPrevisao",
         header: "Dia Pagamento",
+    },
+    {
+        header: "Visualizar",
+        id: "visualizar",
+        cell: ({ row }) => {
+            return (
+                <DialogDefault
+                    size={425}
+                    ButtonOpen={
+                        <Eye className="hover:cursor-pointer" color="orange" ></Eye>
+                    }
+                    Children={<CadastraReceita receitaid={row.original.id ?? undefined} edit={false} />}
+                    title='Visualizar Receita'
+                    descricao=""
+                />
+            );
+        }
     },
     {
         header: "Deletar",

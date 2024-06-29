@@ -67,7 +67,8 @@ export class ReceitasService {
                     nome: nome.toUpperCase(),
                     usuarioCriou,
                     valorEstimado,
-                    empresaId
+                    empresaId,
+                    dataPrevisao
                 }
             });
             return receita;

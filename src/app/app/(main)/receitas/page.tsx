@@ -62,7 +62,7 @@ export default function ListarReceitas() {
                                 <Plus ></Plus>
                                 <p>Cadastrar Receita</p>
                             </Button>}
-                            Children={<CadastraReceita />}
+                            Children={<CadastraReceita edit={true} receitaid={undefined} />}
                             title='Cadastrar Receita'
                             descricao=""
                         />

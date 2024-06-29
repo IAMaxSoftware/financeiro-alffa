@@ -12,6 +12,7 @@ import { useAppData } from "../../../context/app_context"
 import { useRouter } from "next/navigation"
 import { DespesaRepository } from "../../../repositories/despesa_repository"
 import { useSession } from "next-auth/react"
+import { useEffect, useState } from "react"
 
 const formSchema = z.object({
     despesa: z.string().min(2).max(100, {
@@ -22,16 +23,18 @@ const formSchema = z.object({
 })
 
 interface ParamsCadastraDespesa {
-    edit: boolean;
-    despesa: number;
+    edit: boolean | undefined;
+    despesaid: number | undefined;
 }
 
-export default function CadastraDespesa() {
+export default function CadastraDespesa({edit, despesaid}:ParamsCadastraDespesa) {
     const { empresaSelecionada, setControleUniversal } = useAppData()
     const { data: session } = useSession();
     const navigate = useRouter();
+    const [carregando, setCarregando] = useState(true);
+    const [editEstado, setEditEstado] = useState(edit);
     const form = useForm<z.infer<typeof formSchema>>({
-
+        
         resolver: zodResolver(formSchema),
         defaultValues: {
             despesa: "",
@@ -39,6 +42,32 @@ export default function CadastraDespesa() {
             dataPrevisao: 0
         },
     })
+
+    useEffect(() => {
+        despesaid ? fetchDespesa():setCarregando(false);
+    }, [])
+
+
+
+    const fetchDespesa = async () => {
+        try {
+            const repository = new DespesaRepository();
+            const despesaData = await repository.getDespesaById(despesaid??0);
+            if (despesaData) {
+                form.setValue("despesa", despesaData.nome);
+                console.log('Valor Estimado:'+despesaData.valorEstimado)
+                form.setValue("valorEstimado", despesaData.valorEstimado);
+                form.setValue("dataPrevisao", despesaData.dataPrevisao);
+                setCarregando(false);
+            }
+        } catch (error) {
+            swal({
+                title: "Erro.",
+                text: `Erro ao buscar despesa!\n${String(error)}`,
+                dangerMode: true
+            })
+        }
+    }
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
@@ -69,9 +98,12 @@ export default function CadastraDespesa() {
 
     return (
         <Card className="p-6">
-            <Form {...form}>
+            {carregando ? <></> 
+            :    
+                <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <FormField
+                        disabled = {!editEstado}
                         control={form.control}
                         name="despesa"
                         render={({ field }) => (
@@ -88,10 +120,12 @@ export default function CadastraDespesa() {
                         )}
                     />
                     <MoneyInput
+                        disabled={!editEstado??false}
+                        value={form.getValues("valorEstimado")}
                         form={form}
                         label="Valor estimado"
                         name="valorEstimado"
-                        placeholder="Valor estimado"
+                        placeholder='Informe o valor'
                     />
 
                     <FormField
@@ -101,7 +135,7 @@ export default function CadastraDespesa() {
                             <FormItem>
                                 <FormLabel>Dia</FormLabel>
                                 <FormControl>
-                                    <Input type="number" placeholder="Dia do vencimento" {...field} />
+                                    <Input disabled={!editEstado} type="number" placeholder="Dia do vencimento" {...field} />
                                 </FormControl>
                                 <FormDescription>
                                     Informe o dia do mês que vence a despesa
@@ -111,12 +145,15 @@ export default function CadastraDespesa() {
                         )}
                     />
                     <FormMessage />
+                    {editEstado ? <Button type="submit">Salvar</Button> :  
+                    <></>}
 
-
-
-                    <Button type="submit">Cadastrar</Button>
                 </form>
+                {!editEstado ? <Button type="button" onClick={() => setEditEstado(!editEstado)} className="place-self-end">Editar</Button>:<></>}
             </Form>
+        }
+        
+
         </Card>
     )
 

@@ -16,6 +16,7 @@ type TextInputProps = {
     label: string;
     placeholder: string;
     value: number;
+    disabled: boolean;
 };
 
 // Brazilian currency config
@@ -29,6 +30,7 @@ const moneyFormatter = Intl.NumberFormat("pt-BR", {
 });
 
 export default function MoneyInput(props: TextInputProps) {
+    const disabled = props.disabled;
     const initialValue = props.form.getValues()[props.name]
         ? moneyFormatter.format(props.form.getValues()[props.name])
         : "";
@@ -45,7 +47,9 @@ export default function MoneyInput(props: TextInputProps) {
     }
 
     useEffect(() => {
+        console.log(props.value);
         if (props.value) {
+            console.log(props.value);
             setValue((Number(props.value) * 100).toString());
         }
     }, [props.form, props.value]);
@@ -62,6 +66,7 @@ export default function MoneyInput(props: TextInputProps) {
                         <FormLabel>{props.label}</FormLabel>
                         <FormControl>
                             <Input
+                            disabled={disabled}
                                 placeholder={props.placeholder}
                                 type="text"
                                 {...field}

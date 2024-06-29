@@ -79,7 +79,7 @@ export class ReceitaRepository {
     }
 
 
-    async getReceitasByNomeFormatado(nome: string, empresaId: number): Promise<ReceitaModelTable[]> {
+    async getReceitasByNomeFormatado(nome: string, empresaId: number | undefined): Promise<ReceitaModelTable[]> {
         let retorno: ReceitaModelTable[] = [];
         try {
             const config = {
@@ -108,6 +108,34 @@ export class ReceitaRepository {
 
             });
             return retorno as ReceitaModelTable[];
+        } catch (error) {
+            throw new Error(String(Error));
+        }
+    }
+    async getReceitasValorFormatadoBetween(dataInicial:Date, dataFinal:Date, empresaId: number): Promise<ReceitaModelTable[]> {
+        let retorno: ReceitaModelTable[] = [];
+        const url = empresaId>0 ? `/receitas?empresaId=${empresaId}`:`/receitas`;
+        const parametros = {
+            dataInicial: dataInicial,
+            dataFinal: dataFinal,
+        }
+        try {
+
+            const response = await api.get(url,{
+                    params:parametros
+                });
+                
+            response.data.forEach((value: ReceitaModel) => {
+                retorno.push({
+                    id: value.id,
+                    nome: value.nome,
+                    valorEstimado: formatarNumeroMoedaReal(value.valorEstimado),
+                    dataPrevisao: value.dataPrevisao,
+                })
+
+            });
+            return retorno;
+
         } catch (error) {
             throw new Error(String(Error));
         }

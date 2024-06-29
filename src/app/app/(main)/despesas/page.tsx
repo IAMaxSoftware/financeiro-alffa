@@ -14,20 +14,23 @@ import { columns } from "./column";
 import { DatasIntervalo } from "../receitas/_components/calendarioIntervalo";
 import { DateRange } from "react-day-picker";
 import { getFirstDayOfCurrentMonth } from "../../functions/utils";
+import { Input } from "@/components/ui/input";
 
 
 export default function ListarDespesas() {
     const { empresaSelecionada, controleUniversal, setControleUniversal } = useAppData()
     const [data, setData] = useState<DespesaModelTable[]>([])
     const [carregando, setCarregando] = useState(true);
+    const [textPesquisa, setTextPesquisa] = useState('');
     const [dataRange, setDateRange] = React.useState<DateRange | undefined>({
-        from: getFirstDayOfCurrentMonth(),
-        to: new Date(),
+        from: undefined,
+        to: undefined,
       })
 
     useEffect(() => {
         getDespesas()
     }, [])
+
 
     useEffect(() => {
         getDespesas()
@@ -42,13 +45,41 @@ export default function ListarDespesas() {
     }, [controleUniversal])
 
 
+    const pesquisaPorNome = (valor:string) =>{
+        setTextPesquisa(valor);
+        getDespesaByNome();
+    }
+
+    const getDespesaByNome = async () =>{
+        try {
+            const repository = new DespesaRepository();
+            const despesas = await repository.getDespesasByNomeFormatado(textPesquisa, empresaSelecionada?.id || 0);
+            setData(despesas);
+        } catch (error) {
+            toast({
+                variant: "destructive",
+                title: "Dados Incorretos.",
+                description: `Erro ao buscar dados!\n"+${String(error)}`
+            })
+        }
+
+    }
 
 
     const getDespesas = async () => {
-        setCarregando(true);
         try {
-            const respository = new DespesaRepository();
-            const despesas = await respository.getDespesasValorFormatado(empresaSelecionada?.id || 0);
+            const repository = new DespesaRepository();
+            var despesas:DespesaModelTable[];
+            if(dataRange?.from && dataRange?.to)
+                {
+                    console.log('aqui');
+                    despesas = await repository.getDespesasValorFormatadoBetween(dataRange?.from, dataRange?.to, empresaSelecionada?.id || 0);
+                }
+                else
+                {
+                    despesas = await repository.getDespesasValorFormatado(empresaSelecionada?.id || 0)
+                }
+            console.log(despesas);
             setData(despesas);
             setCarregando(false);
         } catch (error) {
@@ -67,7 +98,10 @@ export default function ListarDespesas() {
                 <></>
                 :
                 <>
-                <DatasIntervalo dataRange={dataRange} setDataRange={setDateRange} className="py-2 mx-2.5" />
+                <div className="flex flex-row">
+                    <DatasIntervalo dataRange={dataRange} setDataRange={setDateRange} className="pb-2 mx-2.5" />
+                    <Input placeholder="Digite o nome da despesa" className="pb-2 mx-2.5" type="text"  value={textPesquisa} onChange={(e) => pesquisaPorNome(e.target.value)}></Input>
+                </div>
                     <div className="grid grid-cols-2">
                         <h1 className="p-4 text-orange-600 text-start">Despesas Cadastradas</h1>
                         <div className="flex flex-col items-end">
@@ -80,7 +114,7 @@ export default function ListarDespesas() {
                                         <Plus ></Plus>
                                         <p>Cadastrar Despesa</p>
                                     </Button>}
-                                    Children={<CadastraDespesa />}
+                                    Children={<CadastraDespesa despesaid={undefined} edit={true} />}
                                     title='Cadastrar Despesa'
                                     descricao=""
                                 />

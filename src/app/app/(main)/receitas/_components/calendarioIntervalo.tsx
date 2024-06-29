@@ -48,7 +48,7 @@ export function DatasIntervalo({
                 format(dataRange.from, "LLL dd, y")
               )
             ) : (
-              <span>Pick a date</span>
+              <span>Escolha uma data</span>
             )}
           </Button>
         </PopoverTrigger>

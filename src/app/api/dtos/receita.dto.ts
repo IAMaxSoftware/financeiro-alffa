@@ -10,4 +10,6 @@ export interface ReceitaDto {
 export interface ReceitaQuery {
     nome?: string;
     empresaId: string;
+    dataPrevisao?: number;
+    
 }

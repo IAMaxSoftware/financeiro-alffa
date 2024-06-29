@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/services/auth";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
     receita: z.string().min(2).max(100, {
@@ -23,10 +24,17 @@ const formSchema = z.object({
     dataPrevisao: z.coerce.number(),
 })
 
-export default function CadastraReceita() {
+interface ParamsCadastraReceita {
+    edit: boolean | undefined;
+    receitaid: number | undefined;
+}
+
+export default function CadastraReceita({ edit, receitaid }: ParamsCadastraReceita) {
     const { empresaSelecionada, setControleUniversal } = useAppData()
     const { data: session } = useSession();
     const navigate = useRouter();
+    const [carregando, setCarregando] = useState(true);
+    const [editEstado, setEditEstado] = useState(edit);
     const form = useForm<z.infer<typeof formSchema>>({
 
         resolver: zodResolver(formSchema),
@@ -36,6 +44,33 @@ export default function CadastraReceita() {
             dataPrevisao: 0
         },
     })
+
+    useEffect(() => {
+        receitaid ? fetchReceita() : setCarregando(false);
+    }, [])
+
+
+
+    const fetchReceita = async () => {
+        try {
+            const repository = new ReceitaRepository();
+            const receitaData = await repository.getReceitaById(receitaid ?? 0);
+            if (receitaData) {
+                form.setValue("receita", receitaData.nome);
+                console.log('Valor Estimado:' + receitaData.valorEstimado)
+                form.setValue("valorEstimado", receitaData.valorEstimado);
+                form.setValue("dataPrevisao", receitaData.dataPrevisao);
+                setCarregando(false);
+            }
+        } catch (error) {
+            swal({
+                title: "Erro.",
+                text: `Erro ao buscar receita!\n${String(error)}`,
+                dangerMode: true
+            })
+        }
+    }
+
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
@@ -67,51 +102,62 @@ export default function CadastraReceita() {
 
     return (
         <Card className="p-6">
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                    <FormField
-                        control={form.control}
-                        name="receita"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Receita</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Receita" {...field} />
-                                </FormControl>
-                                <FormDescription>
-                                    Informe a receita para cadastrar
-                                </FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <MoneyInput
-                        form={form}
-                        label="Valor estimado"
-                        name="valorEstimado"
-                        placeholder="Valor estimado"
-                    />
+            {
+                carregando ?
+                    <></> :
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                            <FormField
+                            disabled = {!editEstado}
+                                control={form.control}
+                                name="receita"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Receita</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Receita" {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Informe a receita para cadastrar
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <MoneyInput
+                                disabled={!editEstado??false}
+                                value={form.getValues("valorEstimado")}
+                                form={form}
+                                label="Valor estimado"
+                                name="valorEstimado"
+                                placeholder="Valor estimado"
+                            />
 
-                    <FormField
-                        control={form.control}
-                        name="dataPrevisao"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Dia</FormLabel>
-                                <FormControl>
-                                    <Input type="number" placeholder="Dia do vencimento" {...field} />
-                                </FormControl>
-                                <FormDescription>
-                                    Informe o dia do mês que vence a Receita
-                                </FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormMessage />
-                    <Button type="submit">Cadastrar</Button>
-                </form>
-            </Form>
+                            <FormField
+                                control={form.control}
+                                name="dataPrevisao"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Dia</FormLabel>
+                                        <FormControl>
+                                            <Input disabled={!editEstado} type="number" placeholder="Dia do vencimento" {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Informe o dia do mês que vence a Receita
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormMessage />
+                            {editEstado ? <Button type="submit">Salvar</Button> :  
+                            <></>}
+                        </form>
+                        {!editEstado ? <Button type="button" onClick={() => setEditEstado(!editEstado)} className="place-self-end">Editar</Button>:<></>}
+                    </Form>
+
+            }
+
         </Card>
     )
 
