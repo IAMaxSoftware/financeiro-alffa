@@ -5,25 +5,33 @@ import { Button, ButtonProps } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import CadastraDespesa from "./cadastrar/page";
 import { Toaster } from "@/components/ui/toaster";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DespesaModelTable } from "../../models/despesa_model";
 import { useAppData } from "../../context/app_context";
 import { DespesaRepository } from "../../repositories/despesa_repository";
 import { toast } from "@/components/ui/use-toast";
 import { columns } from "./column";
+import { DatasIntervalo } from "../receitas/_components/calendarioIntervalo";
+import { DateRange } from "react-day-picker";
+import { getFirstDayOfCurrentMonth } from "../../functions/utils";
 
 
 export default function ListarDespesas() {
     const { empresaSelecionada, controleUniversal, setControleUniversal } = useAppData()
     const [data, setData] = useState<DespesaModelTable[]>([])
     const [carregando, setCarregando] = useState(true);
+    const [dataRange, setDateRange] = React.useState<DateRange | undefined>({
+        from: getFirstDayOfCurrentMonth(),
+        to: new Date(),
+      })
+
     useEffect(() => {
         getDespesas()
     }, [])
 
     useEffect(() => {
         getDespesas()
-    }, [empresaSelecionada])
+    }, [empresaSelecionada, dataRange])
 
     useEffect(() => {
         if (controleUniversal) {
@@ -59,6 +67,7 @@ export default function ListarDespesas() {
                 <></>
                 :
                 <>
+                <DatasIntervalo dataRange={dataRange} setDataRange={setDateRange} className="py-2 mx-2.5" />
                     <div className="grid grid-cols-2">
                         <h1 className="p-4 text-orange-600 text-start">Despesas Cadastradas</h1>
                         <div className="flex flex-col items-end">

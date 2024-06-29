@@ -110,7 +110,7 @@ export class DespesaRepository {
 
 
 
-    async getDespesasValorFormatado(empresaId: number): Promise<DespesaModelTable[]> {
+    async getDespesasValorFormatado(dataInicial:Date, dataFinal:Date, empresaId: number): Promise<DespesaModelTable[]> {
         let retorno: DespesaModelTable[] = [];
         try {
 

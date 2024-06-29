@@ -11,4 +11,6 @@ export interface DespesaQuery {
     empresaId?: string;
     max?: string;
     id?:string;
+    dataInicial?: Date;
+    dataFinal?: Date;
 }

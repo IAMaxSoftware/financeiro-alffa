@@ -5,7 +5,7 @@ import { getIdByEmail } from "../lib/getIdByEmail";
 
 export class DespesasService {
     async getDespesas(despesaQuery: DespesaQuery) {
-        const { nome, empresaId, max, id } = despesaQuery;
+        const { nome, empresaId, max, id, dataInicial, dataFinal } = despesaQuery;
         const maxDefault = 100
         try {
             //console.log(`Nome: ${nome}, Empresa ID: ${empresaId}, Max: ${max}, ID: ${id}`);
