@@ -19,7 +19,28 @@ export default function Home() {
     from: getFirstDayOfCurrentMonth(),
     to: new Date(),
   })
+
+
+  async function getDataAsaas() {
+    const options = {method: 'GET', headers: {accept: 'application/json'}};
+    const res = await fetch('https://api.asaas.com/api/v3/payments?paymentDate[ge]=01%2F07%2F2024&paymentDate[le]=05%2F07%2F2024',
+       { next: { revalidate: 3600 } , method: 'GET', 
+       headers: {accept: 'application/json',
+        access_token: '$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwMzM1MjY6OiRhYWNoXzg3YTMxMGNmLTkyMGYtNDA2My05YmYyLWIyNWZlNGJhYWU1NA=='
+       },
+       })
+
+   
+    if (!res.ok) {
+      // This will activate the closest `error.js` Error Boundary
+      throw new Error('Failed to fetch data')
+    }
+   console.log(res.json);
+    return res.json()
+  }
+   
   useEffect(() => {
+
     getMovimentacoes()
   }, [])
 
