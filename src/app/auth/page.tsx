@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { signIn } from 'next-auth/react';
 
 export default function Login() {
-  const handleSingInGoole = async () => signIn('google', { callbackUrl: '/' });
+  const handleSingInGoole = async () => signIn('google', { callbackUrl: '/app' });
 
   return (
     <div className="flex h-screen w-full bg-gray-900 bg-cover bg-no-repeat bg-[url('../../src/assets/financeiro.png')]">

@@ -4,21 +4,16 @@ import { ReactNode, useEffect, useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import SelecionaEmpresa from '@/components/selecionaEmpresa';
 import { Button } from '../../components/ui/button';
-import { ChevronDown, ChevronUp, CircleUserRound, LogOut, User, UserRoundPlus } from 'lucide-react';
-import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
-import { DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../../components/ui/dropdown-menu';
 import { NameRoutes } from './functions/utils';
 import { useAppData } from './context/app_context';
-import { redirect, useRouter } from 'next/navigation';
-import { signOut, useSession } from 'next-auth/react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useRouter } from 'next/navigation';
+import UserDropdown from './_componentes/user_dropdown';
 
 interface homeLayoutProps {
     children: ReactNode;
 }
 
 export default function HomeLayout({ children }: homeLayoutProps) {
-    const { data: session } = useSession();
     const classPadrao = 'text-slate-600  w-full rounded-full';
     const classSelecionado = 'text-orange-600	bg-orange-200 w-full rounded-full'
     const [avatarAberto, setAvatarAberto] = useState(false);
@@ -35,7 +30,6 @@ export default function HomeLayout({ children }: homeLayoutProps) {
 
     useEffect(() => {
         personalizaClasse();
-        console.log(session)
     }, []);
 
 
@@ -101,8 +95,8 @@ export default function HomeLayout({ children }: homeLayoutProps) {
     }
 
     const clickAvatar = () => {
+        console.log('aqui')
         setAvatarAberto(!avatarAberto);
-
     }
 
     function nomeEmpresa(): String {
@@ -110,14 +104,6 @@ export default function HomeLayout({ children }: homeLayoutProps) {
             return 'Financeiro';
         }
         return empresaSelecionada.nome;
-
-
-    }
-
-    const logout = () => {
-        resetaClasses();
-        setUltRota("");
-        navigate.push("/");
     }
 
     return (
@@ -153,39 +139,7 @@ export default function HomeLayout({ children }: homeLayoutProps) {
             <div className='h-full w-full'>
                 <nav className='grid grid-cols-2 justify-items-end w-full bg-white shadow-md py-4'>
                     <p className='pt-2 text-orange-600 font-sans font-bold text-2xl' >{nomeEmpresa()}</p>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button className='hover:bg-slate-300'
-                                onClick={clickAvatar}
-                                size="sm" variant="ghost">
-                                <div className='grid grid-cols-2 justify-items-end'>
-                                    <Avatar>
-                                        {session?.user?.image && (<AvatarImage src={session?.user?.image} alt="@shadcn" />)}
-                                        <AvatarFallback> <CircleUserRound size={24} /></AvatarFallback>
-                                    </Avatar>
-                                    {avatarAberto ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
-                                </div>
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56">
-                            <DropdownMenuLabel>{session?.user?.email}</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuGroup>
-                                <DropdownMenuItem>
-                                    <User className="mr-2 h-4 w-4" />
-                                    <span>{session?.user?.name}</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <UserRoundPlus className="mr-2 h-4 w-4" />
-                                    <span>Cadastrar Perfil</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => signOut()}>
-                                    <LogOut className="mr-2 h-4 w-4" />
-                                    <span>Sair</span>
-                                </DropdownMenuItem>
-                            </DropdownMenuGroup>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <UserDropdown avatarAberto clickAvatar={clickAvatar} />
                 </nav>
                 <div className='p-2'>
                     {children}
