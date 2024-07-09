@@ -7,12 +7,10 @@ import { ReceitaModel } from "../models/receita_model";
 
 
 interface AppDataContextType {
-    ultRota: string;
     empresaSelecionada: EmpresaModel;
     controleUniversal: boolean;
-    despesaSelecionada:DespesaModel | null;
-    receitaSelecionada:ReceitaModel | null;
-    setUltRota: React.Dispatch<SetStateAction<string>>;
+    despesaSelecionada: DespesaModel | null;
+    receitaSelecionada: ReceitaModel | null;
     setEmpresaSelecionada: React.Dispatch<SetStateAction<EmpresaModel | null>>;
     setControleUniversal: React.Dispatch<SetStateAction<boolean>>;
     setDespesaSelecionada: React.Dispatch<SetStateAction<DespesaModel | null>>;
@@ -26,15 +24,12 @@ interface AppProviderProps {
 }
 
 function AppProvider({ children }: AppProviderProps) {
-    const [ultRota, setUltRota] = useState<string>('home');
     const [empresaSelecionada, setEmpresaSelecionada] = useState<EmpresaModel | null>(null);
     const [controleUniversal, setControleUniversal] = useState(false);
     const [despesaSelecionada, setDespesaSelecionada] = useState<DespesaModel | null>(null);
     const [receitaSelecionada, setReceitaSelecionada] = useState<DespesaModel | null>(null);
     return (
         <AppDataContext.Provider value={{
-            ultRota,
-            setUltRota,
             empresaSelecionada,
             setEmpresaSelecionada,
             controleUniversal,
@@ -54,7 +49,7 @@ function useAppData(): AppDataContextType {
     if (context === null) {
         throw new Error('O contexto ainda não foi criado')
     }
-    const { ultRota, setUltRota, empresaSelecionada, setEmpresaSelecionada, controleUniversal, setControleUniversal, despesaSelecionada, setDespesaSelecionada, receitaSelecionada, setReceitaSelecionada } = context as AppDataContextType;
-    return { ultRota, setUltRota, empresaSelecionada, setEmpresaSelecionada, controleUniversal, setControleUniversal, despesaSelecionada, setDespesaSelecionada, receitaSelecionada, setReceitaSelecionada };
+    const { empresaSelecionada, setEmpresaSelecionada, controleUniversal, setControleUniversal, despesaSelecionada, setDespesaSelecionada, receitaSelecionada, setReceitaSelecionada } = context as AppDataContextType;
+    return { empresaSelecionada, setEmpresaSelecionada, controleUniversal, setControleUniversal, despesaSelecionada, setDespesaSelecionada, receitaSelecionada, setReceitaSelecionada };
 }
 export { AppProvider, useAppData }

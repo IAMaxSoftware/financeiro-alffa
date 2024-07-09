@@ -6,15 +6,26 @@ export class ReceitaRepository {
 
     async create(receita: ReceitaModel): Promise<ReceitaModel> {
 
-        const { nome, valorEstimado, emailUsuario, dataPrevisao, empresaId } = receita;
+        const { id, nome, valorEstimado, emailUsuario, dataPrevisao, empresaId } = receita;
         try {
-            const response = await api.post('/receitas', {
-                nome,
-                valorEstimado,
-                emailUsuario,
-                dataPrevisao,
-                empresaId
-            })
+            let response: any = null;
+            if (id) {
+                response = await api.put(`/receitas/${id}`, {
+                    nome,
+                    valorEstimado,
+                    emailUsuario,
+                    dataPrevisao,
+                    empresaId
+                })
+            } else {
+                response = await api.post('/receitas', {
+                    nome,
+                    valorEstimado,
+                    emailUsuario,
+                    dataPrevisao,
+                    empresaId
+                })
+            }
             return response.data as ReceitaModel;
         } catch (error) {
             throw new Error(String(error));
@@ -63,15 +74,14 @@ export class ReceitaRepository {
             throw new Error(String(Error));
         }
     }
-    async getReceitaById(id:number): Promise<ReceitaModel> {
+    async getReceitaById(id: number): Promise<ReceitaModel> {
         try {
 
             const response = await api.get(`/receitas/${id}`)
-            if(Array.isArray(response.data))
-            {
+            if (Array.isArray(response.data)) {
                 return response.data[0] as ReceitaModel;
             }
-            
+
             return response.data as ReceitaModel;
         } catch (error) {
             throw new Error(String(Error));
@@ -86,13 +96,12 @@ export class ReceitaRepository {
                 params: {
                     nome: nome,
                     empresaId: empresaId,
-                    max:5
+                    max: 5
                 }
             };
             const response = await api.get('/receitas', config)
 
-            if(!Array.isArray(response.data))
-            {
+            if (!Array.isArray(response.data)) {
                 let aux = response.data as ReceitaModelTable;
                 aux.valorEstimado = formatarNumeroMoedaReal(response.data.valorEstimado);
                 return [aux] as ReceitaModelTable[];
@@ -112,19 +121,19 @@ export class ReceitaRepository {
             throw new Error(String(Error));
         }
     }
-    async getReceitasValorFormatadoBetween(dataInicial:Date, dataFinal:Date, empresaId: number): Promise<ReceitaModelTable[]> {
+    async getReceitasValorFormatadoBetween(dataInicial: Date, dataFinal: Date, empresaId: number): Promise<ReceitaModelTable[]> {
         let retorno: ReceitaModelTable[] = [];
-        const url = empresaId>0 ? `/receitas?empresaId=${empresaId}`:`/receitas`;
+        const url = empresaId > 0 ? `/receitas?empresaId=${empresaId}` : `/receitas`;
         const parametros = {
             dataInicial: dataInicial,
             dataFinal: dataFinal,
         }
         try {
 
-            const response = await api.get(url,{
-                    params:parametros
-                });
-                
+            const response = await api.get(url, {
+                params: parametros
+            });
+
             response.data.forEach((value: ReceitaModel) => {
                 retorno.push({
                     id: value.id,

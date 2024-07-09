@@ -1,5 +1,5 @@
 import { MovimentacoesDto, MovimentacoesQuery } from "@/app/api/dtos/movimentacoes.dto";
-import { prisma } from "../../../lib/prisma";
+import prisma from "@/services/database";
 
 export class MovimentacoesService {
     async insert(mov: MovimentacoesDto) {

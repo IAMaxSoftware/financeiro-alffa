@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getUrl } from './lib/get-url'
 
 export function middleware(request: NextRequest) {
-    const token = request.cookies.get('next-auth.session-token')
+    const token = 'eaofjoapdjfp'//request.cookies.get('next-auth.session-token')
     const pathname = request.nextUrl.pathname
     console.log(`path = ${pathname} | token ${token}`)
     if (pathname === '/' && token) {

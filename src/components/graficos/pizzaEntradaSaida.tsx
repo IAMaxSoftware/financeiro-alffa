@@ -1,3 +1,5 @@
+'use client'
+
 import { entradaGraficos, saidaGraficos } from '@/app/app/functions/utils';
 import { MovimentacoesModel } from '@/app/app/models/movimentacoes_model';
 import { useEffect, useState } from 'react';

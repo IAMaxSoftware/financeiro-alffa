@@ -10,24 +10,22 @@ import {
 
 
 type DialogParams = {
-    title: string;
-    descricao: string;
-    Children: JSX.Element;
-    ButtonOpen:JSX.Element;
-    size:number;
-  }
+  title: string;
+  Children: JSX.Element;
+  ButtonOpen: JSX.Element;
+  size: number;
+}
 
- 
+
 export function DialogDefault({
-    title ='',
-    Children,
-    ButtonOpen,
-    descricao='',
-    size= 425,
+  title = '',
+  Children,
+  ButtonOpen,
+  size = 425,
 
-}:DialogParams) {
+}: DialogParams) {
 
-  const classe = 'sm:max-w-['+size+'px]'
+  const classe = 'sm:max-w-[' + size + 'px] h-[' + size + 'px]'
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -36,11 +34,8 @@ export function DialogDefault({
       <DialogContent className={classe}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>
-            {descricao}
-          </DialogDescription>
         </DialogHeader>
-            {Children}
+        {Children}
         <DialogFooter>
         </DialogFooter>
       </DialogContent>

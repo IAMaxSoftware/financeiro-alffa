@@ -1,5 +1,5 @@
+import prisma from '@/services/database';
 import * as bcrypt from 'bcrypt';
-import { prisma } from '../../../lib/prisma';
 
 
 export async function POST(request: Request) {

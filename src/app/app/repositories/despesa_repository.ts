@@ -9,13 +9,23 @@ export class DespesaRepository {
 
     async create(despesa: DespesaModel): Promise<DespesaModel> {
         try {
-            const { nome, valorEstimado, dataPrevisao, empresaId } = despesa;
-            const response = await api.post('/despesas', {
-                nome,
-                valorEstimado,
-                dataPrevisao,
-                empresaId
-            })
+            const { id, nome, valorEstimado, dataPrevisao, empresaId } = despesa;
+            let response: any = null;
+            if (id) {
+                response = await api.put(`/despesas/${id}`, {
+                    nome,
+                    valorEstimado,
+                    dataPrevisao,
+                    empresaId
+                })
+            } else {
+                response = await api.post(`/despesas`, {
+                    nome,
+                    valorEstimado,
+                    dataPrevisao,
+                    empresaId
+                })
+            }
             return response.data as DespesaModel;
         } catch (error) {
             throw new Error(String(error));
@@ -41,7 +51,7 @@ export class DespesaRepository {
     }
 
 
-    async getDespesaById(id:number): Promise<DespesaModel> {
+    async getDespesaById(id: number): Promise<DespesaModel> {
         try {
             const config = {
                 params: {
@@ -49,8 +59,7 @@ export class DespesaRepository {
                 }
             };
             const response = await api.get('/despesas', config)
-            if(Array.isArray(response.data))
-            {
+            if (Array.isArray(response.data)) {
                 return response.data[0] as DespesaModel;
             }
             return response.data as DespesaModel;
@@ -74,7 +83,7 @@ export class DespesaRepository {
         }
     }
 
-    async getDespesasByNomeFormatado(nome: string, empresaId: number|undefined): Promise<DespesaModelTable[]> {
+    async getDespesasByNomeFormatado(nome: string, empresaId: number | undefined): Promise<DespesaModelTable[]> {
         let retorno: DespesaModelTable[] = [];
         const maximo = 5;
         try {
@@ -82,17 +91,16 @@ export class DespesaRepository {
                 params: empresaId ? {
                     nome: nome,
                     empresaId: empresaId,
-                    max:maximo
-                } : 
-                {
-                    nome: nome,
-                    max:maximo
-                }
+                    max: maximo
+                } :
+                    {
+                        nome: nome,
+                        max: maximo
+                    }
             };
             const response = await api.get('/despesas', config)
 
-            if(!Array.isArray(response.data))
-            {
+            if (!Array.isArray(response.data)) {
                 let aux = response.data as DespesaModelTable;
                 aux.valorEstimado = formatarNumeroMoedaReal(response.data.valorEstimado);
                 return [aux] as DespesaModelTable[];
@@ -113,19 +121,19 @@ export class DespesaRepository {
         }
     }
 
-    async getDespesasValorFormatadoBetween(dataInicial:Date, dataFinal:Date, empresaId: number): Promise<DespesaModelTable[]> {
+    async getDespesasValorFormatadoBetween(dataInicial: Date, dataFinal: Date, empresaId: number): Promise<DespesaModelTable[]> {
         let retorno: DespesaModelTable[] = [];
-        const url = empresaId>0 ? `/despesas?empresaId=${empresaId}`:`/despesas`;
+        const url = empresaId > 0 ? `/despesas?empresaId=${empresaId}` : `/despesas`;
         const parametros = {
             dataInicial: dataInicial,
             dataFinal: dataFinal,
         }
         try {
 
-            const response = await api.get(url,{
-                    params:parametros
-                });
-                
+            const response = await api.get(url, {
+                params: parametros
+            });
+
             response.data.forEach((value: DespesaModel) => {
                 retorno.push({
                     id: value.id,

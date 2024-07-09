@@ -1,6 +1,6 @@
 import { ReceitaDto, ReceitaQuery } from "@/app/api/dtos/receita.dto";
-import { prisma } from "../../../lib/prisma";
 import { getIdByEmail } from "../lib/getIdByEmail";
+import prisma from "@/services/database";
 
 export class ReceitasService {
     async getReceitas(receitaQuery: ReceitaQuery) {

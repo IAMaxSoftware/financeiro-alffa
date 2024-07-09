@@ -1,7 +1,7 @@
 import { LancamentoDto, LancamentoQuery } from "@/app/api/dtos/lancamentos.dto";
-import { prisma } from "../../../lib/prisma";
 import { MovimentacoesService } from "../movimentacoes/movimentacoes.service";
 import { getIdByEmail } from "../lib/getIdByEmail";
+import prisma from "@/services/database";
 
 export class LancamentosService {
     async getLancamentos(query: LancamentoQuery) {

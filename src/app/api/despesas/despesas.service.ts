@@ -1,7 +1,6 @@
 import { DespesaDto, DespesaQuery } from "@/app/api/dtos/despesa.dto";
-import { prisma } from "../../../lib/prisma";
-import { auth } from "@/services/auth";
 import { getIdByEmail } from "../lib/getIdByEmail";
+import prisma from "@/services/database";
 
 export class DespesasService {
     async getDespesas(despesaQuery: DespesaQuery) {
@@ -9,7 +8,7 @@ export class DespesasService {
         const maxDefault = 100
         try {
             //console.log(`Nome: ${nome}, Empresa ID: ${empresaId}, Max: ${max}, ID: ${id}`);
-            if(id){
+            if (id) {
                 const despesa = await prisma.despesas.findMany({
                     where: {
                         id: parseInt(id)
@@ -22,7 +21,7 @@ export class DespesasService {
             if (nome && !empresaId && !dataInicial && !dataFinal) {
                 // const despesas = await this.prisma.$queryRaw<Despesas[]>`SELECT * FROM DESPESAS WHERE nome like '%${nome}%'`;
                 const despesas = await prisma.despesas.findMany({
-                    take: max ? parseInt(max): maxDefault,
+                    take: max ? parseInt(max) : maxDefault,
                     where: {
                         nome: {
                             contains: nome.toUpperCase()
@@ -33,7 +32,7 @@ export class DespesasService {
             }
             if (empresaId && !nome && !dataInicial && !dataFinal) {
                 const despesas = await prisma.despesas.findMany({
-                    take: max ? parseInt(max): maxDefault,
+                    take: max ? parseInt(max) : maxDefault,
                     where: {
                         empresaId: parseInt(empresaId.toString())
                     }
@@ -43,10 +42,10 @@ export class DespesasService {
 
             if (!empresaId && dataInicial && dataFinal) {
                 const despesas = await prisma.despesas.findMany({
-                    take: max ? parseInt(max): maxDefault,
+                    take: max ? parseInt(max) : maxDefault,
                     where: {
                         dataPrevisao: {
-                            gte:  dataInicial.getDate(),
+                            gte: dataInicial.getDate(),
                             lte: dataFinal.getDate()
                         }
                     }
@@ -57,11 +56,11 @@ export class DespesasService {
 
             if (empresaId && dataInicial && dataFinal) {
                 const despesas = await prisma.despesas.findMany({
-                    take: max ? parseInt(max): maxDefault,
+                    take: max ? parseInt(max) : maxDefault,
                     where: {
                         empresaId: parseInt(empresaId.toString()),
                         dataPrevisao: {
-                            gte:  dataInicial.getDate(),
+                            gte: dataInicial.getDate(),
                             lte: dataFinal.getDate()
                         }
                     }
@@ -72,7 +71,7 @@ export class DespesasService {
 
             if (empresaId && nome) {
                 const despesas = await prisma.despesas.findMany({
-                    take: max ? parseInt(max): maxDefault,
+                    take: max ? parseInt(max) : maxDefault,
                     where: {
                         empresaId: parseInt(empresaId.toString()),
                         nome: {
