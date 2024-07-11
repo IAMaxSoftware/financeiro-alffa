@@ -8,6 +8,6 @@ COPY . .
 RUN npm run migrate:deploy
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 80
 
 ENTRYPOINT [ "npm", "run", "start" ]
