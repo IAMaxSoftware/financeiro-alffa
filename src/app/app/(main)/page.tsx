@@ -34,6 +34,7 @@ export default function Home() {
   }, [dataRange, controleUniversal])
 
   useEffect(() => {
+    console.log(dataRange);
     getMovimentacoes()
     if (controleUniversal) {
       setControleUniversal(!setControleUniversal)
@@ -47,9 +48,9 @@ export default function Home() {
       const respository = new MovimentacoesRepository();
       let movimentacao: MovimentacoesModel[];
       if (dataRange?.from && dataRange?.to) {
-        movimentacao = await respository.getMovimentacoesBetween(dataRange.from, dataRange.to, empresaSelecionada? empresaSelecionada.id: undefined);
+        movimentacao = await respository.getMovimentacoesBetween(dataRange.from, dataRange.to, empresaSelecionada? empresaSelecionada.id: 0);
       } else {
-        movimentacao = await respository.getMovimentacoes(empresaSelecionada?empresaSelecionada.id:undefined);
+        movimentacao = await respository.getMovimentacoes(empresaSelecionada?empresaSelecionada.id:0);
       }
       movimentacao.sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
       setMovimentacoes(movimentacao);
