@@ -47,9 +47,9 @@ export default function Home() {
       const respository = new MovimentacoesRepository();
       let movimentacao: MovimentacoesModel[];
       if (dataRange?.from && dataRange?.to) {
-        movimentacao = await respository.getMovimentacoesBetween(dataRange.from, dataRange.to, empresaSelecionada.id);
+        movimentacao = await respository.getMovimentacoesBetween(dataRange.from, dataRange.to, empresaSelecionada? empresaSelecionada.id: undefined);
       } else {
-        movimentacao = await respository.getMovimentacoes(empresaSelecionada.id);
+        movimentacao = await respository.getMovimentacoes(empresaSelecionada?empresaSelecionada.id:undefined);
       }
       movimentacao.sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
       setMovimentacoes(movimentacao);
