@@ -34,11 +34,12 @@ export class AsaasService {
 }
 
 async function receitaOutros(empresaId:number) {
-    const receitas = await prisma.receitas.findUnique({
+    const receitas = await prisma.receitas.findMany({
         where: {
             empresaId: parseInt(empresaId.toString()),
-            nome: 'OUTROS'
+            nome:'OUTROS'
+            
         }
     })
-    return receitas;
+    return receitas[0];
 }
