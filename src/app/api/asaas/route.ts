@@ -5,8 +5,8 @@ async function POST(request: Request) {
     try {
         const aux = await request.json();
         const body = {
-            value: aux.value,
-            description: aux.description
+            value: aux.payment.value,
+            description: aux.payment.description
         } as AsaasDto;
         console.log(body);
         const lancamentoService = new AsaasService();
