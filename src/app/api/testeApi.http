@@ -1,4 +1,4 @@
-@baseURL = http://localhost:3000
+@baseURL = http://localhost:80
 @authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcxNjQxODY4NywiZXhwIjoxNzE2NTA1MDg3fQ.Q4KXNEVHibfDw2L--nOalxvHsTYeh5MFcfuHcg-MDMQ
 
 POST {{baseURL}}/api/despesas

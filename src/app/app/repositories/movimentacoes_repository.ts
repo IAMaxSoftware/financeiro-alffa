@@ -3,8 +3,9 @@ import {api} from "../services/api";
 
 export class MovimentacoesRepository {
     async getMovimentacoes(empresaId:number): Promise<MovimentacoesModel[]> {
+        const url = empresaId > 0 ? `/movimentacoes?empresaId=${empresaId}` : '/movimentacoes'
         try {
-            const response = await api.get('/movimentacoes')
+            const response = await api.get(url)
             return response.data as MovimentacoesModel[];
         } catch (error) {
             throw new Error(String(Error));
