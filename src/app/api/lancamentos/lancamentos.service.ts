@@ -82,7 +82,6 @@ export class LancamentosService {
                     id
                 }
             })
-            console.log(lanc)
             if (!lanc) {
                 throw new Error('Lançamento não encontrado')
             }

@@ -164,6 +164,14 @@ Content-Type: application/json
    "nome": "PORTAL DOS ANJOS"
 }
 
+###
+PUT {{baseURL}}/api/empresas/2
+Content-Type: application/json
+
+{
+   "nome": "Unialffa"
+}
+
 
 ###
 GET {{baseURL}}/api/empresas

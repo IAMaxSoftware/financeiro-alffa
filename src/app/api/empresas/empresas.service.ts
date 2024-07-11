@@ -24,4 +24,34 @@ export class EmpresaService {
             throw new Error(String(error))
         }
     }
+
+    async update(id: number, body: EmpresaDto) {
+        try {
+            const empresa = prisma.empresas.update({
+                where: {
+                    id: id
+                },
+                data: {
+                    nome: body.nome.toUpperCase()
+                }
+            });
+            console.log(empresa);
+            return empresa;
+        } catch (error) {
+            throw new Error(String(error))
+        }
+    }
+
+    async delete(id:number) {
+        try {
+            const empresas = prisma.empresas.delete({
+                where: {
+                    id: id
+                }
+            });
+            return empresas;
+        } catch (error) {
+            throw new Error(String(error))
+        }
+    }
 }
