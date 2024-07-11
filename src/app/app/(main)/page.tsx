@@ -31,7 +31,7 @@ export default function Home() {
     if (controleUniversal) {
       setControleUniversal(!setControleUniversal)
     }
-  }, [dataRange, controleUniversal])
+  }, [dataRange, controleUniversal, empresaSelecionada])
 
   useEffect(() => {
     console.log(dataRange);
