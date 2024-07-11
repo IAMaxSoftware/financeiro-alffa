@@ -80,12 +80,13 @@ export default function Home() {
       <DashboardPageHeader>
         <DashboardPageHeaderTitle>{empresaSelecionada ? `Dashboard | ${empresaSelecionada.nome}` : 'Dashboard'}</DashboardPageHeaderTitle>
         <DashboardPageHeaderNav>
-          <DashboardPageHeaderNav>
-            <DialogDefault Children={<CadastrarLancamento />} size={800} title="Lançamento" ButtonOpen={<Button variant="default" size="sm">
+          <DashboardPageHeaderNav className="flex flex-row-reverse">
+            <DialogDefault Children={<CadastrarLancamento />} size={800} title="Lançamento" ButtonOpen={<Button disabled={!empresaSelecionada} variant="default" size="sm">
               <PlusIcon className="w-4 h-4 mr-3" />
               Add Lançamento
             </Button>}>
             </DialogDefault>
+            <p className="text-xs text-red-500 p-2">{empresaSelecionada != null ? '' : 'Selecione uma empresa para cadastrar o lançamento'}</p>
           </DashboardPageHeaderNav>
         </DashboardPageHeaderNav>
       </DashboardPageHeader>
