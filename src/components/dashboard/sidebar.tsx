@@ -14,7 +14,7 @@ export function DashboardSidebar({
   return (
     <aside
       className={cn([
-        'border-r border-border flex flex-col space-y-6 bg-secondary/5',
+        'border-r border-border flex flex-col space-y-6 bg-secondary/5 h-full',
         className,
       ])}
     >
