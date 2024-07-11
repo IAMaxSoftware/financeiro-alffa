@@ -48,7 +48,7 @@ export const receitasDataTable: ColumnDef<DespesaModelTable>[] = [
                     ButtonOpen={
                         empresaSelecionada ? <Eye className="hover:cursor-pointer" color="orange" ></Eye> : <EyeOff color="orange" />
                     }
-                    Children={<CadastraDespesa despesaid={row.original.id ?? undefined} edit={false} />}
+                    Children={<CadastraDespesa despesaid={row.original.id ?? 0} edit={false} />}
                     title='Editar Despesa'
                 />
             );

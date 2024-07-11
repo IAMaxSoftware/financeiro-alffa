@@ -111,7 +111,7 @@ export default function ListarDespesas() {
                                         <Plus ></Plus>
                                         <p>Cadastrar Despesa</p>
                                     </Button>}
-                                    Children={<CadastraDespesa despesaid={undefined} edit={true} />}
+                                    Children={<CadastraDespesa despesaid={0} edit={true} />}
                                     title='Cadastrar Despesa'
                                 />
                                 <p className="text-xs text-red-500">{empresaSelecionada != null ? '' : 'Selecione uma empresa para cadastrar a despesa'}</p>

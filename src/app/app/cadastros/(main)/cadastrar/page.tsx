@@ -22,17 +22,17 @@ const formSchema = z.object({
     dataPrevisao: z.coerce.number()
 })
 
-interface ParamsCadastraDespesa {
-    edit: boolean | undefined;
-    despesaid: number | undefined;
+type ParamsCadastraDespesa = {
+    edit?: boolean;
+    despesaid?: number;
 }
 
-export default function CadastraDespesa({ edit, despesaid }: ParamsCadastraDespesa) {
+export default function CadastraDespesa({ edit = false, despesaid = 0 }: ParamsCadastraDespesa) {
     const { empresaSelecionada, setControleUniversal } = useAppData()
     const { data: session } = useSession();
     const navigate = useRouter();
     const [carregando, setCarregando] = useState(true);
-    const [editEstado, setEditEstado] = useState(edit);
+    const [editEstado, setEditEstado] = useState<boolean>(edit);
     const form = useForm<z.infer<typeof formSchema>>({
 
         resolver: zodResolver(formSchema),
@@ -91,7 +91,7 @@ export default function CadastraDespesa({ edit, despesaid }: ParamsCadastraDespe
                 setControleUniversal(true);
                 swal({
                     title: "ok",
-                    text: despesaid ? "Despesa atualizada com sucesso!" : "Despesa cadastrada com sucesso!"
+                    text: despesaid > 0 ? "Despesa atualizada com sucesso!" : "Despesa cadastrada com sucesso!"
                 })
                 navigate.refresh()
             }
