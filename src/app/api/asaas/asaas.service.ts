@@ -20,7 +20,7 @@ export class AsaasService {
                 dataHora: new Date(),
                 empresaId:1,
                 real: asaas.value,
-                recDesId: receita.id,
+                recDesId: receita.id??0,
                 tipo:"R",
                 userEmail:''
             };
