@@ -43,6 +43,7 @@ export class MovimentacoesService {
                 return movimentacoes;
             }
             if (empresaId && dataInicial && dataFinal) {
+                console.log(empresaId);
                 const movimentacoes = prisma.movimentacoes.findMany({
                     where: {
                         empresaId: parseInt(empresaId.toString()),
