@@ -24,7 +24,7 @@ export class AsaasService {
                 tipo:"R",
                 userEmail:''
             };
-           return lancamentoService.create(lancamentoDto);
+           return lancamentoService.createAsaas(lancamentoDto, asaas.description);
            
         } catch (error) {
             throw new Error(String(error));

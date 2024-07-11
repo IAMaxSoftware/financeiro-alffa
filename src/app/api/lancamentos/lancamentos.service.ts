@@ -67,6 +67,14 @@ export class LancamentosService {
         }
     }
 
+    async createAsaas(lancamento: LancamentoDto, descricao: string) {
+        try {
+            return this.lancamentoAsaas(lancamento, descricao)
+        } catch (error) {
+            throw new Error(String(error));
+        }
+    }
+
     async delete(id: number) {
         try {
             const lanc = await prisma.lancamentos_receita_despesa.findUnique({
@@ -139,6 +147,56 @@ export class LancamentosService {
                 obs,
                 recDesId: despesa.id,
                 estimado: despesa.valorEstimado,
+                usuId: userId,
+                diferenca,
+                empresaId: empresa.id,
+                tipo,
+                movId: movimentacao.id
+            }
+        });
+        return lancamentos;
+    }
+
+    async lancamentoAsaas(lancamento: LancamentoDto, descricao: string) {
+        const { real, obs, recDesId, userEmail, empresaId, tipo, dataHora } = lancamento;
+        const userId = await getIdByEmail(userEmail);
+        const receita = await prisma.receitas.findUnique({
+            where: {
+                id: recDesId
+            }
+        })
+
+        if (!receita) {
+            throw new Error('receita não encontrada')
+        }
+
+        const empresa = await prisma.empresas.findUnique({
+            where: {
+                id: empresaId
+            }
+        })
+
+        if (!empresa) {
+            throw new Error('Empresa não encontrada')
+        }
+
+        const movimentacoesService = new MovimentacoesService();
+        const movimentacao = await movimentacoesService.insert({
+            dataHora,
+            credito: real,
+            debito: 0,
+            descricao: `REC - ${descricao}`,
+            empresaId: empresa.id
+        })
+
+        const diferenca = (parseFloat(receita.valorEstimado.toString()) - real);
+        const lancamentos = await prisma.lancamentos_receita_despesa.create({
+            data: {
+                nome: receita.nome,
+                real,
+                obs,
+                recDesId: receita.id,
+                estimado: receita.valorEstimado,
                 usuId: userId,
                 diferenca,
                 empresaId: empresa.id,
