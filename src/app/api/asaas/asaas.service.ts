@@ -37,9 +37,7 @@ async function receitaOutros(empresaId:number) {
     const receitas = await prisma.receitas.findUnique({
         where: {
             empresaId: parseInt(empresaId.toString()),
-            nome: {
-                equal: 'OUTROS'
-            }
+            nome: 'OUTROS'
         }
     })
     return receitas;
