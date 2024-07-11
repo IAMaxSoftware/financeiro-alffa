@@ -1,9 +1,13 @@
-import { LancamentoDto } from "@/app/api/dtos/lancamentos.dto";
 import { AsaasService } from "./asaas.service";
+import { AsaasDto } from "../dtos/asaas.dto";
 
 async function POST(request: Request) {
     try {
-        const body = await request.json() as LancamentoDto;
+        const aux = await request.json();
+        const body = {
+            value: aux.value,
+            description: aux.description
+        } as AsaasDto;
         console.log(body);
         const lancamentoService = new AsaasService();
         const response = await lancamentoService.create(body)
