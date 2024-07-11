@@ -34,7 +34,7 @@ export class AsaasService {
 }
 
 async function receitaOutros(empresaId:number) {
-    const receitas = await prisma.receitas.findMany({
+    const receitas = await prisma.receitas.findUnique({
         where: {
             empresaId: parseInt(empresaId.toString()),
             nome: {
