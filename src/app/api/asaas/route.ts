@@ -4,6 +4,7 @@ import { AsaasDto } from "../dtos/asaas.dto";
 async function POST(request: Request) {
     try {
         const aux = await request.json();
+        console.log(aux);
         const body = {
             value: aux.payment.value,
             description: aux.payment.description
