@@ -2,7 +2,7 @@ import { MovimentacoesModel } from "../models/movimentacoes_model";
 import {api} from "../services/api";
 
 export class MovimentacoesRepository {
-    async getMovimentacoes(): Promise<MovimentacoesModel[]> {
+    async getMovimentacoes(empresaId:number): Promise<MovimentacoesModel[]> {
         try {
             const response = await api.get('/movimentacoes')
             return response.data as MovimentacoesModel[];
