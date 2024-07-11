@@ -16,37 +16,36 @@ import { useEffect, useState } from "react"
 import { Table } from "../ui/table"
 import { DataTable } from "../ui/data-table"
 import { toast } from "@/components/ui/use-toast";
-import { ColumnDef } from "@tanstack/react-table"
-import { SquarePlus  } from 'lucide-react';
+import { ColumnDef, Row } from "@tanstack/react-table"
+import { SquarePlus } from 'lucide-react';
 import { ReceitaModel, ReceitaModelTable } from "@/app/app/models/receita_model"
 import { AppProvider, useAppData } from "@/app/app/context/app_context"
 import { DialogClose } from "@radix-ui/react-dialog"
 import { ReceitaRepository } from "@/app/app/repositories/receita_repository"
 
-interface propsBuscaReceita{
-    empresaId:number;
-    enable:boolean;
+interface propsBuscaReceita {
+    empresaId: number;
+    enable: boolean;
 }
 
 
 
-export function BuscaReceita({empresaId, enable}:propsBuscaReceita) {
+export function BuscaReceita({ empresaId, enable }: propsBuscaReceita) {
 
     const [textoBusca, setTextoBusca] = useState('');
     const [data, setData] = useState<ReceitaModelTable[]>([])
-    const {receitaSelecionada} = useAppData();
+    const { receitaSelecionada } = useAppData();
 
     useEffect(() => {
         busca();
     }, [textoBusca])
 
-    async function busca()
-    {
+    async function busca() {
         const rep = new ReceitaRepository();
         let receitas: ReceitaModelTable[] = [];
-        receitas = await rep.getReceitasByNomeFormatado(textoBusca, empresaId );
+        receitas = await rep.getReceitasByNomeFormatado(textoBusca, empresaId);
         setData(receitas);
-        
+
     }
 
     return (
@@ -95,30 +94,36 @@ const columns: ColumnDef<ReceitaModelTable>[] = [
     },
     {
         id: "Ação",
-        cell: ({ row }) => {
-            const receita = row.original;
-            const {setReceitaSelecionada} = useAppData()
-            const selecionar = async (id: number) => {
-                try {
-                    const repository = new ReceitaRepository();
-                    const receita = await  repository.getReceitaById(id);
-                    setReceitaSelecionada(receita);
-                } catch (error) {
-                    toast({
-                        variant: "destructive",
-                        title: "Erro.",
-                        description: "Não foi possível selecionar a receita!"
-                    })
-                }
-            }
-
-            return (
-                <DialogClose asChild>
-                    <Button  variant="secondary">
-                        <SquarePlus color="orange" onClick={() => selecionar(receita.id!)}>Selecionar</SquarePlus  >
-                    </Button>
-                </DialogClose>
-            );
-        }
+        cell: SelecionarCell
     },
 ]
+
+type PropsCell = {
+    row: Row<ReceitaModelTable>;
+}
+
+function SelecionarCell({ row }: PropsCell) {
+    const receita = row.original
+    const { setReceitaSelecionada } = useAppData()
+    const selecionar = async (id: number) => {
+        try {
+            const repository = new ReceitaRepository()
+            const receita = await repository.getReceitaById(id)
+            setReceitaSelecionada(receita)
+        } catch (error) {
+            toast({
+                variant: "destructive",
+                title: "Erro.",
+                description: "Não foi possível selecionar a receita!"
+            })
+        }
+    }
+
+    return (
+        <DialogClose asChild>
+            <Button variant="secondary">
+                <SquarePlus color="orange" onClick={() => selecionar(receita.id!)}>Selecionar</SquarePlus>
+            </Button>
+        </DialogClose>
+    )
+}

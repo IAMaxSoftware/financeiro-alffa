@@ -16,37 +16,36 @@ import { useEffect, useState } from "react"
 import { Table } from "../ui/table"
 import { DataTable } from "../ui/data-table"
 import { toast } from "@/components/ui/use-toast";
-import { ColumnDef } from "@tanstack/react-table"
-import { SquarePlus  } from 'lucide-react';
+import { ColumnDef, Row } from "@tanstack/react-table"
+import { SquarePlus } from 'lucide-react';
 import { DespesaModel, DespesaModelTable } from "@/app/app/models/despesa_model"
 import { AppProvider, useAppData } from "@/app/app/context/app_context"
 import { DespesaRepository } from "@/app/app/repositories/despesa_repository"
 import { DialogClose } from "@radix-ui/react-dialog"
 
-interface propsBuscaDespesa{
-    empresaId:number;
-    enable:boolean;
+interface propsBuscaDespesa {
+    empresaId: number;
+    enable: boolean;
 }
 
 
 
-export function BuscaDespesa({empresaId, enable}:propsBuscaDespesa) {
+export function BuscaDespesa({ empresaId, enable }: propsBuscaDespesa) {
 
     const [textoBusca, setTextoBusca] = useState('');
     const [data, setData] = useState<DespesaModelTable[]>([])
-    const {despesaSelecionada} = useAppData();
+    const { despesaSelecionada } = useAppData();
 
     useEffect(() => {
         busca();
     }, [textoBusca])
 
-    async function busca()
-    {
+    async function busca() {
         const rep = new DespesaRepository();
         let despesas: DespesaModelTable[] = [];
-        despesas = await rep.getDespesasByNomeFormatado(textoBusca, empresaId );
+        despesas = await rep.getDespesasByNomeFormatado(textoBusca, empresaId);
         setData(despesas);
-        
+
     }
 
     return (
@@ -96,30 +95,36 @@ const columns: ColumnDef<DespesaModelTable>[] = [
     },
     {
         id: "Ação",
-        cell: ({ row }) => {
-            const despesa = row.original;
-            const {setDespesaSelecionada} = useAppData()
-            const selecionar = async (id: number) => {
-                try {
-                    const repository = new DespesaRepository();
-                    const despesa = await  repository.getDespesaById(id);
-                    setDespesaSelecionada(despesa);
-                } catch (error) {
-                    toast({
-                        variant: "destructive",
-                        title: "Erro.",
-                        description: "Não foi possível selecionar a despesa!"
-                    })
-                }
-            }
-
-            return (
-                <DialogClose asChild>
-                    <Button  variant="secondary">
-                        <SquarePlus color="orange" onClick={() => selecionar(despesa.id!)}>Selecionar</SquarePlus  >
-                    </Button>
-                </DialogClose>
-            );
-        }
+        cell: SelecionarCell
     },
 ]
+
+type PropsCell = {
+    row: Row<DespesaModelTable>;
+}
+
+function SelecionarCell({ row }: PropsCell) {
+    const despesa = row.original
+    const { setDespesaSelecionada } = useAppData()
+    const selecionar = async (id: number) => {
+        try {
+            const repository = new DespesaRepository()
+            const despesa = await repository.getDespesaById(id)
+            setDespesaSelecionada(despesa)
+        } catch (error) {
+            toast({
+                variant: "destructive",
+                title: "Erro.",
+                description: "Não foi possível selecionar a despesa!"
+            })
+        }
+    }
+
+    return (
+        <DialogClose asChild>
+            <Button variant="secondary">
+                <SquarePlus color="orange" onClick={() => selecionar(despesa.id!)}>Selecionar</SquarePlus>
+            </Button>
+        </DialogClose>
+    )
+}

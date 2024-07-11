@@ -5,7 +5,7 @@ import { toast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { DialogDefault } from "@/components/dialogs/dialogDefault";
 import { Button } from "@/components/ui/button";
-import CadastraReceita from "./cadastrar/page";
+import CadastraReceita from "./cadastrar";
 import { Plus } from "lucide-react";
 import { useAppData } from "@/app/app/context/app_context";
 import { ReceitaModelTable } from "../../models/receita_model";

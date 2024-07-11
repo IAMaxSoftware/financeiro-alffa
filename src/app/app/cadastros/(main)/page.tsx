@@ -3,7 +3,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { DialogDefault } from "@/components/dialogs/dialogDefault";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { Plus, PlusIcon } from "lucide-react";
-import CadastraDespesa from "./cadastrar/page";
+import CadastraDespesa from "./cadastrar";
 import { Toaster } from "@/components/ui/toaster";
 import React, { useEffect, useState } from "react";
 import { toast } from "@/components/ui/use-toast";
