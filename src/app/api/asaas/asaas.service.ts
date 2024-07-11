@@ -6,10 +6,11 @@ import { AsaasDto } from "../dtos/asaas.dto";
 
 export class AsaasService {
 
-    async create(lancamento: AsaasDto) {
+    async create(asaas: AsaasDto) {
 
         try {
-            console.log(lancamento);
+            console.log(asaas);
+            return asaas;
         } catch (error) {
             throw new Error(String(error));
         }
