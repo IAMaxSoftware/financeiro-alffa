@@ -11,6 +11,7 @@ async function POST(request: Request) {
         console.log(body);
         const lancamentoService = new AsaasService();
         const response = await lancamentoService.create(body)
+        console.log(response);
         return Response.json(response)
     } catch (error) {
         throw new Error(String(error))
