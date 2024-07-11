@@ -33,6 +33,14 @@ export default function Home() {
     }
   }, [dataRange, controleUniversal])
 
+  useEffect(() => {
+    getMovimentacoes()
+    if (controleUniversal) {
+      setControleUniversal(!setControleUniversal)
+    }
+  }, [])
+
+
 
   const getMovimentacoes = async () => {
     try {
