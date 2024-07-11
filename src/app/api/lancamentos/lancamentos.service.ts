@@ -133,7 +133,7 @@ export class LancamentosService {
             dataHora,
             credito: 0,
             debito: real,
-            descricao: `DES - ${despesa.nome}`,
+            descricao: `DES - ${obs}`,
             empresaId: empresa.id,
         })
 
@@ -234,7 +234,7 @@ export class LancamentosService {
             dataHora,
             credito: real,
             debito: 0,
-            descricao: `REC - ${receita.nome}`,
+            descricao: `REC - ${obs}`,
             empresaId: empresa.id
         })
 

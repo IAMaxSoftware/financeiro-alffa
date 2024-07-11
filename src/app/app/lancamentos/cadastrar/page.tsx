@@ -51,15 +51,14 @@ export default function CadastrarLancamento() {
     });
 
     useEffect(() => {
-        form.setValue('obs', despesaSelecionada?.nome ?? 'teste');
+        form.setValue('obs', despesaSelecionada?.nome ?? '');
         form.setValue('valor', despesaSelecionada?.valorEstimado ?? 0);
         setRecDesId(despesaSelecionada?.id ?? 0);
         setEditCampoObs(true);
     }, [despesaSelecionada])
 
     useEffect(() => {
-        form.setValue('obs', receitaSelecionada?.nome ?? 'teste');
-        console.log(receitaSelecionada?.valorEstimado);
+        form.setValue('obs', receitaSelecionada?.nome ?? '');
         form.setValue('valor', receitaSelecionada?.valorEstimado ?? 0);
         setRecDesId(receitaSelecionada?.id ?? 0);
         setEditCampoObs(true);
@@ -140,7 +139,7 @@ export default function CadastrarLancamento() {
                                     <FormItem>
                                         <FormLabel>Lançamento</FormLabel>
                                         <FormControl>
-                                            <Input disabled={editCampoObs} placeholder="lançamento" {...field} />
+                                            <Input disabled={!editCampoObs} placeholder="lançamento" {...field} />
                                         </FormControl>
                                         <FormDescription>
                                             Informe a descrição
