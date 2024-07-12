@@ -15,7 +15,7 @@ export class MovimentacoesRepository {
     async getMovimentacoesBetween(dataInicial:Date, dataFinal:Date, empresaId:number): Promise<MovimentacoesModel[]> {
         dataInicial.setHours(0,0,0,0);
         dataFinal.setHours(23,59,0,0)
-        
+        console.log(empresaId);
         try {
             let parametros:any;
             if(empresaId>0)
