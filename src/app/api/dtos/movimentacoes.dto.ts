@@ -9,5 +9,5 @@ export interface MovimentacoesDto {
 export interface MovimentacoesQuery {
     dataInicial?: Date;
     dataFinal?: Date;
-    empresaId: string;
+    empresaId?: string;
 }

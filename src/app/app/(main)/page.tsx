@@ -27,6 +27,7 @@ export default function Home() {
   })
 
   useEffect(() => {
+    
     getMovimentacoes()
     if (controleUniversal) {
       setControleUniversal(!setControleUniversal)
@@ -34,7 +35,6 @@ export default function Home() {
   }, [dataRange, controleUniversal, empresaSelecionada])
 
   useEffect(() => {
-    console.log(dataRange);
     getMovimentacoes()
     if (controleUniversal) {
       setControleUniversal(!setControleUniversal)
