@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getUrl } from './lib/get-url'
 
 export function middleware(request: NextRequest) {
-    const token = request.cookies.get('__Secure-authjs.session-token')
+    const dev = process.env.DEV==='true';
+    const token = request.cookies.get(dev ? 'authjs.session-token' :'__Secure-authjs.session-token')
     const pathname = request.nextUrl.pathname
 
     if (pathname === '/auth' && token) {

@@ -22,9 +22,10 @@ export class AsaasService {
                 real: asaas.value,
                 recDesId: receita ? receita.id??0 : 0,
                 tipo:"R",
-                userEmail:''
+                userEmail:'',
+                obs: asaas.description
             };
-           return lancamentoService.createAsaas(lancamentoDto, asaas.description);
+           return lancamentoService.createAsaas(lancamentoDto);
            
         } catch (error) {
             throw new Error(String(error));

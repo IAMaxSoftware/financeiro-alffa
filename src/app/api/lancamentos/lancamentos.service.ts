@@ -67,9 +67,9 @@ export class LancamentosService {
         }
     }
 
-    async createAsaas(lancamento: LancamentoDto, descricao: string) {
+    async createAsaas(lancamento: LancamentoDto) {
         try {
-            return this.lancamentoAsaas(lancamento, descricao)
+            return this.lancamentoAsaas(lancamento)
         } catch (error) {
             throw new Error(String(error));
         }
@@ -156,7 +156,7 @@ export class LancamentosService {
         return lancamentos;
     }
 
-    async lancamentoAsaas(lancamento: LancamentoDto, descricao: string) {
+    async lancamentoAsaas(lancamento: LancamentoDto) {
         const { real, obs, recDesId, userEmail, empresaId, tipo, dataHora } = lancamento;
         const userId = await getIdByEmail(userEmail);
         const receita = await prisma.receitas.findUnique({
@@ -184,7 +184,7 @@ export class LancamentosService {
             dataHora,
             credito: real,
             debito: 0,
-            descricao: `REC - ${descricao}`,
+            descricao: `REC - ${lancamento.obs}`,
             empresaId: empresa.id
         })
 
