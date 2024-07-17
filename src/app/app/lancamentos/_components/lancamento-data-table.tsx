@@ -22,6 +22,14 @@ type PropsCell = {
     row: Row<LancamentoTableModel>;
 }
 
+
+function rodape(){
+
+    return(<>
+    <h1>Roda pé</h1>
+    </>)
+}
+
 export const lancamentoDataTable: ColumnDef<LancamentoTableModel>[] = [
     {
         accessorKey: "obs",
@@ -38,7 +46,7 @@ export const lancamentoDataTable: ColumnDef<LancamentoTableModel>[] = [
     {
         id: "Ação",
         cell: CancelaCell
-    },
+    }
 ]
 
 function CancelaCell({ row }: PropsCell) {
