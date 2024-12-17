@@ -5,7 +5,7 @@ COPY package.json package-lock.json ./
 COPY prisma ./prisma/
 RUN npm ci
 COPY . .
-RUN npm run migrate:dev
+RUN npm run migrate:generate
 RUN npm run build
 
 EXPOSE 80
