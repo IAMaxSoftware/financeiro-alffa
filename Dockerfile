@@ -5,6 +5,7 @@ COPY package.json package-lock.json ./
 COPY prisma ./prisma/
 RUN npm ci
 COPY . .
+RUN apt-get install openssl
 RUN npm run migrate:deploy
 RUN npm run build
 
