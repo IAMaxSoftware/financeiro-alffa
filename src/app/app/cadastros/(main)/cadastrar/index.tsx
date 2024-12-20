@@ -128,7 +128,7 @@ export default function CadastraDespesa({ edit = false, despesaid = 0 }: ParamsC
                             )}
                         />
                         <MoneyInput
-                            disabled={!editEstado ?? false}
+                            disabled={!editEstado}
                             value={form.getValues("valorEstimado")}
                             form={form}
                             label="Valor estimado"

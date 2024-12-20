@@ -132,7 +132,7 @@ export default function CadastraReceita({ edit, receitaid }: ParamsCadastraRecei
                                 )}
                             />
                             <MoneyInput
-                                disabled={!editEstado ?? false}
+                                disabled={!editEstado}
                                 value={form.getValues("valorEstimado")}
                                 form={form}
                                 label="Valor estimado"
